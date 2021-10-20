@@ -1,0 +1,128 @@
+version: "3"
+
+networks:
+  perpus:
+
+services:
+  site:
+    build:
+      context: .
+      dockerfile: nginx.dockerfile
+    container_name: nginx-perpus
+    restart: always
+    ports:
+      - 1001:80
+    volumes:
+      - ./server:/var/www/html
+    depends_on:
+      - php
+      - redis
+      - mariadb
+      - adminer
+      - node
+    networks:
+      - perpus
+
+  mariadb:
+    image: mariadb:10.6.4
+    container_name: mariadb-perpus
+    tty: true
+    restart: always
+    ports:
+      - 1002:3306
+    volumes:
+      - ./mariadb:/var/lib/mariadb
+    environment:
+      MARIADB_DATABASE: perpus
+      MARIADB_USER: root
+      MARIADB_PASSWORD: buyung
+      MARIADB_ROOT_PASSWORD: buyung
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mariadb
+    networks:
+      - perpus
+
+  adminer:
+    build:
+      context: .
+      dockerfile: adminer.dockerfile
+    container_name: adminer-perpus
+    restart: always
+    ports:
+      - 1003:8080
+    networks:
+      - perpus
+
+  php:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: php-perpus
+    restart: always
+    volumes:
+      - ./server:/var/www/html
+    networks:
+      - perpus
+
+  redis:
+    image: redis:alpine
+    container_name: redis-perpus
+    restart: always
+    ports:
+      - 1004:6379
+    networks:
+      - perpus
+
+  composer:
+    image: composer:latest
+    container_name: composer-perpus
+    volumes:
+      - ./server:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - perpus
+
+  node:
+    image: node:14.16.0
+    container_name: node-perpus
+    volumes:
+      - ./client:/var/www/html/client
+    working_dir: /var/www/html/client
+    entrypoint: ["npm", "start"]
+    ports:
+      - 1005:3000
+    networks:
+      - perpus
+
+  artisan:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: artisan-perpus
+    volumes:
+      - ./server:/var/www/html
+    depends_on:
+      - mariadb
+    working_dir: /var/www/html
+    user: laravel
+    entrypoint: ["php", "/var/www/html/artisan"]
+    networks:
+      - perpus
+
+  websocket:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: websocket-perpus
+    working_dir: /var/www/html
+    user: laravel
+    restart: always
+    volumes:
+      - ./server:/var/www/html
+    command: ["sh", "-c", "php /var/www/html/artisan websockets:serve --host=0.0.0.0"]
+    ports:
+      - 6001:6001
+    depends_on:
+      - php
+    networks:
+      - perpus
