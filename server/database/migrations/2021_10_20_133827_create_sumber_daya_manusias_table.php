@@ -15,15 +15,12 @@ class CreateSumberDayaManusiasTable extends Migration
     {
         Schema::create('sumber_daya_manusias', function (Blueprint $table) {
             $table->id();
-            $table->decimal('jumlah_pegawai_seluruh', 12, 3)->default(0.000);
             $table->decimal('pns', 12, 3)->default(0.000);
             $table->decimal('pejabat_fungsional', 12, 3)->default(0.000);
             $table->decimal('honorer', 12, 3)->default(0.000);
-            $table->decimal('jumlah_pegawai_menurut_pekerjaan', 12, 3)->default(0.000);
             $table->decimal('kepala_perpustakaan', 12, 3)->default(0.000);
             $table->decimal('tenaga_teknis_perpustakaan', 12, 3)->default(0.000);
             $table->decimal('tenaga_administrasi', 12, 3)->default(0.000);
-            $table->decimal('jumlah_pegawai_menurut_jenjang', 12, 3)->default(0.000);
             $table->decimal('sd', 12, 3)->default(0.000);
             $table->decimal('smp', 12, 3)->default(0.000);
             $table->decimal('diklat', 12, 3)->default(0.000);
