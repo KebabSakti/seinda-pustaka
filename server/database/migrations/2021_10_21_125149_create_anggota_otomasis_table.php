@@ -20,7 +20,7 @@ class CreateAnggotaOtomasisTable extends Migration
             $table->integer('guru')->default(0);
             $table->integer('pengunjung_perbulan')->default(0);
             $table->integer('pinjaman_perbulan')->default(0);
-            $table->enum('perpustakaan_digital', ['Sudah', 'Belum'])->default(0);
+            $table->enum('perpustakaan_digital', ['Sudah', 'Belum']);
             $table->timestamps();
         });
     }
