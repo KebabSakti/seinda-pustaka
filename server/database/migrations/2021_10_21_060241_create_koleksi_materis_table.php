@@ -15,6 +15,7 @@ class CreateKoleksiMaterisTable extends Migration
     {
         Schema::create('koleksi_materis', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('perpustakaan_id');
             $table->integer('jumlah_buku_nonfiksi')->default(0);
             $table->integer('halaman_buku_nonfiksi')->default(0);
             $table->integer('jumlah_buku_referensi')->default(0);

@@ -15,6 +15,7 @@ class CreateDataGedungsTable extends Migration
     {
         Schema::create('data_gedungs', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('perpustakaan_id');
             $table->decimal('luas_tanah', 12, 3)->default(0.000);
             $table->decimal('luas_gedung', 12, 3)->default(0.000);
             $table->decimal('luas_ruang_tamu', 12, 3)->default(0.000);

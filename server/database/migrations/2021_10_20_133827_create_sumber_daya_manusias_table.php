@@ -15,6 +15,7 @@ class CreateSumberDayaManusiasTable extends Migration
     {
         Schema::create('sumber_daya_manusias', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('perpustakaan_id');
             $table->decimal('pns', 12, 3)->default(0.000);
             $table->decimal('pejabat_fungsional', 12, 3)->default(0.000);
             $table->decimal('honorer', 12, 3)->default(0.000);
