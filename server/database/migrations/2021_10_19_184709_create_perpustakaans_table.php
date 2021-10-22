@@ -17,6 +17,7 @@ class CreatePerpustakaansTable extends Migration
             $table->id();
             $table->text('nama')->nullable();
             $table->text('alamat')->nullable();
+            $table->text('kecamatan')->nullable();
             $table->text('kelurahan')->nullable();
             $table->string('kode_pos')->nullable();
             $table->string('telp')->nullable();
