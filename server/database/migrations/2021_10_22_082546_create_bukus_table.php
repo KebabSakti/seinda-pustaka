@@ -17,11 +17,12 @@ class CreateBukusTable extends Migration
             $table->id();
             $table->bigInteger('perpustakaan_id');
             $table->bigInteger('kategori_id');
-            $table->text('judul_buku')->nullable();
-            $table->text('no_buku')->nullable();
+            $table->text('sampul')->nullable();
+            $table->text('judul')->nullable();
+            $table->text('nomor')->nullable();
             $table->integer('stok')->default(0);
-            $table->text('note')->nullable();
-            $table->text('link')->nullable();
+            $table->text('catatan')->nullable();
+            $table->text('download')->nullable();
             $table->boolean('aktif')->default(true);
             $table->timestamps();
         });

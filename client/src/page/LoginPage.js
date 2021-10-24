@@ -6,7 +6,7 @@ import logo from "../asset/image/mahakam_ulu.png";
 
 export default function LoginPage() {
   const { Content } = Layout;
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   return (
     <Layout
