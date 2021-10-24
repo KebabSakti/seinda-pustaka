@@ -69,7 +69,7 @@ export default function BookPage() {
 
   function menu(mode = "horizontal") {
     return (
-      <Menu mode={mode} defaultSelectedKeys={["/buku"]}>
+      <Menu mode={mode} disabledOverflow={true} defaultSelectedKeys={["/buku"]}>
         <Menu.Item key="/buku">
           <BookOutlined />
           <a style={{ marginLeft: "10px" }} href="#">
@@ -130,8 +130,10 @@ export default function BookPage() {
               SEINDAPUSTAKA
             </span>
           </Col>
-          <Col xs={0} sm={0} md={0} lg={0} xl={8}>
-            {menu()}
+          <Col xs={0} sm={0} md={0} lg={18} xl={19}>
+            <Row justify="center">
+              <Col>{menu()}</Col>
+            </Row>
           </Col>
           <Col>
             <Space>
