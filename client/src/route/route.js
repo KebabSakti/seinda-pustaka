@@ -1,26 +1,28 @@
-import Template from "../component/Template";
-import BookPage from "../page/BookPage";
-import HomePage from "../page/HomePage";
 import LoginPage from "../page/LoginPage";
+import AdminApp from "../page/admin/AdminApp";
+import PerpusApp from "../page/perpus/PerpusApp";
+import PublicApp from "../page/public/PublicApp";
 
 const routes = [
   {
     path: "/",
-    component: LoginPage,
-    template: null,
     exact: true,
+    page: LoginPage,
   },
   {
-    path: "/home",
-    component: HomePage,
-    template: Template,
+    path: "/admin",
     exact: false,
+    page: AdminApp,
   },
   {
-    path: "/book",
-    component: BookPage,
-    template: null,
+    path: "/perpus",
     exact: false,
+    page: PerpusApp,
+  },
+  {
+    path: "/public",
+    exact: false,
+    page: PublicApp,
   },
 ];
 

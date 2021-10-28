@@ -58,9 +58,9 @@ export default function LoginPage() {
                         style={{ paddingRight: "5px", color: "#d9d9d9" }}
                       />
                     }
-                    placeholder="Email"
+                    placeholder="Username"
                     size="large"
-                    type="email"
+                    type="text"
                   />
                 </Form.Item>
                 <Form.Item
