@@ -1,8 +1,10 @@
+import AdminHome from "../page/admin/AdminHome";
+
 const adminRoutes = [
   {
     path: "/home",
     exact: false,
-    page: LoginPage,
+    page: AdminHome,
   },
 ];
 

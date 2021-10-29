@@ -7,11 +7,10 @@ import {
   AuditOutlined,
   ApartmentOutlined,
   BlockOutlined,
-  ExceptionOutlined,
   KeyOutlined,
 } from "@ant-design/icons";
 
-export default function MainMenu() {
+export default function AdminMenu() {
   return (
     <Menu
       theme="light"

@@ -1,11 +1,22 @@
 import React, { useState } from "react";
-import { Button, Layout, Drawer, Divider, PageHeader } from "antd";
-import { MenuOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Layout,
+  Drawer,
+  Divider,
+  PageHeader,
+  Space,
+  Row,
+  Col,
+  Popover,
+  Badge,
+} from "antd";
+import { MenuOutlined, BellOutlined } from "@ant-design/icons";
 import logo from "../asset/image/mahakam_ulu.png";
-import MainMenu from "./MainMenu";
 
-export default function Template({ children }) {
+export default function Template({ children, menu, notif }) {
   const { Header, Content, Sider, Footer } = Layout;
+
   const [drawer, toggleDrawer] = useState(false);
   const [sider, toggleSider] = useState(false);
 
@@ -21,9 +32,7 @@ export default function Template({ children }) {
         bodyStyle={{ padding: "0px", margin: "0px" }}
         onClose={() => toggleDrawer(!drawer)}
       >
-        <div style={{ paddingTop: "50px" }}>
-          <MainMenu />
-        </div>
+        <div style={{ paddingTop: "50px" }}>{menu}</div>
       </Drawer>
       <Sider
         style={{ minHeight: "100%", backgroundColor: "#fff" }}
@@ -54,21 +63,37 @@ export default function Template({ children }) {
           </div>
         </div>
         <Divider />
-        <MainMenu />
+        {menu}
       </Sider>
       <Layout>
         <Header style={{ backgroundColor: "#FBFBFB", padding: "0px 18px" }}>
-          {sider && (
-            <Button
-              type="dashed"
-              shape="circle"
-              onClick={() => {
-                toggleDrawer(!drawer);
-              }}
-            >
-              <MenuOutlined />
-            </Button>
-          )}
+          <Row justify="end">
+            <Col>
+              <Space>
+                {sider && (
+                  <Button
+                    shape="circle"
+                    onClick={() => {
+                      toggleDrawer(!drawer);
+                    }}
+                  >
+                    <MenuOutlined />
+                  </Button>
+                )}
+                {notif && (
+                  <Popover
+                    trigger="click"
+                    placement="bottomRight"
+                    content={notif}
+                  >
+                    <Badge offset={[-2, 5]} size="small" count={2}>
+                      <Button shape="circle" icon={<BellOutlined />} />
+                    </Badge>
+                  </Popover>
+                )}
+              </Space>
+            </Col>
+          </Row>
         </Header>
         <PageHeader
           style={{ padding: "0xp", margin: "0px" }}

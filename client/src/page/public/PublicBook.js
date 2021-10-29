@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import logo from "../asset/image/mahakam_ulu.png";
+import logo from "../../asset/image/mahakam_ulu.png";
 import LazyLoad from "react-lazy-load";
-import { limitText } from "../core/Helper";
+import { limitText } from "../../core/Helper";
 import {
   BellOutlined,
   UserOutlined,
@@ -33,7 +33,6 @@ import {
 
 export default function BookPage() {
   const { Header, Content, Footer } = Layout;
-
   const [drawer, toggleDrawer] = useState(false);
 
   const notif = (
