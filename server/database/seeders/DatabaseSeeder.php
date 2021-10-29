@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +22,8 @@ class DatabaseSeeder extends Seeder
             ]);
 
             \App\Models\UserProfil::factory()->create([
-                'perpustakaan_id',
+                'user_id' => $user->id,
+                'perpustakaan_id' => ($role == 'public') ? 1 : null,
             ]);
         }
     }
