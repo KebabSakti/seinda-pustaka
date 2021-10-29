@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserPerpustakaansTable extends Migration
+class CreateUserProfilsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,17 @@ class CreateUserPerpustakaansTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_perpustakaans', function (Blueprint $table) {
+        Schema::create('user_profils', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->bigInteger('perpustakaan_id');
-            $table->text('no_induk')->nullable();
+            $table->bigInteger('perpustakaan_id')->nullable();
             $table->text('nama')->nullable();
-            $table->text('no_telp')->nullable();
+            $table->text('no_identitas')->nullable();
+            $table->text('npsn')->nullable();
+            $table->text('email')->nullable();
+            $table->text('no_hp')->nullable();
+            $table->text('sekolah')->nullable();
+            $table->text('kelas')->nullable();
             $table->text('alamat')->nullable();
             $table->text('catatan')->nullable();
             $table->timestamps();
@@ -33,6 +37,6 @@ class CreateUserPerpustakaansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_perpustakaans');
+        Schema::dropIfExists('user_profils');
     }
 }

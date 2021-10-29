@@ -7,22 +7,22 @@ const routes = [
   {
     path: "/",
     exact: true,
-    page: LoginPage,
+    page: <LoginPage />,
   },
   {
     path: "/admin",
     exact: false,
-    page: AdminApp,
+    page: <AdminApp />,
   },
   {
     path: "/perpus",
     exact: false,
-    page: PerpusApp,
+    page: <PerpusApp />,
   },
   {
     path: "/public",
     exact: false,
-    page: PublicApp,
+    page: <PublicApp />,
   },
 ];
 

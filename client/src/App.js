@@ -9,7 +9,7 @@ export default function App() {
         {routes.map((r, i) => {
           return (
             <Route key={i} exact={r.exact} path={r.path}>
-              {<r.page />}
+              {r.page}
             </Route>
           );
         })}
