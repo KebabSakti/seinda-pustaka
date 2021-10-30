@@ -1,1 +1,1 @@
-export default function PageMiddleware({ role, target }) {}
+export default function PageMiddleware({ role, page }) {}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo from "../../asset/image/mahakam_ulu.png";
 import LazyLoad from "react-lazy-load";
-import { limitText } from "../../core/Helper";
+import { limitText } from "../../module/HelperModule";
 import {
   BellOutlined,
   UserOutlined,

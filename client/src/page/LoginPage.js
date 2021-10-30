@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { token } from "../api/AuthApi";
 import { Layout, Card, Col, Row, Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import background from "../asset/image/background.jpg";
@@ -6,7 +7,16 @@ import logo from "../asset/image/mahakam_ulu.png";
 
 export default function LoginPage() {
   const { Content } = Layout;
+  const [loginForm] = Form.useForm();
   const [loading] = useState(false);
+
+  async function login(fields) {
+    try {
+      await token(fields.username, fields.password);
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
 
   return (
     <Layout
@@ -39,12 +49,7 @@ export default function LoginPage() {
                   SEINDAPUSTAKA
                 </div>
               </div>
-              <Form
-              // form={}
-              // name="login"
-              // initialValues={{ remember: true }}
-              // // onFinish={submitForm}
-              >
+              <Form name="login" form={loginForm} onFinish={login}>
                 <Form.Item
                   name="username"
                   style={{ marginBottom: "20px" }}

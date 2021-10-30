@@ -3,18 +3,44 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use Exception;
 
 class UserRepositories
 {
-    public static function index($username)
+    public static function fetchOne($id, $username)
     {
-        $user = User::with('userProfile')->where('username', $username)->first();
+        $query = User::with('userProfile');
 
-        if (empty($user)) {
-            throw new Exception('User tidak ditemukan');
+        if (!empty($id)) {
+            $query->where('id', $id);
         }
 
-        return $user;
+        if (!empty($username)) {
+            $query->where('username', $username);
+        }
+
+        $data = $query->first();
+
+        return $data;
+    }
+
+    public static function fetchMany($id, $username, $limit)
+    {
+        $query = User::with('userProfile');
+
+        if (!empty($id)) {
+            $query->where('id', $id);
+        }
+
+        if (!empty($username)) {
+            $query->where('username', $username);
+        }
+
+        if (!empty($limit)) {
+            $datas = $query->simplePaginate($limit);
+        } else {
+            $datas = $query->get();
+        }
+
+        return $datas;
     }
 }

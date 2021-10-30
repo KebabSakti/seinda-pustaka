@@ -34,7 +34,7 @@ export default function AdminApp() {
           <Route key={i} exact={r.exact} path={path + r.path}>
             {
               <Template menu={<AdminMenu />} notif={notif}>
-                {r.page}
+                <r.page />
               </Template>
             }
           </Route>

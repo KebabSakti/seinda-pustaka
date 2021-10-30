@@ -4,7 +4,7 @@ const adminRoutes = [
   {
     path: "/home",
     exact: false,
-    page: <AdminHome />,
+    page: AdminHome,
   },
 ];
 
