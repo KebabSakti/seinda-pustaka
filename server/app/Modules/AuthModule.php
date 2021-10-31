@@ -17,11 +17,11 @@ class AuthModule
                 throw new Exception($message);
             }
         } elseif ($user->role == 'perpustakaan') {
-            if ($user->tokenCan('role-perpustakaan')) {
+            if (!$user->tokenCan('role-perpustakaan')) {
                 throw new Exception($message);
             }
         } elseif ($user->role == 'public') {
-            if ($user->tokenCan('role-public')) {
+            if (!$user->tokenCan('role-public')) {
                 throw new Exception($message);
             }
         } else {

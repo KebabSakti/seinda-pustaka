@@ -31,7 +31,7 @@ import {
   Tooltip,
 } from "antd";
 
-export default function BookPage() {
+export default function BookPage({ logout }) {
   const { Header, Content, Footer } = Layout;
   const [drawer, toggleDrawer] = useState(false);
 
@@ -57,7 +57,7 @@ export default function BookPage() {
 
   const user = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item key="/logout" onClick={logout}>
         <PoweroffOutlined />
         <span style={{ marginLeft: "10px", cursor: "pointer" }}>Keluar</span>
       </Menu.Item>
@@ -85,7 +85,7 @@ export default function BookPage() {
             Pesan Masuk
           </span>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key="/password">
           <KeyOutlined />
           <span style={{ marginLeft: "10px", cursor: "pointer" }}>
             Ganti Password
@@ -119,7 +119,7 @@ export default function BookPage() {
             />
             <span
               style={{
-                marginLeft: "16px",
+                marginLeft: "12px",
                 fontWeight: "bold",
                 fontSize: "16px",
               }}

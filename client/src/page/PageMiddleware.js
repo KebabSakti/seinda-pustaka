@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { message, notification } from "antd";
 import { useHistory } from "react-router-dom";
-import { checkUser } from "../module/AuthModule";
+import { checkUser, getUser } from "../module/AuthModule";
 
 export default function PageMiddleware({ children }) {
   const history = useHistory();
@@ -13,6 +13,8 @@ export default function PageMiddleware({ children }) {
   async function check() {
     try {
       await checkUser();
+
+      message.success("Anda login sebagai " + getUser().username);
     } catch (e) {
       notification.error({
         message: "Error",

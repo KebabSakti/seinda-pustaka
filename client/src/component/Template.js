@@ -50,7 +50,7 @@ export default function Template({ children, menu, notif }) {
           <img
             alt="Logo Kabupaten Mahakam Ulu"
             src={logo}
-            style={{ width: "150px", margin: "20px 0px" }}
+            style={{ width: "100px", margin: "20px 0px" }}
           />
           <div
             style={{
@@ -67,7 +67,24 @@ export default function Template({ children, menu, notif }) {
       </Sider>
       <Layout>
         <Header style={{ backgroundColor: "#FBFBFB", padding: "0px 18px" }}>
-          <Row justify="end">
+          <Row justify="space-between">
+            <Col lg={0}>
+              <img
+                alt="Logo Kabupaten Mahakam Ulu"
+                src={logo}
+                style={{ width: "30px" }}
+              />
+              <span
+                style={{
+                  marginLeft: "12px",
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                }}
+              >
+                SEINDAPUSTAKA
+              </span>
+            </Col>
+            <Col xs={0} sm={0} md={0} lg={20} />
             <Col>
               <Space>
                 {sider && (
@@ -95,13 +112,13 @@ export default function Template({ children, menu, notif }) {
             </Col>
           </Row>
         </Header>
-        <PageHeader
+        {/* <PageHeader
           style={{ padding: "0xp", margin: "0px" }}
           backIcon={false}
           title="Perpustakaan"
           // subTitle="This is a subtitle"
-        />
-        <Content style={{ margin: "0px 16px 16px 16px" }}>
+        /> */}
+        <Content style={{ margin: "16px" }}>
           <div
             style={{ padding: 24, minHeight: "100%", backgroundColor: "#fff" }}
           >

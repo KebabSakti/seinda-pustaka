@@ -5,3 +5,7 @@ export function limitText(text, limit) {
 
   return str;
 }
+
+export function getPath(path) {
+  return path.substring(path.lastIndexOf("/"));
+}

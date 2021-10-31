@@ -1,28 +1,26 @@
 import { Menu } from "antd";
 import { BookOutlined, LogoutOutlined, HomeOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 
-export default function AdminMenu({ logout, path }) {
+export default function AdminMenu({ logout }) {
   return (
     <Menu
       theme="light"
-      selectable={false}
-      defaultSelectedKeys={[path]}
-      selectedKeys={[path]}
+      defaultSelectedKeys={["/home"]}
       mode="inline"
+      onClick={(event) => {}}
     >
       <Menu.Item
         key="/home"
         icon={<HomeOutlined style={{ fontSize: "18px" }} />}
       >
-        <Link to="/admin/home">Beranda</Link>
+        Beranda
       </Menu.Item>
 
       <Menu.Item
-        key="/perpus"
+        key="/book"
         icon={<BookOutlined style={{ fontSize: "18px" }} />}
       >
-        <Link to="/admin/perpus">Perpustakaan</Link>
+        Buku
       </Menu.Item>
 
       <Menu.Item
