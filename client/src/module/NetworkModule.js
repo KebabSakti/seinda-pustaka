@@ -1,5 +1,5 @@
 import axios from "axios";
-import { user } from "./AuthModule";
+import { getUser } from "./AuthModule";
 
 export default function Network() {
   const instance = axios.create({
@@ -10,9 +10,9 @@ export default function Network() {
     },
   });
 
-  if (user["token"] != null) {
+  if (getUser() != null) {
     instance.defaults.headers = {
-      Authorization: "Bearer " + user["token"],
+      Authorization: "Bearer " + getUser().token,
     };
   }
 

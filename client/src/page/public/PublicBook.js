@@ -50,7 +50,7 @@ export default function BookPage() {
         tersebut
       </p>
       <Divider>
-        <a href="#">Semua Notifikasi</a>
+        <Button type="link">Semua Notifikasi</Button>
       </Divider>
     </div>
   );
@@ -59,9 +59,7 @@ export default function BookPage() {
     <Menu>
       <Menu.Item>
         <PoweroffOutlined />
-        <a style={{ marginLeft: "10px" }} href="#">
-          Keluar
-        </a>
+        <span style={{ marginLeft: "10px", cursor: "pointer" }}>Keluar</span>
       </Menu.Item>
     </Menu>
   );
@@ -71,27 +69,27 @@ export default function BookPage() {
       <Menu mode={mode} disabledOverflow={true} defaultSelectedKeys={["/buku"]}>
         <Menu.Item key="/buku">
           <BookOutlined />
-          <a style={{ marginLeft: "10px" }} href="#">
+          <span style={{ marginLeft: "10px", cursor: "pointer" }}>
             Koleksi Buku
-          </a>
+          </span>
         </Menu.Item>
         <Menu.Item key="/pinjam">
           <SnippetsOutlined />
-          <a style={{ marginLeft: "10px" }} href="#">
+          <span style={{ marginLeft: "10px", cursor: "pointer" }}>
             Riwayat Pinjam
-          </a>
+          </span>
         </Menu.Item>
         <Menu.Item key="/pesan">
           <MailOutlined />
-          <a style={{ marginLeft: "10px" }} href="#">
+          <span style={{ marginLeft: "10px", cursor: "pointer" }}>
             Pesan Masuk
-          </a>
+          </span>
         </Menu.Item>
         <Menu.Item>
           <KeyOutlined />
-          <a style={{ marginLeft: "10px" }} href="#">
+          <span style={{ marginLeft: "10px", cursor: "pointer" }}>
             Ganti Password
-          </a>
+          </span>
         </Menu.Item>
       </Menu>
     );
@@ -190,7 +188,7 @@ export default function BookPage() {
                   <Badge.Ribbon
                     text="Terbaru"
                     color="red"
-                    style={i == 0 ? { display: "block" } : { display: "none" }}
+                    style={i === 0 ? { display: "block" } : { display: "none" }}
                   >
                     <div
                       style={{

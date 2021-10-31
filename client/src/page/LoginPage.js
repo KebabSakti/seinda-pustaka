@@ -1,20 +1,85 @@
-import React, { useState } from "react";
-import { token } from "../api/AuthApi";
-import { Layout, Card, Col, Row, Form, Input, Button } from "antd";
+import React, { useReducer } from "react";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import background from "../asset/image/background.jpg";
 import logo from "../asset/image/mahakam_ulu.png";
+import { loginUser } from "../module/AuthModule";
+import { useHistory } from "react-router";
+import {
+  Layout,
+  Card,
+  Col,
+  Row,
+  Form,
+  Input,
+  Button,
+  notification,
+} from "antd";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "loading":
+      return {
+        ...state,
+        loading: action.loading,
+      };
+
+    case "complete":
+      return {
+        ...state,
+        loading: false,
+        payload: action.data,
+      };
+
+    case "error":
+      return {
+        ...state,
+        loading: false,
+        payload: null,
+      };
+
+    default:
+      throw new Error("Terjadi kesalahan, cobalah beberapa saat lagi");
+  }
+}
 
 export default function LoginPage() {
+  const key = "auth";
   const { Content } = Layout;
   const [loginForm] = Form.useForm();
-  const [loading] = useState(false);
+  const history = useHistory();
+  const [state, dispatch] = useReducer(reducer, {
+    loading: false,
+  });
 
-  async function login(fields) {
+  async function submitForm(fields) {
     try {
-      await token(fields.username, fields.password);
+      dispatch({ type: "loading", loading: true });
+
+      await loginUser(fields.username, fields.password).then((user) => {
+        let page;
+
+        if (user.role === "admin") {
+          page = "/admin";
+        } else if (user.role === "perpustakaan") {
+          page = "/perpus";
+        } else {
+          page = "/public";
+        }
+
+        history.push(page);
+      });
     } catch (e) {
-      console.log(e.message);
+      notification.error({
+        key: key,
+        message: "Error",
+        description:
+          e.response.data ??
+          "Terjadi kesalahan, harap coba beberapa saat lagi. [" +
+            e.message +
+            "]",
+      });
+
+      dispatch({ type: "error" });
     }
   }
 
@@ -49,7 +114,7 @@ export default function LoginPage() {
                   SEINDAPUSTAKA
                 </div>
               </div>
-              <Form name="login" form={loginForm} onFinish={login}>
+              <Form name="login" form={loginForm} onFinish={submitForm}>
                 <Form.Item
                   name="username"
                   style={{ marginBottom: "20px" }}
@@ -93,7 +158,7 @@ export default function LoginPage() {
                     type="primary"
                     htmlType="submit"
                     size="large"
-                    loading={loading}
+                    loading={state.loading}
                   >
                     Log in
                   </Button>

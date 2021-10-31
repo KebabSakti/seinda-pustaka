@@ -1,11 +1,30 @@
-import { useRouteMatch, Redirect, Switch, Route } from "react-router-dom";
+import {
+  useRouteMatch,
+  useHistory,
+  Redirect,
+  Switch,
+  Route,
+} from "react-router-dom";
 import Template from "../../component/Template";
 import adminRoutes from "../../route/admin_route";
 import AdminMenu from "../../component/AdminMenu";
 import { Divider } from "antd";
+import PageMiddleware from "../PageMiddleware";
+import { logoutUser } from "../../module/AuthModule";
 
 export default function AdminApp() {
   const { path, url } = useRouteMatch();
+  const history = useHistory();
+
+  async function logout() {
+    try {
+      await logoutUser();
+
+      history.push("/");
+    } catch (e) {
+      history.push("/");
+    }
+  }
 
   const notif = (
     <div style={{ width: "250px" }}>
@@ -22,27 +41,29 @@ export default function AdminApp() {
         tersebut
       </p>
       <Divider>
-        <a href="#">Semua Notifikasi</a>
+        <span style={{ cursor: "pointer" }}>Semua Notifikasi</span>
       </Divider>
     </div>
   );
 
   return (
-    <Switch>
-      {adminRoutes.map((r, i) => {
-        return (
-          <Route key={i} exact={r.exact} path={path + r.path}>
-            {
-              <Template menu={<AdminMenu />} notif={notif}>
-                <r.page />
-              </Template>
-            }
-          </Route>
-        );
-      })}
-      <Route path={"*"}>
-        <Redirect to={url + "/home"} />
-      </Route>
-    </Switch>
+    <PageMiddleware>
+      <Switch>
+        {adminRoutes.map((r, i) => {
+          return (
+            <Route key={i} exact={r.exact} path={path + r.path}>
+              {
+                <Template menu={<AdminMenu logout={logout} />} notif={notif}>
+                  <r.page />
+                </Template>
+              }
+            </Route>
+          );
+        })}
+        <Route path={"*"}>
+          <Redirect to={url + "/home"} />
+        </Route>
+      </Switch>
+    </PageMiddleware>
   );
 }
