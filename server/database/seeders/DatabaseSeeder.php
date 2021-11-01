@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +13,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        //MASTER DATA FACTORY
+        \App\Models\Kecamatan::factory()->count(5)->create();
+        \App\Models\Kelurahan::factory()->count(5)->create();
+        \App\Models\Provinsi::factory()->count(5)->create();
+        \App\Models\Kabupaten::factory()->count(5)->create();
+        \App\Models\JenisPerpustakaan::factory()->count(5)->create();
+
+        //PERPUSTAKAAN FACTORY
+        for ($i = 0; $i <= 50; ++$i) {
+            \App\Models\Perpustakaan::factory()->create([
+                'jenis_perpustakaan_id' => \App\Models\JenisPerpustakaan::inRandomOrder()->first()->id,
+                'kecamatan' => \App\Models\Kecamatan::inRandomOrder()->first()->nama_kecamatan,
+                'kelurahan' => \App\Models\Kelurahan::inRandomOrder()->first()->nama_kelurahan,
+                'provinsi' => \App\Models\Provinsi::inRandomOrder()->first()->nama_provinsi,
+                'kabupaten_kota' => \App\Models\Kabupaten::inRandomOrder()->first()->nama_kabupaten,
+            ]);
+        }
+
+        //USER FACTORY
         $roles = ['admin', 'perpustakaan', 'public'];
 
         foreach ($roles as $role) {
@@ -23,7 +41,7 @@ class DatabaseSeeder extends Seeder
 
             \App\Models\UserProfil::factory()->create([
                 'user_id' => $user->id,
-                'perpustakaan_id' => ($role == 'public') ? 1 : null,
+                'perpustakaan_id' => \App\Models\Perpustakaan::inRandomOrder()->first()->id,
             ]);
         }
     }

@@ -15,6 +15,7 @@ class CreatePerpustakaansTable extends Migration
     {
         Schema::create('perpustakaans', function (Blueprint $table) {
             $table->id();
+            $table->text('jenis_perpustakaan_id');
             $table->text('nama')->nullable();
             $table->text('alamat')->nullable();
             $table->text('kecamatan')->nullable();
@@ -25,7 +26,6 @@ class CreatePerpustakaansTable extends Migration
             $table->text('website')->nullable();
             $table->text('provinsi')->nullable();
             $table->text('kabupaten_kota')->nullable();
-            $table->text('jenis_perpustakaan')->nullable();
             $table->text('status_perpustakaan')->nullable();
             $table->text('npsn')->nullable();
             $table->text('nis')->nullable();

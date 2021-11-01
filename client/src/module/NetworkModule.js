@@ -11,9 +11,8 @@ export default function Network() {
   });
 
   if (getUser() != null) {
-    instance.defaults.headers = {
-      Authorization: "Bearer " + getUser().token,
-    };
+    instance.defaults.headers.common.Authorization =
+      "Bearer " + getUser().token;
   }
 
   return instance;

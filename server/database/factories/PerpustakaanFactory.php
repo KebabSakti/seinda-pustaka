@@ -23,15 +23,16 @@ class PerpustakaanFactory extends Factory
     {
         return [
             'nama' => 'Perpustakaan '.$this->faker->name(),
-            'alamat' => $this->faker->address(),
-            'kecamatan' => $this->faker->state(),
-            'kelurahan' => $this->faker->city(),
             'kode_pos' => $this->faker->postcode(),
             'telp' => $this->faker->phoneNumber(),
             'email' => $this->faker->email(),
             'website' => $this->faker->domainName(),
-            'provinsi' => $this->faker->country(),
-            'kabupaten_kota' => $this->faker->streetName(),
+            'status_perpustakaan' => 'Negeri',
+            'npsn' => $this->faker->creditCardNumber(),
+            'struktur_organisasi' => $this->faker->word(),
+            'nama_kepala_perpustakaan' => $this->faker->name(),
+            'nama_kepala_instansi_induk' => $this->faker->name(),
+            'tahun_berdiri_perpustakaan' => $this->faker->year(),
         ];
     }
 }

@@ -14,7 +14,7 @@ export default function PageMiddleware({ children }) {
     try {
       await checkUser();
 
-      message.success("Anda login sebagai " + getUser().username);
+      message.success("Anda login sebagai " + getUser().user_profile.nama);
     } catch (e) {
       notification.error({
         message: "Error",

@@ -12,7 +12,7 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'abilities:role-admin']], function () {
-    //admin route
+    Route::post('perpus/index', [App\Http\Controllers\PerpustakaanController::class, 'index']);
 });
 
 Route::group(['prefix' => 'perpustakaan', 'middleware' => ['auth:sanctum', 'abilities:role-perpustakaan']], function () {
