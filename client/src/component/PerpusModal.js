@@ -6,7 +6,12 @@ export default function PerpusModal() {
 
   return (
     <div>
-      <Form layout="vertical">
+      <Form
+        layout="vertical"
+        onFinish={(values) => {
+          console.log(values);
+        }}
+      >
         <Form.Item
           label="Nama Perpustakaan"
           name="nama"

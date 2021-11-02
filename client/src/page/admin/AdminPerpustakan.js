@@ -55,7 +55,12 @@ export default function AdminPerpustakaan() {
   const { RangePicker } = DatePicker;
   const { Text, Title } = Typography;
   const [modal, setModal] = useState(false);
-  const [filter, setFilter] = useState({});
+
+  const [filter, setFilter] = useState({
+    page: 1,
+    sort_key: "id",
+    sort_mode: "desc",
+  });
 
   const [state, dispatch] = useReducer(reducer, {
     loading: true,
@@ -63,8 +68,8 @@ export default function AdminPerpustakaan() {
       datas: [],
       pagination: {
         current: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 5,
+        total: 5,
         showLessItems: true,
         responsive: true,
         showSizeChanger: false,
@@ -176,11 +181,11 @@ export default function AdminPerpustakaan() {
     },
   ];
 
-  const fetchDatas = useCallback(async (page, params) => {
+  const fetchDatas = useCallback(async (params) => {
     try {
       dispatch({ type: "loading", loading: true });
 
-      await perpusIndex(page, params).then((response) => {
+      await perpusIndex(params).then((response) => {
         let results = response.data.data.map((item) => {
           return { ...item, key: item.id };
         });
@@ -211,13 +216,14 @@ export default function AdminPerpustakaan() {
 
   function tableChange(tPagination, _, tSorter) {
     if (tSorter != null) {
-      fetchDatas(tPagination.current, {
+      setFilter({
         ...filter,
+        page: tPagination.current,
         sort_key: tSorter.field,
         sort_mode: tSorter.order,
       });
     } else {
-      fetchDatas(tPagination.current, filter);
+      setFilter({ ...filter, page: tPagination.current });
     }
   }
 
@@ -242,7 +248,7 @@ export default function AdminPerpustakaan() {
   //======================================================================//
 
   useEffect(() => {
-    fetchDatas(1, { ...filter, sort_key: "id", sort_mode: "desc" });
+    fetchDatas(filter);
   }, [filter, fetchDatas]);
 
   //======================================================================//

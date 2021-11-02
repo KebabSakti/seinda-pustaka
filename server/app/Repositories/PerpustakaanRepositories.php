@@ -30,7 +30,7 @@ class PerpustakaanRepositories
         if (!empty($keyword)) {
             $query->where(function ($query) use ($columns, $keyword) {
                 foreach ($columns as $column) {
-                    $query->orWhere($column, 'like', '%'.$keyword.'%');
+                    $query->orWhere($column, 'like', '%' . $keyword . '%');
                 }
             });
         }
@@ -39,7 +39,7 @@ class PerpustakaanRepositories
             $query->orderBy($sortKey, UtilityModule::sorter($sortMode));
         }
 
-        $datas = $query->paginate(10);
+        $datas = $query->paginate(5);
 
         return $datas;
     }
