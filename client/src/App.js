@@ -12,16 +12,22 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
-import { Divider } from "antd";
+import { Divider, Modal, Spin } from "antd";
 import AdminHome from "./page/admin/AdminHome";
 import PerpusHome from "./page/perpus/PerpusHome";
 import PublicBook from "./page/public/PublicBook";
 import AdminPerpustakaan from "./page/admin/AdminPerpustakan";
 import { getPath } from "./module/HelperModule";
+import { useState } from "react";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export default function App() {
   const history = useHistory();
+  const loader = <LoadingOutlined style={{ fontSize: 40 }} spin />;
+
   let location = useLocation();
+
+  const [fullLoading, setFullLoading] = useState(false);
 
   const notif = (
     <div style={{ width: "250px" }}>
@@ -45,10 +51,16 @@ export default function App() {
 
   async function logout() {
     try {
+      setFullLoading(true);
+
       await logoutUser();
+
+      setFullLoading(false);
 
       toLoginPage();
     } catch (e) {
+      setFullLoading(false);
+
       toLoginPage();
     }
   }
@@ -58,57 +70,71 @@ export default function App() {
   }
 
   return (
-    <Switch>
-      <Route exact path="/">
-        <LoginPage />
-      </Route>
-      <PageMiddleware>
-        <Route path="/admin">
-          <Template
-            notif={notif}
-            menu={
-              <AdminMenu logout={logout} path={getPath(location.pathname)} />
-            }
-          >
+    <div>
+      <Modal
+        centered
+        width={150}
+        footer={null}
+        closable={false}
+        maskClosable={false}
+        keyboard={false}
+        visible={fullLoading}
+        style={{ textAlign: "center" }}
+      >
+        <Spin size="large" tip="Loading.." indicator={loader} />
+      </Modal>
+      <Switch>
+        <Route exact path="/">
+          <LoginPage />
+        </Route>
+        <PageMiddleware setFullLoading={setFullLoading}>
+          <Route path="/admin">
+            <Template
+              notif={notif}
+              menu={
+                <AdminMenu logout={logout} path={getPath(location.pathname)} />
+              }
+            >
+              <Switch>
+                <Route path="/admin/home">
+                  <AdminHome />
+                </Route>
+                <Route path="/admin/perpus">
+                  <AdminPerpustakaan />
+                </Route>
+                <Route path="*">
+                  <Redirect to="/admin/home" />
+                </Route>
+              </Switch>
+            </Template>
+          </Route>
+          <Route path="/perpus">
+            <Template notif={notif} menu={<PerpusMenu logout={logout} />}>
+              <Switch>
+                <Route path="/perpus/home">
+                  <PerpusHome />
+                </Route>
+                <Route path="*">
+                  <Redirect to="/perpus/home" />
+                </Route>
+              </Switch>
+            </Template>
+          </Route>
+          <Route path="/public">
             <Switch>
-              <Route path="/admin/home">
-                <AdminHome />
-              </Route>
-              <Route path="/admin/perpus">
-                <AdminPerpustakaan />
+              <Route path="/public/book">
+                <PublicBook logout={logout} />
               </Route>
               <Route path="*">
-                <Redirect to="/admin/home" />
+                <Redirect to="/public/book" />
               </Route>
             </Switch>
-          </Template>
+          </Route>
+        </PageMiddleware>
+        <Route path="*">
+          <PageNotFound />
         </Route>
-        <Route path="/perpus">
-          <Template notif={notif} menu={<PerpusMenu logout={logout} />}>
-            <Switch>
-              <Route path="/perpus/home">
-                <PerpusHome />
-              </Route>
-              <Route path="*">
-                <Redirect to="/perpus/home" />
-              </Route>
-            </Switch>
-          </Template>
-        </Route>
-        <Route path="/public">
-          <Switch>
-            <Route path="/public/book">
-              <PublicBook logout={logout} />
-            </Route>
-            <Route path="*">
-              <Redirect to="/public/book" />
-            </Route>
-          </Switch>
-        </Route>
-      </PageMiddleware>
-      <Route path="*">
-        <PageNotFound />
-      </Route>
-    </Switch>
+      </Switch>
+    </div>
   );
 }

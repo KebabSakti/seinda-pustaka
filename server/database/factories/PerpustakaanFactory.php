@@ -23,6 +23,7 @@ class PerpustakaanFactory extends Factory
     {
         return [
             'nama' => 'Perpustakaan '.$this->faker->name(),
+            'alamat' => $this->faker->address(),
             'kode_pos' => $this->faker->postcode(),
             'telp' => $this->faker->phoneNumber(),
             'email' => $this->faker->email(),

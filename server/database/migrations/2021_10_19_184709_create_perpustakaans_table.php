@@ -32,7 +32,7 @@ class CreatePerpustakaansTable extends Migration
             $table->text('struktur_organisasi')->nullable();
             $table->text('nama_kepala_perpustakaan')->nullable();
             $table->text('nama_kepala_instansi_induk')->nullable();
-            $table->text('tahun_berdiri_perpustakaan')->nullable();
+            $table->integer('tahun_berdiri_perpustakaan')->nullable();
             $table->timestamps();
         });
     }

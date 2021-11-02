@@ -14,11 +14,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //MASTER DATA FACTORY
-        \App\Models\Kecamatan::factory()->count(5)->create();
-        \App\Models\Kelurahan::factory()->count(5)->create();
-        \App\Models\Provinsi::factory()->count(5)->create();
-        \App\Models\Kabupaten::factory()->count(5)->create();
-        \App\Models\JenisPerpustakaan::factory()->count(5)->create();
+        // \App\Models\Kecamatan::factory()->count(5)->create();
+        // \App\Models\Kelurahan::factory()->count(5)->create();
+        // \App\Models\Provinsi::factory()->count(5)->create();
+        // \App\Models\Kabupaten::factory()->count(5)->create();
+        // \App\Models\JenisPerpustakaan::factory()->count(5)->create();
 
         //PERPUSTAKAAN FACTORY
         for ($i = 0; $i <= 50; ++$i) {
@@ -32,17 +32,17 @@ class DatabaseSeeder extends Seeder
         }
 
         //USER FACTORY
-        $roles = ['admin', 'perpustakaan', 'public'];
+        // $roles = ['admin', 'perpustakaan', 'public'];
 
-        foreach ($roles as $role) {
-            $user = \App\Models\User::factory()->create([
-                'role' => $role,
-            ]);
+        // foreach ($roles as $role) {
+        //     $user = \App\Models\User::factory()->create([
+        //         'role' => $role,
+        //     ]);
 
-            \App\Models\UserProfil::factory()->create([
-                'user_id' => $user->id,
-                'perpustakaan_id' => \App\Models\Perpustakaan::inRandomOrder()->first()->id,
-            ]);
-        }
+        //     \App\Models\UserProfil::factory()->create([
+        //         'user_id' => $user->id,
+        //         'perpustakaan_id' => \App\Models\Perpustakaan::inRandomOrder()->first()->id,
+        //     ]);
+        // }
     }
 }

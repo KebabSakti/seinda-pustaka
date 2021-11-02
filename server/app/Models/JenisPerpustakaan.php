@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class JenisPerpustakaan extends Model
 {
     use HasFactory;
+
+    public function perpustakaan()
+    {
+        return $this->belongsTo(\App\Models\Perpustakaan::class);
+    }
 }
