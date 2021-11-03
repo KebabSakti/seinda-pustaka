@@ -1,8 +1,7 @@
 import { useEffect, useCallback, useReducer, useState } from "react";
-import { perpusIndex } from "../../api/AuthPerpus";
+import { perpusIndex } from "../../api/PerpusApi";
 import { debounce } from "../../module/UtilityModule";
 import PerpusModal from "../../component/PerpusModal";
-
 import {
   Row,
   Col,
@@ -16,6 +15,7 @@ import {
   Divider,
   notification,
   Modal,
+  Form,
 } from "antd";
 import {
   BarsOutlined,
@@ -54,12 +54,14 @@ function reducer(state, action) {
 export default function AdminPerpustakaan() {
   const { RangePicker } = DatePicker;
   const { Text, Title } = Typography;
+  const [form] = Form.useForm();
   const [modal, setModal] = useState(false);
 
   const [filter, setFilter] = useState({
     page: 1,
     sort_key: "id",
     sort_mode: "desc",
+    paging_size: 5,
   });
 
   const [state, dispatch] = useReducer(reducer, {
@@ -228,7 +230,7 @@ export default function AdminPerpustakaan() {
   }
 
   function tableSearch(e) {
-    setFilter({ ...filter, keyword: e.target.value });
+    setFilter({ ...filter, keyword: e.target.value, page: 1 });
   }
 
   function tableDateRange(_, dateStrings) {
@@ -257,11 +259,24 @@ export default function AdminPerpustakaan() {
     <div>
       <Modal
         centered
-        title="Perpustakaan"
         visible={modal}
+        width={600}
+        closable={false}
+        maskClosable={false}
+        keyboard={false}
+        destroyOnClose={true}
         onCancel={() => setModal(false)}
+        onOk={async () => {
+          try {
+            await form.validateFields();
+
+            console.log(form.getFieldValue());
+          } catch (e) {
+            console.log(e);
+          }
+        }}
       >
-        <PerpusModal />
+        <PerpusModal form={form} />
       </Modal>
       <Title level={4}>Daftar Perpustakaan</Title>
       <Divider style={{ margin: "10px 0px" }} />

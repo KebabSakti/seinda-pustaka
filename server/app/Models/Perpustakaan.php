@@ -11,6 +11,6 @@ class Perpustakaan extends Model
 
     public function jenis_perpustakaan()
     {
-        return $this->hasOne(\App\Models\JenisPerpustakaan::class, 'id', 'jenis_perpustakaan_id');
+        return $this->belongsTo(\App\Models\JenisPerpustakaan::class);
     }
 }

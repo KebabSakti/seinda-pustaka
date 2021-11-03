@@ -22,7 +22,11 @@ class DatabaseSeeder extends Seeder
 
         //PERPUSTAKAAN FACTORY
         for ($i = 0; $i <= 50; ++$i) {
+            $user = \App\Models\User::inRandomOrder()->first();
+
             \App\Models\Perpustakaan::factory()->create([
+                'user_id' => $user->id,
+                'username' => $user->username,
                 'jenis_perpustakaan_id' => \App\Models\JenisPerpustakaan::inRandomOrder()->first()->id,
                 'kecamatan' => \App\Models\Kecamatan::inRandomOrder()->first()->nama_kecamatan,
                 'kelurahan' => \App\Models\Kelurahan::inRandomOrder()->first()->nama_kelurahan,

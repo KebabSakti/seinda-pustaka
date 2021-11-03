@@ -22,3 +22,8 @@ Route::group(['prefix' => 'perpustakaan', 'middleware' => ['auth:sanctum', 'abil
 Route::group(['prefix' => 'public', 'middleware' => ['auth:sanctum', 'abilities:role-public']], function () {
     //public route
 });
+
+//GLOBAL ROUTE [need auth]
+Route::group(['prefix' => 'global', 'middleware' => ['auth:sanctum']], function () {
+    Route::post('index', [App\Http\Controllers\ExtraDataContoller::class, 'index']);
+});

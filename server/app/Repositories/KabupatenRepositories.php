@@ -2,30 +2,36 @@
 
 namespace App\Repositories;
 
-use App\Models\Perpustakaan;
 use App\Modules\UtilityModule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class PerpustakaanRepositories
+class KabupatenRepositories
 {
-    public static function fetchOne($id)
+    public static function fetchOne($keyword)
     {
-        $data = DB::table('perpustakaans')->find($id);
+        $columns = Schema::getColumnListing('kabupatens');
+
+        $query = DB::table('kabupatens');
+
+        if (!empty($keyword)) {
+            $query->where(function ($query) use ($columns, $keyword) {
+                foreach ($columns as $column) {
+                    $query->orWhere($column, $keyword);
+                }
+            });
+        }
+
+        $data = $query->first();
 
         return $data;
     }
 
     public static function fetchMany($keyword = null, $sortKey = null, $sortMode = null, $dStart = null, $dEnd = null, $pagingSize = null)
     {
-        $columns = Schema::getColumnListing('perpustakaans');
+        $columns = Schema::getColumnListing('kabupatens');
 
-        $query = Perpustakaan::with(['jenis_perpustakaan']);
-
-        if (!empty($dStart) && !empty($dEnd)) {
-            $query->where('tahun_berdiri_perpustakaan', '>=', $dStart)
-                ->where('tahun_berdiri_perpustakaan', '<=', $dEnd);
-        }
+        $query = DB::table('kabupatens');
 
         if (!empty($keyword)) {
             $query->where(function ($query) use ($columns, $keyword) {
