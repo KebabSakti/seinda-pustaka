@@ -51,4 +51,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\UserProfil::class);
     }
+
+    /**
+     * Get the user associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function perpustakaan_role()
+    {
+        return $this->hasOne(\App\Models\PerpustakaanRole::class);
+    }
 }

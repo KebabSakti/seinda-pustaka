@@ -10,6 +10,7 @@ import {
   notification,
   DatePicker,
   InputNumber,
+  Checkbox,
 } from "antd";
 import { extraIndex } from "../api/ExtraApi";
 
@@ -95,19 +96,22 @@ export default function PerpusModal({ form }) {
         </Row>
         <Form.Item
           label="Jenis"
-          name="jenis_perpustakaan_id"
-          rules={[{ required: true, message: "Field tidak boleh kosong" }]}
+          name="jenis_perpustakaan_id[]"
+          rules={[{ required: false, message: "Field tidak boleh kosong" }]}
         >
-          <Select placeholder="Pilihan">
+          <Select placeholder="Pilihan" multiple={true}>
             <Option key="SD" value="Perpustakaan SD">
               Perpustakaan SD
+            </Option>
+            <Option key="SMP" value="Perpustakaan SMP">
+              Perpustakaan SMP
             </Option>
           </Select>
         </Form.Item>
         <Form.Item
           label="Nama"
           name="nama"
-          rules={[{ required: true, message: "Field tidak boleh kosong" }]}
+          rules={[{ required: false, message: "Field tidak boleh kosong" }]}
         >
           <Input />
         </Form.Item>
@@ -115,7 +119,7 @@ export default function PerpusModal({ form }) {
           <Input.TextArea />
         </Form.Item>
         <Form.Item label="Kecamatan" name="kecamatan">
-          <Select placeholder="Pilihan">
+          <Select placeholder="Pilihan" loading={state.loading}>
             {state.payload != null &&
               state.payload.kecamatan.map((item) => (
                 <Option key={item.id} value={item.nama_kecamatan}>
@@ -125,7 +129,7 @@ export default function PerpusModal({ form }) {
           </Select>
         </Form.Item>
         <Form.Item label="Kelurahan" name="kelurahan">
-          <Select placeholder="Pilihan">
+          <Select placeholder="Pilihan" loading={state.loading}>
             {state.payload != null &&
               state.payload.kelurahan.map((item) => (
                 <Option key={item.id} value={item.nama_kelurahan}>
@@ -135,7 +139,7 @@ export default function PerpusModal({ form }) {
           </Select>
         </Form.Item>
         <Form.Item label="Provinsi" name="provinsi">
-          <Select placeholder="Pilihan">
+          <Select placeholder="Pilihan" loading={state.loading}>
             {state.payload != null &&
               state.payload.provinsi.map((item) => (
                 <Option key={item.id} value={item.nama_provinsi}>
@@ -145,7 +149,7 @@ export default function PerpusModal({ form }) {
           </Select>
         </Form.Item>
         <Form.Item label="Kabupaten" name="kabupaten">
-          <Select placeholder="Pilihan">
+          <Select placeholder="Pilihan" loading={state.loading}>
             {state.payload != null &&
               state.payload.kabupaten.map((item) => (
                 <Option key={item.id} value={item.nama_kabupaten}>
@@ -301,6 +305,18 @@ export default function PerpusModal({ form }) {
         </Form.Item>
         <Form.Item label="Jml. Peta" name="jumlah_peta">
           <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Divider style={{ margin: "15px 0px" }} />
+        <Row>
+          <Col span={24}>
+            <Title level={4} style={{ textAlign: "center" }}>
+              Cara Mendapat Koleksi
+            </Title>
+            <Divider style={{ margin: "15px 0px" }} />
+          </Col>
+        </Row>
+        <Form.Item label="Sumber Koleksi" valuePropName="checked">
+          <Checkbox>Pembelian</Checkbox>
         </Form.Item>
       </Form>
     </div>

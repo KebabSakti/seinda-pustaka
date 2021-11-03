@@ -8,7 +8,7 @@ class UserRepositories
 {
     public static function fetchOne($id, $username)
     {
-        $query = User::with('userProfile');
+        $query = User::with(['userProfile', 'perpustakaan_role']);
 
         if (!empty($id)) {
             $query->where('id', $id);

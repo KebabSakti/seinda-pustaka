@@ -16,7 +16,6 @@ class CreatePerpustakaansTable extends Migration
         Schema::create('perpustakaans', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->string('username');
             $table->text('jenis_perpustakaan_id');
             $table->text('nama')->nullable();
             $table->text('alamat')->nullable();

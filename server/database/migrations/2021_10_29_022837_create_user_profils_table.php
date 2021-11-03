@@ -16,7 +16,6 @@ class CreateUserProfilsTable extends Migration
         Schema::create('user_profils', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->bigInteger('perpustakaan_id')->nullable();
             $table->text('nama')->nullable();
             $table->text('no_identitas')->nullable();
             $table->text('npsn')->nullable();
