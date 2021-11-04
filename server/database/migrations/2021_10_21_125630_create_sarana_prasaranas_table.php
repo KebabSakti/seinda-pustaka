@@ -29,7 +29,7 @@ class CreateSaranaPrasaranasTable extends Migration
             $table->integer('kursi_kerja')->default(0);
             $table->integer('kursi_tamu')->default(0);
             $table->integer('komputer')->default(0);
-            $table->integer('tv')->default(0);
+            $table->integer('sarana_tv')->default(0);
             $table->integer('ac')->default(0);
             $table->timestamps();
         });

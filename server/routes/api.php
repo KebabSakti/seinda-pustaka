@@ -12,7 +12,10 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'abilities:role-admin']], function () {
-    Route::post('perpus/index', [App\Http\Controllers\PerpustakaanController::class, 'index']);
+    Route::prefix('perpus')->group(function () {
+        Route::post('index', [App\Http\Controllers\PerpustakaanController::class, 'index']);
+        Route::post('store', [App\Http\Controllers\PerpustakaanController::class, 'store']);
+    });
 });
 
 Route::group(['prefix' => 'perpustakaan', 'middleware' => ['auth:sanctum', 'abilities:role-perpustakaan']], function () {

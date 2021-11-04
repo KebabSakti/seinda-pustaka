@@ -13,6 +13,7 @@ class ExtraDataContoller extends Controller
             'kabupaten' => \App\Repositories\KabupatenRepositories::fetchMany(),
             'kelurahan' => \App\Repositories\KelurahanRepositories::fetchMany(),
             'provinsi' => \App\Repositories\ProvinsiRepositories::fetchMany(),
+            'jenis_perpustakaan' => \App\Repositories\JenisPerpusRepositories::fetchMany(null, 'level', 'desc'),
         ];
 
         return response()->json($datas);

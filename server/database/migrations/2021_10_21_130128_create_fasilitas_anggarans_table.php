@@ -17,7 +17,7 @@ class CreateFasilitasAnggaransTable extends Migration
             $table->id();
             $table->bigInteger('perpustakaan_id');
             $table->boolean('internet')->default(false);
-            $table->boolean('tv')->default(false);
+            $table->boolean('fasilitas_tv')->default(false);
             $table->boolean('kantin')->default(false);
             $table->boolean('mushollah')->default(false);
             $table->boolean('apbn')->default(false);

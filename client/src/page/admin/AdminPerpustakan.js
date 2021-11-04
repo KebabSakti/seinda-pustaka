@@ -261,7 +261,6 @@ export default function AdminPerpustakaan() {
         centered
         visible={modal}
         width={600}
-        closable={false}
         maskClosable={false}
         keyboard={false}
         destroyOnClose={true}

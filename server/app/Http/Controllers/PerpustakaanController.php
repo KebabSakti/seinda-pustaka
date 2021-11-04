@@ -9,8 +9,15 @@ class PerpustakaanController extends Controller
 {
     public function index(Request $request)
     {
-        $datas = PerpustakaanRepositories::fetchMany($request->keyword, $request->sort_key, $request->sort_mode, $request->d_start, $request->d_end, $request->paging_size);
+        $datas = PerpustakaanRepositories::fetchMany($request);
 
         return response()->json($datas);
+    }
+
+    public static function store(Request $request)
+    {
+        $data = PerpustakaanRepositories::store($request);
+
+        return response()->json($data);
     }
 }

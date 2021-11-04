@@ -11,6 +11,7 @@ import {
   DatePicker,
   InputNumber,
   Checkbox,
+  Radio,
 } from "antd";
 import { extraIndex } from "../api/ExtraApi";
 
@@ -94,18 +95,14 @@ export default function PerpusModal({ form }) {
             <Divider style={{ margin: "15px 0px" }} />
           </Col>
         </Row>
-        <Form.Item
-          label="Jenis"
-          name="jenis_perpustakaan_id[]"
-          rules={[{ required: false, message: "Field tidak boleh kosong" }]}
-        >
-          <Select placeholder="Pilihan" multiple={true}>
-            <Option key="SD" value="Perpustakaan SD">
-              Perpustakaan SD
-            </Option>
-            <Option key="SMP" value="Perpustakaan SMP">
-              Perpustakaan SMP
-            </Option>
+        <Form.Item label="Jenis Perpustakaan" name="jenis_perpustakaan_id">
+          <Select placeholder="Pilihan" loading={state.loading}>
+            {state.payload != null &&
+              state.payload.jenis_perpustakaan.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.nama_jenis_perpustakaan} (Level : {item.level})
+                </Option>
+              ))}
           </Select>
         </Form.Item>
         <Form.Item
@@ -310,13 +307,215 @@ export default function PerpusModal({ form }) {
         <Row>
           <Col span={24}>
             <Title level={4} style={{ textAlign: "center" }}>
-              Cara Mendapat Koleksi
+              Cara Mendapat Koleksi Dan Layanan
             </Title>
             <Divider style={{ margin: "15px 0px" }} />
           </Col>
         </Row>
-        <Form.Item label="Sumber Koleksi" valuePropName="checked">
-          <Checkbox>Pembelian</Checkbox>
+        <Form.Item label="Sumber Koleksi" name="sumber_koleksi">
+          <Checkbox.Group>
+            <Row>
+              <Col>
+                <Checkbox value="Pembelian">Pembelian</Checkbox>
+              </Col>
+              <Col>
+                <Checkbox value="Hadiah">Hadiah</Checkbox>
+              </Col>
+            </Row>
+          </Checkbox.Group>
+        </Form.Item>
+        <Form.Item label="Alat Seleksi" name="alat_seleksi">
+          <Checkbox.Group>
+            <Row>
+              <Col>
+                <Checkbox value="Bibliografi">Bibliografi</Checkbox>
+              </Col>
+              <Col>
+                <Checkbox value="Daftar Buku Toko Buku">
+                  Daftar Buku Toko Buku
+                </Checkbox>
+              </Col>
+            </Row>
+          </Checkbox.Group>
+        </Form.Item>
+        <Form.Item label="Sistem Layanan" name="sistem_layanan">
+          <Checkbox.Group>
+            <Row>
+              <Col>
+                <Checkbox value="Terbuka">Terbuka</Checkbox>
+              </Col>
+              <Col>
+                <Checkbox value="Tertutup">Tertutup</Checkbox>
+              </Col>
+            </Row>
+          </Checkbox.Group>
+        </Form.Item>
+        <Form.Item label="Jenis Layanan" name="jenis_layanan">
+          <Checkbox.Group>
+            <Row>
+              <Col>
+                <Checkbox value="Referensi">Referensi</Checkbox>
+              </Col>
+              <Col>
+                <Checkbox value="Internet">Internet</Checkbox>
+              </Col>
+            </Row>
+          </Checkbox.Group>
+        </Form.Item>
+        <Divider style={{ margin: "15px 0px" }} />
+        <Row>
+          <Col span={24}>
+            <Title level={4} style={{ textAlign: "center" }}>
+              Jam Buka Perpustakaan
+            </Title>
+            <Divider style={{ margin: "15px 0px" }} />
+          </Col>
+        </Row>
+        <Form.Item label="Senin sd Kamis" name="senin_kamis">
+          <DatePicker picker="time" style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jummat" name="jummat">
+          <DatePicker picker="time" style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Sabtu" name="sabtu">
+          <DatePicker picker="time" style={{ width: "100%" }} />
+        </Form.Item>
+        <Divider style={{ margin: "15px 0px" }} />
+        <Row>
+          <Col span={24}>
+            <Title level={4} style={{ textAlign: "center" }}>
+              Anggota Dan Sistem Otomatis
+            </Title>
+            <Divider style={{ margin: "15px 0px" }} />
+          </Col>
+        </Row>
+        <Form.Item label="Jml. Anggota Pelajar" name="pelajar">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Anggota GUru" name="guru">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Pengunjung Perbulan" name="pengunjung_perbulan">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Pinjaman Perbulan" name="pinjaman_perbulan">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Perpustakaan Digital" name="perpustakaan_digital">
+          <Radio.Group>
+            <Radio value="Sudah">Sudah</Radio>
+            <Radio value="Belum">Belum</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Divider style={{ margin: "15px 0px" }} />
+        <Row>
+          <Col span={24}>
+            <Title level={4} style={{ textAlign: "center" }}>
+              Sarana Dan Prasana
+            </Title>
+            <Divider style={{ margin: "15px 0px" }} />
+          </Col>
+        </Row>
+        <Form.Item label="Operasional Roda Empat" name="operasional_roda_empat">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Operasional Roda Dua" name="operasional_roda_dua">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Rak Buku" name="rak_buku">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Rak Majalah" name="rak_majalah">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Rak Surat Kabar" name="rak_surat_kabar">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Rak Titip Barang" name="rak_penitipan_barang">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Filling Kabinet" name="filling_kabinet">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Meja Baca" name="meja_baca">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Meja Sirkulasi" name="meja_sirkulasi">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Meja Kerja" name="meja_kerja">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Kursi Kerja" name="kursi_kerja">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Kursi Tamu" name="kursi_tamu">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Komputer" name="komputer">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. TV" name="tv">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. AC" name="ac">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Divider style={{ margin: "15px 0px" }} />
+        <Row>
+          <Col span={24}>
+            <Title level={4} style={{ textAlign: "center" }}>
+              Fasilitas Umum Dan Anggaran
+            </Title>
+            <Divider style={{ margin: "15px 0px" }} />
+          </Col>
+        </Row>
+        <Form.Item label="Pilihan">
+          <Row>
+            <Col>
+              <Form.Item name="internet" valuePropName="checked">
+                <Checkbox>Internet</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="fasilitas_tv" valuePropName="checked">
+                <Checkbox>TV</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="kantin" valuePropName="checked">
+                <Checkbox>Kantin</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="mushollah" valuePropName="checked">
+                <Checkbox>Mushollah</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="apbn" valuePropName="checked">
+                <Checkbox>APBN</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="apbd" valuePropName="checked">
+                <Checkbox>APBD</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="yayasan" valuePropName="checked">
+                <Checkbox>Yayasan</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="bantuan" valuePropName="checked">
+                <Checkbox>Bantuan</Checkbox>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form.Item>
+        <Form.Item label="Lainnya" name="lainnya">
+          <Input />
         </Form.Item>
       </Form>
     </div>
