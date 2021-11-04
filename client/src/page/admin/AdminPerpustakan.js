@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useReducer, useState } from "react";
-import { perpusIndex } from "../../api/PerpusApi";
+import { perpusIndex, perpusStore } from "../../api/PerpusApi";
 import { debounce } from "../../module/UtilityModule";
+import { getUser } from "../../module/AuthModule";
 import PerpusModal from "../../component/PerpusModal";
 import {
   Row,
@@ -54,6 +55,7 @@ function reducer(state, action) {
 export default function AdminPerpustakaan() {
   const { RangePicker } = DatePicker;
   const { Text, Title } = Typography;
+
   const [form] = Form.useForm();
   const [modal, setModal] = useState(false);
 
@@ -247,6 +249,31 @@ export default function AdminPerpustakaan() {
     }
   }
 
+  //CRUD==================================================================//
+
+  async function tableModalOnOk() {
+    let params = form.getFieldValue();
+
+    switch (params["mode"]) {
+      case "store":
+        try {
+          let response = await perpusStore({
+            ...params,
+            tahun_berdiri_perpustakaan:
+              params.tahun_berdiri_perpustakaan.year(),
+            user_id: getUser().id,
+          });
+
+          console.log(response);
+        } catch (e) {
+          console.log(e);
+        }
+        break;
+    }
+  }
+
+  //CRUD==================================================================//
+
   //======================================================================//
 
   useEffect(() => {
@@ -259,23 +286,15 @@ export default function AdminPerpustakaan() {
     <div>
       <Modal
         centered
-        visible={modal}
         width={600}
+        visible={modal}
         maskClosable={false}
         keyboard={false}
         destroyOnClose={true}
         onCancel={() => setModal(false)}
-        onOk={async () => {
-          try {
-            await form.validateFields();
-
-            console.log(form.getFieldValue());
-          } catch (e) {
-            console.log(e);
-          }
-        }}
+        onOk={tableModalOnOk}
       >
-        <PerpusModal form={form} />
+        <PerpusModal form={form} mode="store" />
       </Modal>
       <Title level={4}>Daftar Perpustakaan</Title>
       <Divider style={{ margin: "10px 0px" }} />

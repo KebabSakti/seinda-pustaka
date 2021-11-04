@@ -5,3 +5,7 @@ export async function perpusIndex(params) {
     params: { page: params.page },
   });
 }
+
+export async function perpusStore(params) {
+  return await Network().post("/admin/perpus/store", params);
+}

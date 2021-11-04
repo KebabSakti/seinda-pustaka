@@ -42,7 +42,7 @@ function reducer(state, action) {
   }
 }
 
-export default function PerpusModal({ form }) {
+export default function PerpusModal({ form, mode }) {
   const { Option } = Select;
   const { Title } = Typography;
 
@@ -58,6 +58,10 @@ export default function PerpusModal({ form }) {
         dispatch({
           type: "complete",
           payload: response.data,
+        });
+
+        form.setFieldsValue({
+          mode: mode,
         });
       });
     } catch (e) {
@@ -87,6 +91,9 @@ export default function PerpusModal({ form }) {
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 17 }}
       >
+        <Form.Item name="mode">
+          <Input type="hidden" />
+        </Form.Item>
         <Row>
           <Col span={24}>
             <Title level={4} style={{ textAlign: "center" }}>
@@ -95,7 +102,11 @@ export default function PerpusModal({ form }) {
             <Divider style={{ margin: "15px 0px" }} />
           </Col>
         </Row>
-        <Form.Item label="Jenis Perpustakaan" name="jenis_perpustakaan_id">
+        <Form.Item
+          label="Jenis Perpustakaan"
+          name="jenis_perpustakaan_id"
+          rules={[{ required: true, message: "Pilih salah satu" }]}
+        >
           <Select placeholder="Pilihan" loading={state.loading}>
             {state.payload != null &&
               state.payload.jenis_perpustakaan.map((item) => (
@@ -108,7 +119,7 @@ export default function PerpusModal({ form }) {
         <Form.Item
           label="Nama"
           name="nama"
-          rules={[{ required: false, message: "Field tidak boleh kosong" }]}
+          rules={[{ required: true, message: "Field tidak boleh kosong" }]}
         >
           <Input />
         </Form.Item>

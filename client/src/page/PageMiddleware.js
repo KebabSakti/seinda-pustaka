@@ -16,6 +16,8 @@ export default function PageMiddleware({ children, setFullLoading }) {
 
       message.success("Anda login sebagai " + getUser().user_profile.nama);
     } catch (e) {
+      setFullLoading(false);
+
       notification.error({
         message: "Error",
         description: "Akses tidak di izinkan, login untuk melanjutkan",

@@ -9,6 +9,8 @@ class Perpustakaan extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function jenis_perpustakaan()
     {
         return $this->belongsTo(\App\Models\JenisPerpustakaan::class);
