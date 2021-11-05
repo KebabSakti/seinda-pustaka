@@ -252,11 +252,11 @@ export default function AdminPerpustakaan() {
   //CRUD==================================================================//
 
   async function tableModalOnOk() {
-    let params = form.getFieldValue();
+    try {
+      let params = form.getFieldValue();
 
-    switch (params["mode"]) {
-      case "store":
-        try {
+      switch (params["mode"]) {
+        case "store":
           let response = await perpusStore({
             ...params,
             tahun_berdiri_perpustakaan:
@@ -265,10 +265,13 @@ export default function AdminPerpustakaan() {
           });
 
           console.log(response);
-        } catch (e) {
-          console.log(e);
-        }
-        break;
+
+          break;
+
+        default:
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
 

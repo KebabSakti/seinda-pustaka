@@ -14,6 +14,7 @@ import {
   Radio,
 } from "antd";
 import { extraIndex } from "../api/ExtraApi";
+import { perpusAdd } from "../api/PerpusApi";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -54,7 +55,7 @@ export default function PerpusModal({ form, mode }) {
     try {
       dispatch({ type: "loading", loading: true });
 
-      await extraIndex().then((response) => {
+      await perpusAdd().then((response) => {
         dispatch({
           type: "complete",
           payload: response.data,
@@ -91,8 +92,8 @@ export default function PerpusModal({ form, mode }) {
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 17 }}
       >
-        <Form.Item name="mode">
-          <Input type="hidden" />
+        <Form.Item hidden name="mode">
+          <Input />
         </Form.Item>
         <Row>
           <Col span={24}>

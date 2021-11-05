@@ -6,6 +6,10 @@ export async function perpusIndex(params) {
   });
 }
 
+export async function perpusAdd(params) {
+  return await Network().post("/admin/perpus/add", params);
+}
+
 export async function perpusStore(params) {
   return await Network().post("/admin/perpus/store", params);
 }

@@ -14,6 +14,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'abilities:role-admin']], function () {
     Route::prefix('perpus')->group(function () {
         Route::post('index', [App\Http\Controllers\PerpustakaanController::class, 'index']);
+        Route::post('add', [App\Http\Controllers\PerpustakaanController::class, 'add']);
         Route::post('store', [App\Http\Controllers\PerpustakaanController::class, 'store']);
     });
 });
