@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class DataGedung extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 }

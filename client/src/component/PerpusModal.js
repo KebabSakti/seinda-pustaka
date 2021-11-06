@@ -13,7 +13,6 @@ import {
   Checkbox,
   Radio,
 } from "antd";
-import { extraIndex } from "../api/ExtraApi";
 import { perpusAdd } from "../api/PerpusApi";
 
 function reducer(state, action) {
@@ -157,7 +156,7 @@ export default function PerpusModal({ form, mode }) {
               ))}
           </Select>
         </Form.Item>
-        <Form.Item label="Kabupaten" name="kabupaten">
+        <Form.Item label="Kabupaten" name="kabupaten_kota">
           <Select placeholder="Pilihan" loading={state.loading}>
             {state.payload != null &&
               state.payload.kabupaten.map((item) => (
@@ -225,7 +224,13 @@ export default function PerpusModal({ form, mode }) {
         <Form.Item label="Luas Ruang Tamu" name="luas_ruang_tamu">
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
-        <Form.Item label="Luas Ruang Sirkulasi" name="luas_ruang_sirkulasi">
+        <Form.Item label="Luas Ruang Sirkulasi" name="ruang_sirkulasi">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Luas Ruang Baca" name="luas_ruang_baca">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Luas Ruang Koleksi" name="luas_ruang_koleksi">
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item label="Luas Toilet" name="luas_toilet">
@@ -267,7 +272,10 @@ export default function PerpusModal({ form, mode }) {
         <Form.Item label="Jml. Pegawai SD" name="sd">
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
-        <Form.Item label="Jml. Pegawai SMD" name="smp">
+        <Form.Item label="Jml. Pegawai SMP" name="smp">
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item label="Jml. Diklat" name="diklat">
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item label="Jml. S1 Perpus" name="s1_perpustakaan">
@@ -306,10 +314,7 @@ export default function PerpusModal({ form, mode }) {
         >
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
-        <Form.Item
-          label="Buku Terbitan Daerah"
-          name="jumlah_terbitan_pemerintah"
-        >
+        <Form.Item label="Buku Terbitan Daerah" name="jumlah_terbitan_daerah">
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item label="Jml. Peta" name="jumlah_peta">

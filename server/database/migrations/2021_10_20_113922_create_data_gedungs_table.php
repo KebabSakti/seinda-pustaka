@@ -19,7 +19,7 @@ class CreateDataGedungsTable extends Migration
             $table->decimal('luas_tanah', 12, 3)->default(0.000);
             $table->decimal('luas_gedung', 12, 3)->default(0.000);
             $table->decimal('luas_ruang_tamu', 12, 3)->default(0.000);
-            $table->decimal('ruang_sirkulasi', 12, 3)->default(0.000);
+            $table->decimal('luas_ruang_sirkulasi', 12, 3)->default(0.000);
             $table->decimal('luas_ruang_baca', 12, 3)->default(0.000);
             $table->decimal('luas_ruang_koleksi', 12, 3)->default(0.000);
             $table->decimal('luas_toilet', 12, 3)->default(0.000);

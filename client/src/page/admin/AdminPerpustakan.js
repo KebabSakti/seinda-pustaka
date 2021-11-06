@@ -255,17 +255,22 @@ export default function AdminPerpustakaan() {
     try {
       let params = form.getFieldValue();
 
+      console.log(params);
+
       switch (params["mode"]) {
         case "store":
           let response = await perpusStore({
             ...params,
             tahun_berdiri_perpustakaan:
-              params.tahun_berdiri_perpustakaan.year(),
+              params.tahun_berdiri_perpustakaan?.year(),
             user_id: getUser().id,
           });
 
           console.log(response);
 
+          // setModal(false);
+
+          // setFilter(filter);
           break;
 
         default:

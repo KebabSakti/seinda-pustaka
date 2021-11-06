@@ -16,10 +16,8 @@ class CreateMendapatKoleksisTable extends Migration
         Schema::create('mendapat_koleksis', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('perpustakaan_id');
-            $table->text('sumber_koleksi')->nullable();
-            $table->text('alat_seleksi')->nullable();
-            $table->text('sistem_layanan')->nullable();
-            $table->text('jenis_layanan')->nullable();
+            $table->text('sumber')->nullable();
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

@@ -14,4 +14,13 @@ class UtilityModule
             return 'desc';
         }
     }
+
+    public static function toArrayPreserve($params)
+    {
+        foreach ($params as $key => $value) {
+            $param[$key] = $value;
+        }
+
+        return $param;
+    }
 }
