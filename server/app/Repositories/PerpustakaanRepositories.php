@@ -11,7 +11,7 @@ class PerpustakaanRepositories
 {
     public static function fetchOne($id)
     {
-        $data = DB::table('perpustakaans')->find($id);
+        $data = Perpustakaan::find($id);
 
         return $data;
     }
@@ -30,7 +30,7 @@ class PerpustakaanRepositories
         if (!empty($params['keyword'])) {
             $query->where(function ($query) use ($columns, $params) {
                 foreach ($columns as $column) {
-                    $query->orWhere($column, 'like', '%'.$params['keyword'].'%');
+                    $query->orWhere($column, 'like', '%' . $params['keyword'] . '%');
                 }
             });
         }

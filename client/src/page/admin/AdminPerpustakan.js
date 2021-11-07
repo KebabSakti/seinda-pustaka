@@ -259,6 +259,8 @@ export default function AdminPerpustakaan() {
 
       switch (params["mode"]) {
         case "store":
+          await form.validateFields();
+
           let response = await perpusStore({
             ...params,
             tahun_berdiri_perpustakaan:

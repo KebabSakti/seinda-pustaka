@@ -44,23 +44,47 @@ class PerpustakaanController extends Controller
 
         $params['perpustakaan_id'] = $perpustakaan->id;
 
-        $gedung = DataGedungRepositories::store($params);
-        $sdm = SumberDayaManusiaRepositories::store($params);
-        $koleksi = KoleksiMateriRepositories::store($params);
+        DataGedungRepositories::store($params);
+        SumberDayaManusiaRepositories::store($params);
+        KoleksiMateriRepositories::store($params);
 
-        foreach ($params['sumber_koleksi'] as $key => $value) {
-            $params['sumber'] = 'sumber_koleksi';
-            $params['deskripsi'] = $value;
+        if (!empty($params['sumber_koleksi'])) {
+            foreach ($params['sumber_koleksi'] as $param) {
+                $params['sumber'] = 'sumber_koleksi';
+                $params['deskripsi'] = $param;
 
-            MendapatKoleksiRepositories::store($params);
+                MendapatKoleksiRepositories::store($params);
+            }
         }
 
-        $data = [
-            'perpustakaan' => $perpustakaan,
-            'gedung' => $gedung,
-            'sdm' => $sdm,
-            'koleksi' => $koleksi,
-        ];
+        if (!empty($params['alat_seleksi'])) {
+            foreach ($params['alat_seleksi'] as $param) {
+                $params['sumber'] = 'alat_seleksi';
+                $params['deskripsi'] = $param;
+
+                MendapatKoleksiRepositories::store($params);
+            }
+        }
+
+        if (!empty($params['sistem_layanan'])) {
+            foreach ($params['sistem_layanan'] as $param) {
+                $params['sumber'] = 'sistem_layanan';
+                $params['deskripsi'] = $param;
+
+                MendapatKoleksiRepositories::store($params);
+            }
+        }
+
+        if (!empty($params['jenis_layanan'])) {
+            foreach ($params['jenis_layanan'] as $param) {
+                $params['sumber'] = 'jenis_layanan';
+                $params['deskripsi'] = $param;
+
+                MendapatKoleksiRepositories::store($params);
+            }
+        }
+
+        $data = PerpustakaanRepositories::fetchOne($perpustakaan->id);
 
         return response()->json($data);
     }
