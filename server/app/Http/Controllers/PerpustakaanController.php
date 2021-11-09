@@ -105,20 +105,20 @@ class PerpustakaanController extends Controller
 
         $params['perpustakaan_id'] = $params['id'];
 
-        DataGedungRepositories::store($params);
-        SumberDayaManusiaRepositories::store($params);
-        KoleksiMateriRepositories::store($params);
-        JamOperasionalRepositories::store($params);
-        AnggotaOtomasiRepositories::store($params);
-        SaranaPrasaranaRepositories::store($params);
-        FasilitasAnggaranRepositories::store($params);
+        DataGedungRepositories::update($params);
+        SumberDayaManusiaRepositories::update($params);
+        KoleksiMateriRepositories::update($params);
+        JamOperasionalRepositories::update($params);
+        AnggotaOtomasiRepositories::update($params);
+        SaranaPrasaranaRepositories::update($params);
+        FasilitasAnggaranRepositories::update($params);
 
         if (!empty($params['sumber_koleksi'])) {
             foreach ($params['sumber_koleksi'] as $param) {
                 $params['sumber'] = 'sumber_koleksi';
                 $params['deskripsi'] = $param;
 
-                MendapatKoleksiRepositories::store($params);
+                MendapatKoleksiRepositories::update($params);
             }
         }
 
@@ -127,7 +127,7 @@ class PerpustakaanController extends Controller
                 $params['sumber'] = 'alat_seleksi';
                 $params['deskripsi'] = $param;
 
-                MendapatKoleksiRepositories::store($params);
+                MendapatKoleksiRepositories::update($params);
             }
         }
 
@@ -136,7 +136,7 @@ class PerpustakaanController extends Controller
                 $params['sumber'] = 'sistem_layanan';
                 $params['deskripsi'] = $param;
 
-                MendapatKoleksiRepositories::store($params);
+                MendapatKoleksiRepositories::update($params);
             }
         }
 
@@ -145,11 +145,11 @@ class PerpustakaanController extends Controller
                 $params['sumber'] = 'jenis_layanan';
                 $params['deskripsi'] = $param;
 
-                MendapatKoleksiRepositories::store($params);
+                MendapatKoleksiRepositories::update($params);
             }
         }
 
-        $data = PerpustakaanRepositories::fetchOne($perpustakaan->id);
+        $data = PerpustakaanRepositories::fetchOne($params['perpustakaan_id']);
 
         return response()->json($data);
     }

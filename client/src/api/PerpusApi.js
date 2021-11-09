@@ -13,3 +13,7 @@ export async function perpusAdd(params) {
 export async function perpusStore(params) {
   return await Network().post("/admin/perpus/store", params);
 }
+
+export async function perpusUpdate(params) {
+  return await Network().post("/admin/perpus/update", params);
+}

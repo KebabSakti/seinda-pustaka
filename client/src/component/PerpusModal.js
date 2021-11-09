@@ -12,6 +12,7 @@ import {
   InputNumber,
   Checkbox,
   Radio,
+  Button,
 } from "antd";
 import { perpusAdd } from "../api/PerpusApi";
 import moment from "moment";
@@ -43,7 +44,7 @@ function reducer(state, action) {
   }
 }
 
-export default function PerpusModal({ form, payload }) {
+export default function PerpusModal({ form, payload, tableModalOnOk }) {
   const { Option } = Select;
   const { Title } = Typography;
 
@@ -189,14 +190,15 @@ export default function PerpusModal({ form, payload }) {
           let fasilitas = payload.data.fasilitas_anggaraan;
 
           form.setFieldsValue({
-            internet: parseInt(1) > 0 ? "checked" : "",
-            fasilitas_tv: parseInt(fasilitas.fasilitas_tv) > 0 ? "checked" : "",
-            kantin: parseInt(fasilitas.kantin) > 0 ? "checked" : "",
-            mushollah: parseInt(fasilitas.mushollah) > 0 ? "checked" : "",
-            apbn: parseInt(fasilitas.apbn) > 0 ? "checked" : "",
-            apbd: parseInt(fasilitas.apbd) > 0 ? "checked" : "",
-            yayasan: parseInt(fasilitas.yayasan) > 0 ? "checked" : "",
-            bantuan: parseInt(fasilitas.bantuan) > 0 ? "checked" : "",
+            internet: parseInt(fasilitas.internet) > 0,
+            fasilitas_tv: parseInt(fasilitas.fasilitas_tv) > 0,
+            kantin: parseInt(fasilitas.kantin) > 0,
+            mushollah: parseInt(fasilitas.mushollah) > 0,
+            apbn: parseInt(fasilitas.apbn) > 0,
+            apbd: parseInt(fasilitas.apbd) > 0,
+            yayasan: parseInt(fasilitas.yayasan) > 0,
+            bantuan: parseInt(fasilitas.bantuan) > 0,
+            lainnya: fasilitas.lainnya,
           });
         }
 
@@ -253,6 +255,7 @@ export default function PerpusModal({ form, payload }) {
         form={form}
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 17 }}
+        onFinish={tableModalOnOk}
       >
         <Form.Item hidden name={payload.mode}>
           <Input />
@@ -699,6 +702,15 @@ export default function PerpusModal({ form, payload }) {
               <Form.Item name="lainnya">
                 <Input placeholder="Lainnya.." style={{ width: "100%" }} />
               </Form.Item>
+            </Col>
+          </Row>
+        </Form.Item>
+        <Form.Item hidden>
+          <Row justify="center">
+            <Col>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
             </Col>
           </Row>
         </Form.Item>

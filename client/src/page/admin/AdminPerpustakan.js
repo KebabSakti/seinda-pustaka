@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useReducer, useState } from "react";
-import { perpusIndex, perpusStore } from "../../api/PerpusApi";
+import { perpusIndex, perpusStore, perpusUpdate } from "../../api/PerpusApi";
 import { debounce } from "../../module/UtilityModule";
 import { getUser } from "../../module/AuthModule";
 import PerpusModal from "../../component/PerpusModal";
@@ -284,7 +284,7 @@ export default function AdminPerpustakaan() {
         case "add":
           await form.validateFields();
 
-          let response = await perpusStore({
+          await perpusStore({
             ...params,
             tahun_berdiri_perpustakaan:
               params.tahun_berdiri_perpustakaan?.format("YYYY"),
@@ -292,13 +292,31 @@ export default function AdminPerpustakaan() {
             jummat: params.jummat?.format("HH:mm:ss"),
             sabtu: params.sabtu?.format("HH:mm:ss"),
             user_id: getUser().id,
+          }).then((_) => {
+            setModalPayload({ show: false });
+
+            setFilter({ ...filter });
           });
 
-          console.log(response);
+          break;
 
-          // setModal(false);
+        case "edit":
+          await form.validateFields();
 
-          // setFilter(filter);
+          await perpusUpdate({
+            ...params,
+            tahun_berdiri_perpustakaan:
+              params.tahun_berdiri_perpustakaan?.format("YYYY"),
+            senin_kamis: params.senin_kamis?.format("HH:mm:ss"),
+            jummat: params.jummat?.format("HH:mm:ss"),
+            sabtu: params.sabtu?.format("HH:mm:ss"),
+            user_id: getUser().id,
+          }).then((_) => {
+            setModalPayload({ show: false });
+
+            setFilter({ ...filter });
+          });
+
           break;
 
         default:
@@ -330,7 +348,11 @@ export default function AdminPerpustakaan() {
         onCancel={() => setModalPayload({ ...modalPayload, show: false })}
         onOk={tableModalOnOk}
       >
-        <PerpusModal form={form} payload={modalPayload} />
+        <PerpusModal
+          form={form}
+          payload={modalPayload}
+          tableModalOnOk={tableModalOnOk}
+        />
       </Modal>
       <Title level={4}>Daftar Perpustakaan</Title>
       <Divider style={{ margin: "10px 0px" }} />
@@ -349,7 +371,7 @@ export default function AdminPerpustakaan() {
         </Col>
         <Col xs={24} sm={24} md={14} lg={14}>
           <Row justify="end" gutter={[8, 0]}>
-            <Col xs={12} sm={12} md={10} lg={10}>
+            <Col xs={16} sm={16} md={10} lg={10}>
               <Input
                 allowClear
                 placeholder="Cari di sini"
@@ -357,7 +379,7 @@ export default function AdminPerpustakaan() {
                 onChange={debounce((e) => tableSearch(e))}
               />
             </Col>
-            <Col xs={12} sm={12} md={6} lg={6}>
+            <Col xs={8} sm={8} md={6} lg={6}>
               <Dropdown
                 arrow
                 trigger={["click"]}

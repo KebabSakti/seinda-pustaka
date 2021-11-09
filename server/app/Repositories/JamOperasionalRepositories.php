@@ -17,4 +17,16 @@ class JamOperasionalRepositories
 
         return $data;
     }
+
+    public static function update($params)
+    {
+        $data = JamOperasional::where('perpustakaan_id', $params['perpustakaan_id'])
+                              ->update([
+                                    'senin_kamis' => $params['senin_kamis'] ?? null,
+                                    'jummat' => $params['jummat'] ?? null,
+                                    'sabtu' => $params['sabtu'] ?? null,
+                                ]);
+
+        return $data;
+    }
 }
