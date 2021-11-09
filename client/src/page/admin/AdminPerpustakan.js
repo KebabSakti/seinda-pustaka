@@ -57,7 +57,7 @@ export default function AdminPerpustakaan() {
   const { Text, Title } = Typography;
 
   const [form] = Form.useForm();
-  const [modal, setModal] = useState(false);
+  const [modalPayload, setModalPayload] = useState({ show: false });
 
   const [filter, setFilter] = useState({
     page: 1,
@@ -240,9 +240,32 @@ export default function AdminPerpustakaan() {
   }
 
   function tableMenuEvent(event, payload) {
+    console.log(payload);
+
+    form.resetFields();
+
     switch (event.key) {
       case "add":
-        setModal(true);
+        setModalPayload({
+          mode: "add",
+          show: true,
+        });
+        break;
+
+      case "detail":
+        setModalPayload({
+          mode: "detail",
+          show: true,
+          data: payload,
+        });
+        break;
+
+      case "edit":
+        setModalPayload({
+          mode: "edit",
+          show: true,
+          data: payload,
+        });
         break;
 
       default:
@@ -258,13 +281,16 @@ export default function AdminPerpustakaan() {
       console.log(params);
 
       switch (params["mode"]) {
-        case "store":
+        case "add":
           await form.validateFields();
 
           let response = await perpusStore({
             ...params,
             tahun_berdiri_perpustakaan:
-              params.tahun_berdiri_perpustakaan?.year(),
+              params.tahun_berdiri_perpustakaan?.format("YYYY"),
+            senin_kamis: params.senin_kamis?.format("HH:mm:ss"),
+            jummat: params.jummat?.format("HH:mm:ss"),
+            sabtu: params.sabtu?.format("HH:mm:ss"),
             user_id: getUser().id,
           });
 
@@ -297,14 +323,14 @@ export default function AdminPerpustakaan() {
       <Modal
         centered
         width={600}
-        visible={modal}
+        visible={modalPayload.show}
         maskClosable={false}
-        keyboard={false}
+        keyboard={true}
         destroyOnClose={true}
-        onCancel={() => setModal(false)}
+        onCancel={() => setModalPayload({ ...modalPayload, show: false })}
         onOk={tableModalOnOk}
       >
-        <PerpusModal form={form} mode="store" />
+        <PerpusModal form={form} payload={modalPayload} />
       </Modal>
       <Title level={4}>Daftar Perpustakaan</Title>
       <Divider style={{ margin: "10px 0px" }} />

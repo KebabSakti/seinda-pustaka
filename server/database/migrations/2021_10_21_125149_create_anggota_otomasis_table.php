@@ -16,11 +16,11 @@ class CreateAnggotaOtomasisTable extends Migration
         Schema::create('anggota_otomasis', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('perpustakaan_id');
-            $table->integer('pelajar')->default(0);
-            $table->integer('guru')->default(0);
-            $table->integer('pengunjung_perbulan')->default(0);
-            $table->integer('pinjaman_perbulan')->default(0);
-            $table->enum('perpustakaan_digital', ['Sudah', 'Belum']);
+            $table->integer('pelajar')->default(0)->nullable();
+            $table->integer('guru')->default(0)->nullable();
+            $table->integer('pengunjung_perbulan')->default(0)->nullable();
+            $table->integer('pinjaman_perbulan')->default(0)->nullable();
+            $table->enum('perpustakaan_digital', ['Sudah', 'Belum'])->nullable();
             $table->timestamps();
         });
     }

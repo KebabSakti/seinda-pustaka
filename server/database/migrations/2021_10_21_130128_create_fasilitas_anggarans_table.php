@@ -16,14 +16,14 @@ class CreateFasilitasAnggaransTable extends Migration
         Schema::create('fasilitas_anggarans', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('perpustakaan_id');
-            $table->boolean('internet')->default(false);
-            $table->boolean('fasilitas_tv')->default(false);
-            $table->boolean('kantin')->default(false);
-            $table->boolean('mushollah')->default(false);
-            $table->boolean('apbn')->default(false);
-            $table->boolean('apbd')->default(false);
-            $table->boolean('yayasan')->default(false);
-            $table->boolean('bantuan')->default(false);
+            $table->boolean('internet')->default(false)->nullable();
+            $table->boolean('fasilitas_tv')->default(false)->nullable();
+            $table->boolean('kantin')->default(false)->nullable();
+            $table->boolean('mushollah')->default(false)->nullable();
+            $table->boolean('apbn')->default(false)->nullable();
+            $table->boolean('apbd')->default(false)->nullable();
+            $table->boolean('yayasan')->default(false)->nullable();
+            $table->boolean('bantuan')->default(false)->nullable();
             $table->text('lainnya')->nullable();
             $table->timestamps();
         });

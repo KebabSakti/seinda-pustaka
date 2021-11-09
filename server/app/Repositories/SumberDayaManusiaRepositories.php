@@ -10,19 +10,19 @@ class SumberDayaManusiaRepositories
     {
         $data = SumberDayaManusia::create([
             'perpustakaan_id' => $params['perpustakaan_id'],
-            'seluruh_pegawai' => $params['seluruh_pegawai'] ?? 0,
-            'pns' => $params['pns'] ?? 0,
-            'pejabat_fungsional' => $params['pejabat_fungsional'] ?? 0,
-            'honorer' => $params['honorer'] ?? 0,
-            'kepala_perpustakaan' => $params['kepala_perpustakaan'] ?? 0,
-            'tenaga_teknis_perpustakaan' => $params['tenaga_teknis_perpustakaan'] ?? 0,
-            'tenaga_administrasi' => $params['tenaga_administrasi'] ?? 0,
-            'sd' => $params['sd'] ?? 0,
-            'smp' => $params['smp'] ?? 0,
-            'diklat' => $params['diklat'] ?? 0,
-            's1_perpustakaan' => $params['s1_perpustakaan'] ?? 0,
-            's1_diklat' => $params['s1_diklat'] ?? 0,
-            's1_non_perpustakaan' => $params['s1_non_perpustakaan'] ?? 0,
+            'seluruh_pegawai' => $params['seluruh_pegawai'] ?? null,
+            'pns' => $params['pns'] ?? null,
+            'pejabat_fungsional' => $params['pejabat_fungsional'] ?? null,
+            'honorer' => $params['honorer'] ?? null,
+            'kepala_perpustakaan' => $params['kepala_perpustakaan'] ?? null,
+            'tenaga_teknis_perpustakaan' => $params['tenaga_teknis_perpustakaan'] ?? null,
+            'tenaga_administrasi' => $params['tenaga_administrasi'] ?? null,
+            'sd' => $params['sd'] ?? null,
+            'smp' => $params['smp'] ?? null,
+            'diklat' => $params['diklat'] ?? null,
+            's1_perpustakaan' => $params['s1_perpustakaan'] ?? null,
+            's1_diklat' => $params['s1_diklat'] ?? null,
+            's1_non_perpustakaan' => $params['s1_non_perpustakaan'] ?? null,
         ]);
 
         return $data;

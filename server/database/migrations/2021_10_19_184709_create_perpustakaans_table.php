@@ -17,7 +17,7 @@ class CreatePerpustakaansTable extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->text('jenis_perpustakaan_id');
-            $table->text('nama')->nullable();
+            $table->text('nama');
             $table->text('alamat')->nullable();
             $table->text('kecamatan')->nullable();
             $table->text('kelurahan')->nullable();

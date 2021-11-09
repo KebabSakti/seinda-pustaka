@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\Perpustakaan;
 use App\Modules\UtilityModule;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class PerpustakaanRepositories
@@ -20,7 +19,7 @@ class PerpustakaanRepositories
     {
         $columns = Schema::getColumnListing('perpustakaans');
 
-        $query = Perpustakaan::with(['jenis_perpustakaan']);
+        $query = Perpustakaan::query();
 
         if (!empty($params['d_start']) && !empty($params['d_end'])) {
             $query->where('tahun_berdiri_perpustakaan', '>=', $params['d_start'])
@@ -30,7 +29,7 @@ class PerpustakaanRepositories
         if (!empty($params['keyword'])) {
             $query->where(function ($query) use ($columns, $params) {
                 foreach ($columns as $column) {
-                    $query->orWhere($column, 'like', '%' . $params['keyword'] . '%');
+                    $query->orWhere($column, 'like', '%'.$params['keyword'].'%');
                 }
             });
         }
@@ -71,6 +70,34 @@ class PerpustakaanRepositories
             'nama_kepala_instansi_induk' => $params['nama_kepala_instansi_induk'] ?? null,
             'tahun_berdiri_perpustakaan' => $params['tahun_berdiri_perpustakaan'] ?? null,
         ]);
+
+        return $data;
+    }
+
+    public static function update($params)
+    {
+        $data = Perpustakaan::where('id', $params['id'])
+                            ->update([
+                                'user_id' => $params['user_id'],
+                                'jenis_perpustakaan_id' => $params['jenis_perpustakaan_id'],
+                                'nama' => $params['nama'],
+                                'alamat' => $params['alamat'] ?? null,
+                                'kecamatan' => $params['kecamatan'] ?? null,
+                                'kelurahan' => $params['kelurahan'] ?? null,
+                                'kode_pos' => $params['kode_pos'] ?? null,
+                                'telp' => $params['telp'] ?? null,
+                                'email' => $params['email'] ?? null,
+                                'website' => $params['website'] ?? null,
+                                'provinsi' => $params['provinsi'] ?? null,
+                                'kabupaten_kota' => $params['kabupaten_kota'] ?? null,
+                                'status_perpustakaan' => $params['status_perpustakaan'] ?? null,
+                                'npsn' => $params['npsn'] ?? null,
+                                'nis' => $params['nis'] ?? null,
+                                'struktur_organisasi' => $params['struktur_organisasi'] ?? null,
+                                'nama_kepala_perpustakaan' => $params['nama_kepala_perpustakaan'] ?? null,
+                                'nama_kepala_instansi_induk' => $params['nama_kepala_instansi_induk'] ?? null,
+                                'tahun_berdiri_perpustakaan' => $params['tahun_berdiri_perpustakaan'] ?? null,
+                            ]);
 
         return $data;
     }

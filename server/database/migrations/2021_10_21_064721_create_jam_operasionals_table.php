@@ -16,9 +16,9 @@ class CreateJamOperasionalsTable extends Migration
         Schema::create('jam_operasionals', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('perpustakaan_id');
-            $table->text('judul')->nullable();
-            $table->time('mulai')->nullable();
-            $table->time('selesai')->nullable();
+            $table->time('senin_kami')->nullable();
+            $table->time('jummat')->nullable();
+            $table->time('sabtu')->nullable();
             $table->timestamps();
         });
     }

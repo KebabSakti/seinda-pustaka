@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\AnggotaOtomasiRepositories;
 use App\Repositories\DataGedungRepositories;
+use App\Repositories\FasilitasAnggaranRepositories;
+use App\Repositories\JamOperasionalRepositories;
 use App\Repositories\JenisPerpusRepositories;
 use App\Repositories\KabupatenRepositories;
 use App\Repositories\KecamatanRepositories;
@@ -11,6 +14,7 @@ use App\Repositories\KoleksiMateriRepositories;
 use App\Repositories\MendapatKoleksiRepositories;
 use App\Repositories\PerpustakaanRepositories;
 use App\Repositories\ProvinsiRepositories;
+use App\Repositories\SaranaPrasaranaRepositories;
 use App\Repositories\SumberDayaManusiaRepositories;
 use Illuminate\Http\Request;
 
@@ -47,6 +51,67 @@ class PerpustakaanController extends Controller
         DataGedungRepositories::store($params);
         SumberDayaManusiaRepositories::store($params);
         KoleksiMateriRepositories::store($params);
+        JamOperasionalRepositories::store($params);
+        AnggotaOtomasiRepositories::store($params);
+        SaranaPrasaranaRepositories::store($params);
+        FasilitasAnggaranRepositories::store($params);
+
+        if (!empty($params['sumber_koleksi'])) {
+            foreach ($params['sumber_koleksi'] as $param) {
+                $params['sumber'] = 'sumber_koleksi';
+                $params['deskripsi'] = $param;
+
+                MendapatKoleksiRepositories::store($params);
+            }
+        }
+
+        if (!empty($params['alat_seleksi'])) {
+            foreach ($params['alat_seleksi'] as $param) {
+                $params['sumber'] = 'alat_seleksi';
+                $params['deskripsi'] = $param;
+
+                MendapatKoleksiRepositories::store($params);
+            }
+        }
+
+        if (!empty($params['sistem_layanan'])) {
+            foreach ($params['sistem_layanan'] as $param) {
+                $params['sumber'] = 'sistem_layanan';
+                $params['deskripsi'] = $param;
+
+                MendapatKoleksiRepositories::store($params);
+            }
+        }
+
+        if (!empty($params['jenis_layanan'])) {
+            foreach ($params['jenis_layanan'] as $param) {
+                $params['sumber'] = 'jenis_layanan';
+                $params['deskripsi'] = $param;
+
+                MendapatKoleksiRepositories::store($params);
+            }
+        }
+
+        $data = PerpustakaanRepositories::fetchOne($perpustakaan->id);
+
+        return response()->json($data);
+    }
+
+    public static function update(Request $request)
+    {
+        $params = $request->toArray();
+
+        $perpustakaan = PerpustakaanRepositories::update($params);
+
+        $params['perpustakaan_id'] = $params['id'];
+
+        DataGedungRepositories::store($params);
+        SumberDayaManusiaRepositories::store($params);
+        KoleksiMateriRepositories::store($params);
+        JamOperasionalRepositories::store($params);
+        AnggotaOtomasiRepositories::store($params);
+        SaranaPrasaranaRepositories::store($params);
+        FasilitasAnggaranRepositories::store($params);
 
         if (!empty($params['sumber_koleksi'])) {
             foreach ($params['sumber_koleksi'] as $param) {

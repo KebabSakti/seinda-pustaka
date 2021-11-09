@@ -14,6 +14,7 @@ import {
   Radio,
 } from "antd";
 import { perpusAdd } from "../api/PerpusApi";
+import moment from "moment";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -42,7 +43,7 @@ function reducer(state, action) {
   }
 }
 
-export default function PerpusModal({ form, mode }) {
+export default function PerpusModal({ form, payload }) {
   const { Option } = Select;
   const { Title } = Typography;
 
@@ -59,11 +60,173 @@ export default function PerpusModal({ form, mode }) {
           type: "complete",
           payload: response.data,
         });
-
-        form.setFieldsValue({
-          mode: mode,
-        });
       });
+
+      if (payload.data != null) {
+        form.setFieldsValue({
+          mode: payload.mode,
+          id: payload.data.id,
+          jenis_perpustakaan_id: parseInt(payload.data.jenis_perpustakaan_id),
+          nama: payload.data.nama,
+          alamat: payload.data.alamat,
+          kecamatan: payload.data.kecamatan,
+          kelurahan: payload.data.kelurahan,
+          provinsi: payload.data.provinsi,
+          kabupaten_kota: payload.data.kabupaten_kota,
+          kode_pos: payload.data.kode_pos,
+          telp: payload.data.telp,
+          email: payload.data.email,
+          website: payload.data.website,
+          status_perpustakaan: payload.data.status_perpustakaan,
+          npsn: payload.data.npsn,
+          nis: payload.data.nis,
+          struktur_organisasi: payload.data.struktur_organisasi,
+          nama_kepala_perpustakaan: payload.data.nama_kepala_perpustakaan,
+          nama_kepala_instansi_induk: payload.data.nama_kepala_instansi_induk,
+          tahun_berdiri_perpustakaan:
+            payload.data.tahun_berdiri_perpustakaan != null
+              ? moment(payload.data.tahun_berdiri_perpustakaan, "YYYY")
+              : null,
+        });
+
+        if (payload.data.data_gedung != null) {
+          let dataGedung = payload.data.data_gedung;
+
+          form.setFieldsValue({
+            luas_tanah: dataGedung.luas_tanah,
+            luas_gedung: dataGedung.luas_gedung,
+            luas_ruang_tamu: dataGedung.luas_ruang_tamu,
+            luas_ruang_sirkulasi: dataGedung.luas_ruang_sirkulasi,
+            luas_ruang_baca: dataGedung.luas_ruang_baca,
+            luas_ruang_koleksi: dataGedung.luas_ruang_koleksi,
+            luas_toilet: dataGedung.luas_toilet,
+            luas_kantin: dataGedung.luas_kantin,
+          });
+        }
+
+        if (payload.data.sumber_daya_manusia != null) {
+          let sdm = payload.data.sumber_daya_manusia;
+
+          form.setFieldsValue({
+            seluruh_pegawai: sdm.seluruh_pegawai,
+            pns: sdm.pns,
+            pejabat_fungsional: sdm.pejabat_fungsional,
+            honorer: sdm.honorer,
+            kepala_perpustakaan: sdm.kepala_perpustakaan,
+            tenaga_teknis_perpustakaan: sdm.tenaga_teknis_perpustakaan,
+            tenaga_administrasi: sdm.tenaga_administrasi,
+            sd: sdm.sd,
+            smp: sdm.smp,
+            diklat: sdm.diklat,
+            s1_perpustakaan: sdm.s1_perpustakaan,
+            s1_diklat: sdm.s1_diklat,
+            s1_non_perpustakaan: sdm.s1_non_perpustakaan,
+          });
+        }
+
+        if (payload.data.koleksi_materi != null) {
+          let koleksi = payload.data.koleksi_materi;
+
+          form.setFieldsValue({
+            jumlah_buku_nonfiksi: koleksi.jumlah_buku_nonfiksi,
+            jumlah_buku_referensi: koleksi.jumlah_buku_referensi,
+            jumlah_buku_fiksi: koleksi.jumlah_buku_fiksi,
+            jumlah_sk_lokal: koleksi.jumlah_sk_lokal,
+            jumlah_terbitan_pemerintah: koleksi.jumlah_terbitan_pemerintah,
+            jumlah_terbitan_daerah: koleksi.jumlah_terbitan_daerah,
+            jumlah_peta: koleksi.jumlah_peta,
+          });
+        }
+
+        if (payload.data.jam_operasional != null) {
+          let jam = payload.data.jam_operasional;
+
+          form.setFieldsValue({
+            senin_kamis:
+              jam.senin_kamis != null
+                ? moment(jam.senin_kamis, "HH:mm:ss")
+                : null,
+            jummat: jam.jummat != null ? moment(jam.jummat, "HH:mm:ss") : null,
+            sabtu: jam.sabtu != null ? moment(jam.sabtu, "HH:mm:ss") : null,
+          });
+        }
+
+        if (payload.data.anggota_otomasi != null) {
+          let anggota = payload.data.anggota_otomasi;
+
+          form.setFieldsValue({
+            pelajar: anggota.pelajar,
+            guru: anggota.guru,
+            pengunjung_perbulan: anggota.pengunjung_perbulan,
+            pinjaman_perbulan: anggota.pinjaman_perbulan,
+            perpustakaan_digital: anggota.perpustakaan_digital,
+          });
+        }
+
+        if (payload.data.sarana_prasarana != null) {
+          let sarana = payload.data.sarana_prasarana;
+
+          form.setFieldsValue({
+            operasional_roda_empat: sarana.operasional_roda_empat,
+            operasional_roda_dua: sarana.operasional_roda_dua,
+            rak_buku: sarana.rak_buku,
+            rak_majalah: sarana.rak_majalah,
+            rak_surat_kabar: sarana.rak_surat_kabar,
+            rak_penitipan_barang: sarana.rak_penitipan_barang,
+            filling_kabinet: sarana.filling_kabinet,
+            meja_baca: sarana.meja_baca,
+            meja_sirkulasi: sarana.meja_sirkulasi,
+            meja_kerja: sarana.meja_kerja,
+            kursi_kerja: sarana.kursi_kerja,
+            kursi_tamu: sarana.kursi_tamu,
+            komputer: sarana.komputer,
+            sarana_tv: sarana.sarana_tv,
+            ac: sarana.ac,
+          });
+        }
+
+        if (payload.data.fasilitas_anggaraan != null) {
+          let fasilitas = payload.data.fasilitas_anggaraan;
+
+          form.setFieldsValue({
+            internet: parseInt(1) > 0 ? "checked" : "",
+            fasilitas_tv: parseInt(fasilitas.fasilitas_tv) > 0 ? "checked" : "",
+            kantin: parseInt(fasilitas.kantin) > 0 ? "checked" : "",
+            mushollah: parseInt(fasilitas.mushollah) > 0 ? "checked" : "",
+            apbn: parseInt(fasilitas.apbn) > 0 ? "checked" : "",
+            apbd: parseInt(fasilitas.apbd) > 0 ? "checked" : "",
+            yayasan: parseInt(fasilitas.yayasan) > 0 ? "checked" : "",
+            bantuan: parseInt(fasilitas.bantuan) > 0 ? "checked" : "",
+          });
+        }
+
+        if (payload.data.mendapat_koleksi != null) {
+          let dapat = payload.data.mendapat_koleksi;
+
+          let sk = dapat
+            .filter((item) => item.sumber === "sumber_koleksi")
+            .map((item) => item.deskripsi);
+
+          let as = dapat
+            .filter((item) => item.sumber === "alat_seleksi")
+            .map((item) => item.deskripsi);
+
+          let sl = dapat
+            .filter((item) => item.sumber === "sistem_layanan")
+            .map((item) => item.deskripsi);
+
+          let jl = dapat
+            .filter((item) => item.sumber === "jenis_layanan")
+            .map((item) => item.deskripsi);
+
+          form.setFieldsValue({
+            sumber_koleksi: sk,
+            alat_seleksi: as,
+            sistem_layanan: sl,
+            jenis_layanan: jl,
+          });
+        }
+      }
     } catch (e) {
       dispatch({
         type: "error",
@@ -91,7 +254,10 @@ export default function PerpusModal({ form, mode }) {
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 17 }}
       >
-        <Form.Item hidden name="mode">
+        <Form.Item hidden name={payload.mode}>
+          <Input />
+        </Form.Item>
+        <Form.Item hidden name="id">
           <Input />
         </Form.Item>
         <Row>
@@ -224,7 +390,7 @@ export default function PerpusModal({ form, mode }) {
         <Form.Item label="Luas Ruang Tamu" name="luas_ruang_tamu">
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
-        <Form.Item label="Luas Ruang Sirkulasi" name="ruang_sirkulasi">
+        <Form.Item label="Luas Ruang Sirkulasi" name="luas_ruang_sirkulasi">
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item label="Luas Ruang Baca" name="luas_ruang_baca">
@@ -472,7 +638,7 @@ export default function PerpusModal({ form, mode }) {
         <Form.Item label="Jml. Komputer" name="komputer">
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
-        <Form.Item label="Jml. TV" name="tv">
+        <Form.Item label="Jml. TV" name="sarana_tv">
           <InputNumber min={0} style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item label="Jml. AC" name="ac">
@@ -529,10 +695,12 @@ export default function PerpusModal({ form, mode }) {
                 <Checkbox>Bantuan</Checkbox>
               </Form.Item>
             </Col>
+            <Col span={24}>
+              <Form.Item name="lainnya">
+                <Input placeholder="Lainnya.." style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
           </Row>
-        </Form.Item>
-        <Form.Item label="Lainnya" name="lainnya">
-          <Input />
         </Form.Item>
       </Form>
     </div>
