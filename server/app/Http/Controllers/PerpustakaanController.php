@@ -101,7 +101,7 @@ class PerpustakaanController extends Controller
     {
         $params = $request->toArray();
 
-        $perpustakaan = PerpustakaanRepositories::update($params);
+        PerpustakaanRepositories::update($params);
 
         $params['perpustakaan_id'] = $params['id'];
 
@@ -152,5 +152,25 @@ class PerpustakaanController extends Controller
         $data = PerpustakaanRepositories::fetchOne($params['perpustakaan_id']);
 
         return response()->json($data);
+    }
+
+    public static function delete(Request $request)
+    {
+        $params = $request->toArray();
+
+        $params['perpustakaan_id'] = $params['id'];
+
+        DataGedungRepositories::delete($params);
+        SumberDayaManusiaRepositories::delete($params);
+        KoleksiMateriRepositories::delete($params);
+        JamOperasionalRepositories::delete($params);
+        AnggotaOtomasiRepositories::delete($params);
+        SaranaPrasaranaRepositories::delete($params);
+        FasilitasAnggaranRepositories::delete($params);
+        MendapatKoleksiRepositories::delete($params);
+
+        PerpustakaanRepositories::delete($params);
+
+        return response()->json();
     }
 }

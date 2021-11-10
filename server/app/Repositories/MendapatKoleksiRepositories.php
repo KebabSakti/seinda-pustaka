@@ -30,4 +30,9 @@ class MendapatKoleksiRepositories
 
         return $data;
     }
+
+    public static function delete($params)
+    {
+        MendapatKoleksi::where('perpustakaan_id', $params['perpustakaan_id'])->delete();
+    }
 }

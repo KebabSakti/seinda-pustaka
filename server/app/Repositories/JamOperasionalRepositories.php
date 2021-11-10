@@ -29,4 +29,9 @@ class JamOperasionalRepositories
 
         return $data;
     }
+
+    public static function delete($params)
+    {
+        JamOperasional::where('perpustakaan_id', $params['perpustakaan_id'])->delete();
+    }
 }

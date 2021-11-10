@@ -41,4 +41,9 @@ class FasilitasAnggaranRepositories
 
         return $data;
     }
+
+    public static function delete($params)
+    {
+        FasilitasAnggaran::where('perpustakaan_id', $params['perpustakaan_id'])->delete();
+    }
 }

@@ -17,6 +17,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'abilities:r
         Route::post('add', [App\Http\Controllers\PerpustakaanController::class, 'add']);
         Route::post('store', [App\Http\Controllers\PerpustakaanController::class, 'store']);
         Route::post('update', [App\Http\Controllers\PerpustakaanController::class, 'update']);
+        Route::post('delete', [App\Http\Controllers\PerpustakaanController::class, 'delete']);
     });
 });
 

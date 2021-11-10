@@ -39,4 +39,9 @@ class DataGedungRepositories
 
         return $data;
     }
+
+    public static function delete($params)
+    {
+        DataGedung::where('perpustakaan_id', $params['perpustakaan_id'])->delete();
+    }
 }

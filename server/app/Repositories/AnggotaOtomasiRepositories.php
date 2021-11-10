@@ -33,4 +33,9 @@ class AnggotaOtomasiRepositories
 
         return $data;
     }
+
+    public static function delete($params)
+    {
+        AnggotaOtomasi::where('perpustakaan_id', $params['perpustakaan_id'])->delete();
+    }
 }

@@ -101,4 +101,9 @@ class PerpustakaanRepositories
 
         return $data;
     }
+
+    public static function delete($params)
+    {
+        Perpustakaan::where('id', $params['perpustakaan_id'])->delete();
+    }
 }

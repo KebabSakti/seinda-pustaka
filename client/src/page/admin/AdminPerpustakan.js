@@ -1,5 +1,10 @@
 import { useEffect, useCallback, useReducer, useState } from "react";
-import { perpusIndex, perpusStore, perpusUpdate } from "../../api/PerpusApi";
+import {
+  perpusDelete,
+  perpusIndex,
+  perpusStore,
+  perpusUpdate,
+} from "../../api/PerpusApi";
 import { debounce } from "../../module/UtilityModule";
 import { getUser } from "../../module/AuthModule";
 import PerpusModal from "../../component/PerpusModal";
@@ -17,6 +22,7 @@ import {
   notification,
   Modal,
   Form,
+  message,
 } from "antd";
 import {
   BarsOutlined,
@@ -160,7 +166,7 @@ export default function AdminPerpustakaan() {
               <Menu onClick={(event) => tableMenuEvent(event, record)}>
                 <Menu.Item key="detail">Detail</Menu.Item>
                 <Menu.Item key="edit">Edit</Menu.Item>
-                <Menu.Item key="hapus">
+                <Menu.Item key="delete">
                   <Text type="danger">Hapus</Text>
                 </Menu.Item>
                 <Menu.Divider style={{ margin: "0px" }} />
@@ -239,13 +245,11 @@ export default function AdminPerpustakaan() {
     setFilter({ ...filter, d_start: dateStrings[0], d_end: dateStrings[1] });
   }
 
-  function tableMenuEvent(event, payload) {
-    console.log(payload);
-
-    form.resetFields();
-
+  async function tableMenuEvent(event, payload) {
     switch (event.key) {
       case "add":
+        form.resetFields();
+
         setModalPayload({
           mode: "add",
           show: true,
@@ -253,6 +257,8 @@ export default function AdminPerpustakaan() {
         break;
 
       case "detail":
+        form.resetFields();
+
         setModalPayload({
           mode: "detail",
           show: true,
@@ -261,11 +267,31 @@ export default function AdminPerpustakaan() {
         break;
 
       case "edit":
+        form.resetFields();
+
         setModalPayload({
           mode: "edit",
           show: true,
           data: payload,
         });
+        break;
+
+      case "delete":
+        try {
+          if (
+            window.confirm(
+              "Data akan dihapus, proses ini tidak dapat dikembalikan, lanjutkan ?"
+            )
+          ) {
+            await perpusDelete({ id: payload.id }).then((_) => {
+              setFilter({ ...filter });
+
+              message.success("Data berhasil di hapus");
+            });
+          }
+        } catch (e) {
+          console.log(e);
+        }
         break;
 
       default:
@@ -277,8 +303,6 @@ export default function AdminPerpustakaan() {
   async function tableModalOnOk() {
     try {
       let params = form.getFieldValue();
-
-      console.log(params);
 
       switch (params["mode"]) {
         case "add":
@@ -296,6 +320,8 @@ export default function AdminPerpustakaan() {
             setModalPayload({ show: false });
 
             setFilter({ ...filter });
+
+            message.success("Data berhasil di simpan");
           });
 
           break;
@@ -315,6 +341,8 @@ export default function AdminPerpustakaan() {
             setModalPayload({ show: false });
 
             setFilter({ ...filter });
+
+            message.success("Data berhasil di edit");
           });
 
           break;

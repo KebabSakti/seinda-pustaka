@@ -17,3 +17,7 @@ export async function perpusStore(params) {
 export async function perpusUpdate(params) {
   return await Network().post("/admin/perpus/update", params);
 }
+
+export async function perpusDelete(params) {
+  return await Network().post("/admin/perpus/delete", params);
+}

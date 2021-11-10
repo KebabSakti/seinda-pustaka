@@ -37,4 +37,9 @@ class KoleksiMateriRepositories
 
         return $data;
     }
+
+    public static function delete($params)
+    {
+        KoleksiMateri::where('perpustakaan_id', $params['perpustakaan_id'])->delete();
+    }
 }

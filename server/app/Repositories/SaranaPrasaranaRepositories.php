@@ -53,4 +53,9 @@ class SaranaPrasaranaRepositories
 
         return $data;
     }
+
+    public static function delete($params)
+    {
+        SaranaPrasarana::where('perpustakaan_id', $params['perpustakaan_id'])->delete();
+    }
 }
