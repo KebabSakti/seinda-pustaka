@@ -260,8 +260,6 @@ export default function AdminPerpustakaan() {
   async function tableMenuEvent(event, payload) {
     switch (event.key) {
       case "add":
-        form.resetFields();
-
         setModalPayload({
           mode: "add",
           show: true,
@@ -269,8 +267,6 @@ export default function AdminPerpustakaan() {
         break;
 
       case "detail":
-        form.resetFields();
-
         setModalPayload({
           mode: "detail",
           show: true,
@@ -279,8 +275,6 @@ export default function AdminPerpustakaan() {
         break;
 
       case "edit":
-        form.resetFields();
-
         setModalPayload({
           mode: "edit",
           show: true,
