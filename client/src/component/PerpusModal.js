@@ -253,6 +253,7 @@ export default function PerpusModal({ form, payload, tableModalOnOk }) {
       <Form
         layout="horizontal"
         form={form}
+        preserve={false}
         labelCol={{ span: 7 }}
         wrapperCol={{ span: 17 }}
         onFinish={tableModalOnOk}
