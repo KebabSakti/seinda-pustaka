@@ -706,13 +706,9 @@ export default function PerpusModal({ form, payload, tableModalOnOk }) {
           </Row>
         </Form.Item>
         <Form.Item hidden>
-          <Row justify="center">
-            <Col>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Col>
-          </Row>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
         </Form.Item>
       </Form>
     </div>
