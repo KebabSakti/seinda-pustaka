@@ -252,6 +252,7 @@ export default function PerpusModal({ form, payload, tableModalOnOk }) {
     <div>
       <Form
         layout="horizontal"
+        preserve={false}
         form={form}
         preserve={false}
         labelCol={{ span: 7 }}
@@ -707,13 +708,9 @@ export default function PerpusModal({ form, payload, tableModalOnOk }) {
           </Row>
         </Form.Item>
         <Form.Item hidden>
-          <Row justify="center">
-            <Col>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Col>
-          </Row>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
         </Form.Item>
       </Form>
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useReducer, useState } from "react";
+import { useEffect, useCallback, useReducer, useState, useRef } from "react";
 import {
   perpusDelete,
   perpusIndex,
@@ -30,6 +30,7 @@ import {
   FileExcelOutlined,
   FilePdfOutlined,
 } from "@ant-design/icons";
+import ReactToPrint from "react-to-print";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -59,6 +60,8 @@ function reducer(state, action) {
 }
 
 export default function AdminPerpustakaan() {
+  const componentRef = useRef();
+
   const { RangePicker } = DatePicker;
   const { Text, Title } = Typography;
 
@@ -67,9 +70,9 @@ export default function AdminPerpustakaan() {
 
   const [filter, setFilter] = useState({
     page: 1,
+    paging_size: 5,
     sort_key: "id",
     sort_mode: "desc",
-    paging_size: 5,
   });
 
   const [state, dispatch] = useReducer(reducer, {
@@ -171,13 +174,10 @@ export default function AdminPerpustakaan() {
                 </Menu.Item>
                 <Menu.Divider style={{ margin: "0px" }} />
                 <Menu.Item key="printData" icon={<PrinterOutlined />}>
-                  Print
+                  Print / PDF
                 </Menu.Item>
                 <Menu.Item key="excelData" icon={<FileExcelOutlined />}>
                   Excel
-                </Menu.Item>
-                <Menu.Item key="pdfData" icon={<FilePdfOutlined />}>
-                  PDF
                 </Menu.Item>
               </Menu>
             }
@@ -209,6 +209,8 @@ export default function AdminPerpustakaan() {
               current: response.data.current_page,
               total: response.data.total,
               pageSize: response.data.per_page,
+              showSizeChanger: response.data.total > 5 ? true : false,
+              pageSizeOptions: ["5", response.data.total],
             },
           },
         });
@@ -224,16 +226,26 @@ export default function AdminPerpustakaan() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function tableChange(tPagination, _, tSorter) {
-    if (tSorter != null) {
-      setFilter({
-        ...filter,
-        page: tPagination.current,
-        sort_key: tSorter.field,
-        sort_mode: tSorter.order,
-      });
-    } else {
-      setFilter({ ...filter, page: tPagination.current });
+  function tableChange(tPagination, _, tSorter, tExtra) {
+    switch (tExtra.action) {
+      case "paginate":
+        setFilter({
+          ...filter,
+          page: tPagination.current,
+          paging_size: tPagination.pageSize,
+        });
+        break;
+
+      case "sort":
+        setFilter({
+          ...filter,
+          page: tPagination.current,
+          sort_key: tSorter.field,
+          sort_mode: tSorter.order,
+        });
+        break;
+
+      default:
     }
   }
 
@@ -411,13 +423,17 @@ export default function AdminPerpustakaan() {
                     <Menu.Item key="add">Tambah Data</Menu.Item>
                     <Menu.Divider style={{ margin: "0px" }} />
                     <Menu.Item key="printTable" icon={<PrinterOutlined />}>
-                      Print
+                      {/* Print / PDF */}
+                      <ReactToPrint
+                        trigger={() => <div>Print / PDF</div>}
+                        content={() => componentRef.current}
+                        onBeforeGetContent={() => {
+                          // setFilter({ ...filter, paging_size: null });
+                        }}
+                      />
                     </Menu.Item>
                     <Menu.Item key="excelTable" icon={<FileExcelOutlined />}>
                       Excel
-                    </Menu.Item>
-                    <Menu.Item key="pdfTable" icon={<FilePdfOutlined />}>
-                      PDF
                     </Menu.Item>
                   </Menu>
                 }
@@ -434,15 +450,17 @@ export default function AdminPerpustakaan() {
           </Row>
         </Col>
       </Row>
-      <Table
-        bordered
-        columns={columns}
-        loading={state.loading}
-        dataSource={state.payload?.datas}
-        pagination={state.payload?.pagination}
-        onChange={tableChange}
-        // scroll={state.payload.datas.length > 0 && { x: true, y: false }}
-      />
+      <div ref={componentRef}>
+        <Table
+          bordered
+          columns={columns}
+          loading={state.loading}
+          dataSource={state.payload?.datas}
+          pagination={state.payload?.pagination}
+          onChange={tableChange}
+          // scroll={state.payload.datas.length > 0 && { x: true, y: false }}
+        />
+      </div>
     </div>
   );
 }

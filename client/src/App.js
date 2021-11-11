@@ -20,6 +20,7 @@ import AdminPerpustakaan from "./page/admin/AdminPerpustakan";
 import { getPath } from "./module/HelperModule";
 import { useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
+import PrintPage from "./page/PrintPage";
 
 export default function App() {
   const history = useHistory();
@@ -101,6 +102,9 @@ export default function App() {
                 </Route>
                 <Route path="/admin/perpus">
                   <AdminPerpustakaan />
+                </Route>
+                <Route path="/admin/print">
+                  <PrintPage />
                 </Route>
                 <Route path="*">
                   <Redirect to="/admin/home" />
