@@ -28,10 +28,10 @@ import {
   BarsOutlined,
   PrinterOutlined,
   FileExcelOutlined,
-  FilePdfOutlined,
+  ExportOutlined,
 } from "@ant-design/icons";
-import ReactToPrint from "react-to-print";
-import PrintPage from "../PrintPage";
+import AdminPerpusExportAll from "./AdminPerpusExportAll";
+import AdminPerpusExportOne from "./AdminPerpusExportOne";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -67,8 +67,8 @@ export default function AdminPerpustakaan() {
   const { Text, Title } = Typography;
 
   const [form] = Form.useForm();
+
   const [modalPayload, setModalPayload] = useState({
-    show: false,
     page: "form",
   });
 
@@ -76,7 +76,7 @@ export default function AdminPerpustakaan() {
     width: 600,
     centered: true,
     visible: false,
-    maskClosable: true,
+    maskClosable: false,
     keyboard: true,
     destroyOnClose: true,
     onCancel: () => {
@@ -189,11 +189,8 @@ export default function AdminPerpustakaan() {
                   <Text type="danger">Hapus</Text>
                 </Menu.Item>
                 <Menu.Divider style={{ margin: "0px" }} />
-                <Menu.Item key="printData" icon={<PrinterOutlined />}>
-                  Print / PDF
-                </Menu.Item>
-                <Menu.Item key="excelData" icon={<FileExcelOutlined />}>
-                  Excel
+                <Menu.Item key="exportOne" icon={<ExportOutlined />}>
+                  Export Data
                 </Menu.Item>
               </Menu>
             }
@@ -278,30 +275,43 @@ export default function AdminPerpustakaan() {
       case "add":
         setModalPayload({
           ...modalPayload,
+          mode: "add",
           page: "form",
+          data: null,
         });
 
         setModal({
           ...modal,
           visible: true,
-          page: "form",
+          width: 600,
         });
         break;
 
       case "detail":
         setModalPayload({
           mode: "detail",
-          show: true,
+          page: "form",
           data: payload,
+        });
+
+        setModal({
+          ...modal,
+          visible: true,
+          width: 600,
         });
         break;
 
       case "edit":
         setModalPayload({
           mode: "edit",
-          show: true,
-          data: payload,
           page: "form",
+          data: payload,
+        });
+
+        setModal({
+          ...modal,
+          visible: true,
+          width: 600,
         });
         break;
 
@@ -323,17 +333,33 @@ export default function AdminPerpustakaan() {
         }
         break;
 
-      case "printTable":
+      case "exportAll":
         setModalPayload({
           ...modalPayload,
-          page: "print",
+          page: "exportAll",
+          data: state.payload.datas,
         });
 
         setModal({
           ...modal,
           visible: true,
+          width: 1200,
+          footer: false,
+        });
+        break;
+
+      case "exportOne":
+        setModalPayload({
+          ...modalPayload,
+          page: "exportOne",
+          data: payload,
         });
 
+        setModal({
+          ...modal,
+          visible: true,
+          footer: false,
+        });
         break;
 
       default:
@@ -351,8 +377,11 @@ export default function AdminPerpustakaan() {
           />
         );
 
-      case "print":
-        return <PrintPage />;
+      case "exportAll":
+        return <AdminPerpusExportAll payload={modalPayload} />;
+
+      case "exportOne":
+        return <AdminPerpusExportOne form={form} payload={modalPayload} />;
 
       default:
     }
@@ -461,18 +490,8 @@ export default function AdminPerpustakaan() {
                   <Menu onClick={tableMenuEvent}>
                     <Menu.Item key="add">Tambah Data</Menu.Item>
                     <Menu.Divider style={{ margin: "0px" }} />
-                    <Menu.Item key="printTable" icon={<PrinterOutlined />}>
-                      Print / PDF
-                      {/* <ReactToPrint
-                        trigger={() => <div>Print / PDF</div>}
-                        content={() => componentRef.current}
-                        onBeforeGetContent={() => {
-                          // setFilter({ ...filter, paging_size: null });
-                        }}
-                      /> */}
-                    </Menu.Item>
-                    <Menu.Item key="excelTable" icon={<FileExcelOutlined />}>
-                      Excel
+                    <Menu.Item key="exportAll" icon={<ExportOutlined />}>
+                      Export Data
                     </Menu.Item>
                   </Menu>
                 }
