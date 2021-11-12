@@ -36,7 +36,8 @@ export default function AdminPerpusExportOne({ form, payload }) {
         form.setFieldsValue({
           mode: payload.mode,
           id: payload.data.id,
-          jenis_perpustakaan_id: parseInt(payload.data.jenis_perpustakaan_id),
+          jenis_perpustakaan_id:
+            payload.data.jenis_perpustakaan.nama_jenis_perpustakaan,
           nama: payload.data.nama,
           alamat: payload.data.alamat,
           kecamatan: payload.data.kecamatan,
@@ -239,7 +240,7 @@ export default function AdminPerpusExportOne({ form, payload }) {
           </ExcelSheet>
         </ExcelFile> */}
       </Space>
-      <div ref={componentRef} style={{ margin: "20px", textAlign: "center" }}>
+      <div ref={componentRef} style={{ margin: "20px" }}>
         <Form
           layout="horizontal"
           preserve={false}
@@ -248,15 +249,14 @@ export default function AdminPerpusExportOne({ form, payload }) {
           wrapperCol={{ span: 17 }}
         >
           <Row>
-            <Col span={24}>
+            <Col span={24} style={{ marginBottom: "10px" }}>
               <Title level={4} style={{ textAlign: "center" }}>
                 Data Perpustakaan
               </Title>
-              <Divider style={{ margin: "15px 0px" }} />
             </Col>
           </Row>
           <Form.Item label="Jenis Perpustakaan" name="jenis_perpustakaan_id">
-            <Input />
+            <Input bordered={false} />
           </Form.Item>
           <Form.Item label="Nama" name="nama">
             <Input />

@@ -82,7 +82,7 @@ export default function AdminPerpusExportAll({ payload }) {
           filename="Data Perpustakaan"
           element={<Button icon={<FileExcelOutlined />}>Excel</Button>}
         >
-          <ExcelSheet data={payload} name="Data Perpustakaan">
+          <ExcelSheet data={payload.data} name="Data Perpustakaan">
             {columns.map((item, index) => {
               return (
                 <ExcelColumn

@@ -24,12 +24,7 @@ import {
   Form,
   message,
 } from "antd";
-import {
-  BarsOutlined,
-  PrinterOutlined,
-  FileExcelOutlined,
-  ExportOutlined,
-} from "@ant-design/icons";
+import { BarsOutlined, ExportOutlined } from "@ant-design/icons";
 import AdminPerpusExportAll from "./AdminPerpusExportAll";
 import AdminPerpusExportOne from "./AdminPerpusExportOne";
 
@@ -79,6 +74,7 @@ export default function AdminPerpustakaan() {
     maskClosable: false,
     keyboard: true,
     destroyOnClose: true,
+    onOk: tableModalOnOk,
     onCancel: () => {
       setModal({ ...modal, visible: false });
     },
@@ -406,7 +402,7 @@ export default function AdminPerpustakaan() {
             sabtu: params.sabtu?.format("HH:mm:ss"),
             user_id: getUser().id,
           }).then((_) => {
-            setModalPayload({ show: false });
+            setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
 
@@ -427,7 +423,7 @@ export default function AdminPerpustakaan() {
             sabtu: params.sabtu?.format("HH:mm:ss"),
             user_id: getUser().id,
           }).then((_) => {
-            setModalPayload({ show: false });
+            setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
 

@@ -54,6 +54,8 @@ export default function PerpusModal({ form, payload, tableModalOnOk }) {
 
   const fetchDatas = useCallback(async () => {
     try {
+      console.log(payload);
+
       dispatch({ type: "loading", loading: true });
 
       await perpusAdd().then((response) => {
@@ -61,6 +63,10 @@ export default function PerpusModal({ form, payload, tableModalOnOk }) {
           type: "complete",
           payload: response.data,
         });
+      });
+
+      form.setFieldsValue({
+        mode: payload.mode,
       });
 
       if (payload.data != null) {
@@ -258,7 +264,7 @@ export default function PerpusModal({ form, payload, tableModalOnOk }) {
         wrapperCol={{ span: 17 }}
         onFinish={tableModalOnOk}
       >
-        <Form.Item hidden name={payload.mode}>
+        <Form.Item hidden name="mode">
           <Input />
         </Form.Item>
         <Form.Item hidden name="id">
