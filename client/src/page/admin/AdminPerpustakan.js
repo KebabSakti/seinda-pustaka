@@ -31,6 +31,7 @@ import {
   FilePdfOutlined,
 } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
+import PrintPage from "../PrintPage";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -66,7 +67,22 @@ export default function AdminPerpustakaan() {
   const { Text, Title } = Typography;
 
   const [form] = Form.useForm();
-  const [modalPayload, setModalPayload] = useState({ show: false });
+  const [modalPayload, setModalPayload] = useState({
+    show: false,
+    page: "form",
+  });
+
+  const [modal, setModal] = useState({
+    width: 600,
+    centered: true,
+    visible: false,
+    maskClosable: true,
+    keyboard: true,
+    destroyOnClose: true,
+    onCancel: () => {
+      setModal({ ...modal, visible: false });
+    },
+  });
 
   const [filter, setFilter] = useState({
     page: 1,
@@ -261,8 +277,14 @@ export default function AdminPerpustakaan() {
     switch (event.key) {
       case "add":
         setModalPayload({
-          mode: "add",
-          show: true,
+          ...modalPayload,
+          page: "form",
+        });
+
+        setModal({
+          ...modal,
+          visible: true,
+          page: "form",
         });
         break;
 
@@ -279,6 +301,7 @@ export default function AdminPerpustakaan() {
           mode: "edit",
           show: true,
           data: payload,
+          page: "form",
         });
         break;
 
@@ -299,6 +322,37 @@ export default function AdminPerpustakaan() {
           console.log(e);
         }
         break;
+
+      case "printTable":
+        setModalPayload({
+          ...modalPayload,
+          page: "print",
+        });
+
+        setModal({
+          ...modal,
+          visible: true,
+        });
+
+        break;
+
+      default:
+    }
+  }
+
+  function pageModal(page) {
+    switch (page) {
+      case "form":
+        return (
+          <PerpusModal
+            form={form}
+            payload={modalPayload}
+            tableModalOnOk={tableModalOnOk}
+          />
+        );
+
+      case "print":
+        return <PrintPage />;
 
       default:
     }
@@ -372,22 +426,7 @@ export default function AdminPerpustakaan() {
 
   return (
     <div>
-      <Modal
-        centered
-        width={600}
-        visible={modalPayload.show}
-        maskClosable={false}
-        keyboard={true}
-        destroyOnClose={true}
-        onCancel={() => setModalPayload({ ...modalPayload, show: false })}
-        onOk={tableModalOnOk}
-      >
-        <PerpusModal
-          form={form}
-          payload={modalPayload}
-          tableModalOnOk={tableModalOnOk}
-        />
-      </Modal>
+      <Modal {...modal}>{pageModal(modalPayload.page)}</Modal>
       <Title level={4}>Daftar Perpustakaan</Title>
       <Divider style={{ margin: "10px 0px" }} />
       <Row
@@ -423,14 +462,14 @@ export default function AdminPerpustakaan() {
                     <Menu.Item key="add">Tambah Data</Menu.Item>
                     <Menu.Divider style={{ margin: "0px" }} />
                     <Menu.Item key="printTable" icon={<PrinterOutlined />}>
-                      {/* Print / PDF */}
-                      <ReactToPrint
+                      Print / PDF
+                      {/* <ReactToPrint
                         trigger={() => <div>Print / PDF</div>}
                         content={() => componentRef.current}
                         onBeforeGetContent={() => {
                           // setFilter({ ...filter, paging_size: null });
                         }}
-                      />
+                      /> */}
                     </Menu.Item>
                     <Menu.Item key="excelTable" icon={<FileExcelOutlined />}>
                       Excel
