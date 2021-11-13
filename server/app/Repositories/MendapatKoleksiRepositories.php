@@ -19,10 +19,13 @@ class MendapatKoleksiRepositories
 
     public static function update($params)
     {
-        $data = MendapatKoleksi::where('perpustakaan_id', $params['perpustakaan_id'])
-                               ->where('sumber', $params['sumber'])
-                               ->where('deskripsi', $params['deskripsi'])
-                               ->update([
+        $data = MendapatKoleksi::updateOrCreate(
+                                [
+                                    'perpustakaan_id' => $params['perpustakaan_id'],
+                                    'sumber' => $params['sumber'],
+                                    'deskripsi' => $params['deskripsi'],
+                                ],
+                                [
                                     'perpustakaan_id' => $params['perpustakaan_id'],
                                     'sumber' => $params['sumber'] ?? null,
                                     'deskripsi' => $params['deskripsi'] ?? null,

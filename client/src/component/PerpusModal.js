@@ -54,8 +54,6 @@ export default function PerpusModal({ form, payload, tableModalOnOk }) {
 
   const fetchDatas = useCallback(async () => {
     try {
-      console.log(payload);
-
       dispatch({ type: "loading", loading: true });
 
       await perpusAdd().then((response) => {

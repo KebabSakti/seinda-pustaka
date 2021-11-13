@@ -1,13 +1,11 @@
 import { useEffect, useCallback, useReducer, useState, useRef } from "react";
 import {
-  adminPerpusDelete,
-  adminPerpusIndex,
-  adminPerpusStore,
-  adminPerpusUpdate,
-} from "../../api/admin/AdminPerpusApi";
+  adminBukuDelete,
+  adminBukuIndex,
+  adminBukuStore,
+  adminBukuUpdate,
+} from "../../api/admin/AdminBukuApi";
 import { debounce } from "../../module/UtilityModule";
-import { getUser } from "../../module/AuthModule";
-import AdminPerpusForm from "../admin/AdminPerpusForm";
 import {
   Row,
   Col,
@@ -23,10 +21,14 @@ import {
   Modal,
   Form,
   message,
+  Tag,
+  Image,
 } from "antd";
 import { BarsOutlined, ExportOutlined } from "@ant-design/icons";
 import AdminPerpusExportAll from "./AdminPerpusExportAll";
 import AdminPerpusExportOne from "./AdminPerpusExportOne";
+import AdminBukuForm from "./AdminBukuForm";
+import AdminBukuExportAll from "./AdminBukuExportAll";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -47,7 +49,7 @@ function reducer(state, action) {
       return {
         ...state,
         loading: false,
-        payload: null,
+        error: action.error,
       };
 
     default:
@@ -55,7 +57,7 @@ function reducer(state, action) {
   }
 }
 
-export default function AdminPerpustakaan() {
+export default function AdminBuku() {
   const componentRef = useRef();
 
   const { RangePicker } = DatePicker;
@@ -83,7 +85,7 @@ export default function AdminPerpustakaan() {
 
   const [filter, setFilter] = useState({
     page: 1,
-    paging_size: 5,
+    paging_size: 10,
     sort_key: "id",
     sort_mode: "desc",
   });
@@ -94,8 +96,8 @@ export default function AdminPerpustakaan() {
       datas: [],
       pagination: {
         current: 1,
-        pageSize: 5,
-        total: 5,
+        pageSize: 10,
+        total: 10,
         showLessItems: true,
         responsive: true,
         showSizeChanger: false,
@@ -106,68 +108,50 @@ export default function AdminPerpustakaan() {
 
   const columns = [
     {
-      title: "Nama",
-      dataIndex: "nama",
+      title: "Perpustakaan",
+      dataIndex: ["perpustakaan", "nama"],
+    },
+    {
+      title: "Judul",
+      dataIndex: "judul",
       sorter: true,
     },
     {
-      title: "Jenis Perpustakaan",
-      dataIndex: ["jenis_perpustakaan", "nama_jenis_perpustakaan"],
+      title: "Sampul",
+      dataIndex: "sampul",
+      render: (text, record) => {
+        return text == "" ? "-" : <Image height={50} src={text} />;
+      },
+    },
+    {
+      title: "Nomor",
+      dataIndex: "nomor",
       responsive: ["sm"],
     },
     {
-      title: "Kecamatan",
-      dataIndex: "kecamatan",
-      responsive: ["sm"],
-      ellipsis: true,
-      sorter: true,
+      title: "Ebook",
+      dataIndex: "download",
+      responsive: ["md"],
+      render: (text, record) => {
+        return (
+          <a href={text} target="_blank" rel="noreferrer">
+            Download
+          </a>
+        );
+      },
     },
     {
-      title: "Kelurahan",
-      dataIndex: "kelurahan",
-      responsive: ["sm"],
-      sorter: true,
-    },
-    {
-      title: "Provinsi",
-      dataIndex: "provinsi",
+      title: "Status",
+      dataIndex: "aktif",
       responsive: ["md"],
       sorter: true,
-    },
-    {
-      title: "Status Perpustakaan",
-      dataIndex: "status_perpustakaan",
-      responsive: ["md"],
-      sorter: true,
-    },
-    {
-      title: "NPSN",
-      dataIndex: "npsn",
-      responsive: ["lg"],
-    },
-    {
-      title: "Kepala Perpustakaan",
-      dataIndex: "nama_kepala_perpustakaan",
-      responsive: ["lg"],
-      sorter: true,
-    },
-    {
-      title: "Kepala Instansi Indek",
-      dataIndex: "nama_kepala_instansi_induk",
-      responsive: ["xl"],
-      sorter: true,
-    },
-    {
-      title: "Tahun Berdiri",
-      dataIndex: "tahun_berdiri_perpustakaan",
-      responsive: ["xl"],
-      sorter: true,
-    },
-    {
-      title: "Alamat",
-      dataIndex: "alamat",
-      responsive: ["xl"],
-      ellipsis: true,
+      render: (text, record) => {
+        return text > 0 ? (
+          <Tag color="success">Aktif</Tag>
+        ) : (
+          <Tag color="error">Tidak Aktif</Tag>
+        );
+      },
     },
     {
       title: "",
@@ -184,10 +168,10 @@ export default function AdminPerpustakaan() {
                 <Menu.Item key="delete">
                   <Text type="danger">Hapus</Text>
                 </Menu.Item>
-                <Menu.Divider style={{ margin: "0px" }} />
+                {/* <Menu.Divider style={{ margin: "0px" }} />
                 <Menu.Item key="exportOne" icon={<ExportOutlined />}>
                   Export Data
-                </Menu.Item>
+                </Menu.Item> */}
               </Menu>
             }
           >
@@ -204,7 +188,7 @@ export default function AdminPerpustakaan() {
     try {
       dispatch({ type: "loading", loading: true });
 
-      await adminPerpusIndex(params).then((response) => {
+      await adminBukuIndex(params).then((response) => {
         let results = response.data.data.map((item) => {
           return { ...item, key: item.id };
         });
@@ -218,8 +202,8 @@ export default function AdminPerpustakaan() {
               current: response.data.current_page,
               total: response.data.total,
               pageSize: response.data.per_page,
-              showSizeChanger: response.data.total > 5 ? true : false,
-              pageSizeOptions: ["5", response.data.total],
+              showSizeChanger: response.data.total > 10 ? true : false,
+              pageSizeOptions: ["10", response.data.total],
             },
           },
         });
@@ -304,14 +288,21 @@ export default function AdminPerpustakaan() {
               "Data akan dihapus, proses ini tidak dapat dikembalikan, lanjutkan ?"
             )
           ) {
-            await adminPerpusDelete({ id: payload.id }).then((_) => {
+            dispatch({ type: "loading", loading: true });
+
+            await adminBukuDelete({ id: payload.id }).then((_) => {
               setFilter({ ...filter });
 
               message.success("Data berhasil di hapus");
             });
           }
         } catch (e) {
-          console.log(e);
+          dispatch({ type: "error", error: e });
+
+          notification.error({
+            message: "Error",
+            description: e.message,
+          });
         }
         break;
 
@@ -352,7 +343,8 @@ export default function AdminPerpustakaan() {
     switch (page) {
       case "form":
         return (
-          <AdminPerpusForm
+          <AdminBukuForm
+            loading={state.loading}
             form={form}
             payload={modalPayload}
             tableModalOnOk={tableModalOnOk}
@@ -360,10 +352,10 @@ export default function AdminPerpustakaan() {
         );
 
       case "exportAll":
-        return <AdminPerpusExportAll payload={modalPayload} />;
+        return <AdminBukuExportAll payload={modalPayload} />;
 
-      case "exportOne":
-        return <AdminPerpusExportOne form={form} payload={modalPayload} />;
+      // case "exportOne":
+      //   return <AdminPerpusExportOne form={form} payload={modalPayload} />;
 
       default:
     }
@@ -373,21 +365,31 @@ export default function AdminPerpustakaan() {
 
   async function tableModalOnOk() {
     try {
+      await form.validateFields();
+
       let params = form.getFieldValue();
+
+      let formData = new FormData();
+
+      Object.keys(params).forEach(function (key) {
+        if (params[key] != null) {
+          formData.set(key, params[key]);
+        }
+      });
+
+      if (params?.sampul != null) {
+        formData.set("sampul", params.sampul.target.files[0]);
+      }
+
+      if (params?.download != null) {
+        formData.set("download", params.download.target.files[0]);
+      }
 
       switch (params["mode"]) {
         case "add":
-          await form.validateFields();
+          dispatch({ type: "loading", loading: true });
 
-          await adminPerpusStore({
-            ...params,
-            tahun_berdiri_perpustakaan:
-              params.tahun_berdiri_perpustakaan?.format("YYYY"),
-            senin_kamis: params.senin_kamis?.format("HH:mm:ss"),
-            jummat: params.jummat?.format("HH:mm:ss"),
-            sabtu: params.sabtu?.format("HH:mm:ss"),
-            user_id: getUser().id,
-          }).then((_) => {
+          await adminBukuStore(formData).then((_) => {
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
@@ -398,22 +400,14 @@ export default function AdminPerpustakaan() {
           break;
 
         case "edit":
-          await form.validateFields();
+          dispatch({ type: "loading", loading: true });
 
-          await adminPerpusUpdate({
-            ...params,
-            tahun_berdiri_perpustakaan:
-              params.tahun_berdiri_perpustakaan?.format("YYYY"),
-            senin_kamis: params.senin_kamis?.format("HH:mm:ss"),
-            jummat: params.jummat?.format("HH:mm:ss"),
-            sabtu: params.sabtu?.format("HH:mm:ss"),
-            user_id: getUser().id,
-          }).then((_) => {
+          await adminBukuUpdate(formData).then((_) => {
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
 
-            message.success("Data berhasil di edit");
+            message.success("Data berhasil di update");
           });
 
           break;
@@ -421,7 +415,12 @@ export default function AdminPerpustakaan() {
         default:
       }
     } catch (e) {
-      console.log(e);
+      dispatch({ type: "error", error: e });
+
+      notification.error({
+        message: "Error",
+        description: e.message,
+      });
     }
   }
 
@@ -438,7 +437,7 @@ export default function AdminPerpustakaan() {
   return (
     <div>
       <Modal {...modal}>{tableModalPage(modalPayload.page)}</Modal>
-      <Title level={4}>Daftar Perpustakaan</Title>
+      <Title level={4}>Daftar Buku</Title>
       <Divider style={{ margin: "10px 0px" }} />
       <Row
         justify="space-between"
@@ -448,7 +447,7 @@ export default function AdminPerpustakaan() {
       >
         <Col xs={24} sm={24} md={8} lg={8}>
           <RangePicker
-            picker="year"
+            picker="date"
             style={{ width: "100%" }}
             onChange={tableDateRange}
           />

@@ -13,11 +13,19 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'abilities:role-admin']], function () {
     Route::prefix('perpus')->group(function () {
-        Route::post('index', [App\Http\Controllers\PerpustakaanController::class, 'index']);
-        Route::post('add', [App\Http\Controllers\PerpustakaanController::class, 'add']);
-        Route::post('store', [App\Http\Controllers\PerpustakaanController::class, 'store']);
-        Route::post('update', [App\Http\Controllers\PerpustakaanController::class, 'update']);
-        Route::post('delete', [App\Http\Controllers\PerpustakaanController::class, 'delete']);
+        Route::post('index', [App\Http\Controllers\Admin\PerpustakaanController::class, 'index']);
+        Route::post('add', [App\Http\Controllers\Admin\PerpustakaanController::class, 'add']);
+        Route::post('store', [App\Http\Controllers\Admin\PerpustakaanController::class, 'store']);
+        Route::post('update', [App\Http\Controllers\Admin\PerpustakaanController::class, 'update']);
+        Route::post('delete', [App\Http\Controllers\Admin\PerpustakaanController::class, 'delete']);
+    });
+
+    Route::prefix('buku')->group(function () {
+        Route::post('index', [App\Http\Controllers\Admin\BukuController::class, 'index']);
+        Route::post('add', [App\Http\Controllers\Admin\BukuController::class, 'add']);
+        Route::post('store', [App\Http\Controllers\Admin\BukuController::class, 'store']);
+        Route::post('update', [App\Http\Controllers\Admin\BukuController::class, 'update']);
+        Route::post('delete', [App\Http\Controllers\Admin\BukuController::class, 'delete']);
     });
 });
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Repositories\AnggotaOtomasiRepositories;
 use App\Repositories\DataGedungRepositories;
 use App\Repositories\FasilitasAnggaranRepositories;

@@ -22,8 +22,9 @@ class AnggotaOtomasiRepositories
 
     public static function update($params)
     {
-        $data = AnggotaOtomasi::where('perpustakaan_id', $params['perpustakaan_id'])
-                              ->update([
+        $data = AnggotaOtomasi::updateOrCreate(
+                                ['perpustakaan_id' => $params['perpustakaan_id']],
+                                [
                                     'pelajar' => $params['pelajar'] ?? null,
                                     'guru' => $params['guru'] ?? null,
                                     'pengunjung_perbulan' => $params['pengunjung_perbulan'] ?? null,

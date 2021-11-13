@@ -30,8 +30,9 @@ class SumberDayaManusiaRepositories
 
     public static function update($params)
     {
-        $data = SumberDayaManusia::where('perpustakaan_id', $params['perpustakaan_id'])
-                                 ->update([
+        $data = SumberDayaManusia::updateOrCreate(
+                                     ['perpustakaan_id' => $params['perpustakaan_id']],
+                                     [
                                         'seluruh_pegawai' => $params['seluruh_pegawai'] ?? null,
                                         'pns' => $params['pns'] ?? null,
                                         'pejabat_fungsional' => $params['pejabat_fungsional'] ?? null,

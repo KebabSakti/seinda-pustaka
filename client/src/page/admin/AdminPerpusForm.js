@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useReducer, useCallback, useEffect, useState } from "react";
 import {
   Col,
   Divider,
@@ -14,25 +14,68 @@ import {
   Radio,
   Button,
   Space,
+  Spin,
 } from "antd";
+import { adminPerpusAdd } from "../../api/admin/AdminPerpusApi";
 import moment from "moment";
-import ReactToPrint from "react-to-print";
-import { PrinterOutlined, FileExcelOutlined } from "@ant-design/icons";
 
-export default function AdminPerpusExportOne({ form, payload }) {
-  const componentRef = useRef();
+function reducer(state, action) {
+  switch (action.type) {
+    case "loading":
+      return {
+        ...state,
+        loading: action.loading,
+      };
 
+    case "complete":
+      return {
+        ...state,
+        loading: false,
+        payload: action.payload,
+      };
+
+    case "error":
+      return {
+        ...state,
+        loading: false,
+        payload: null,
+      };
+
+    default:
+      throw new Error("Terjadi kesalahan, cobalah beberapa saat lagi");
+  }
+}
+
+export default function AdminPerpusForm({ form, payload, tableModalOnOk }) {
   const { Option } = Select;
   const { Title } = Typography;
 
+  const [loading, setLoading] = useState(false);
+
+  const [state, dispatch] = useReducer(reducer, {
+    loading: false,
+  });
+
   const fetchDatas = useCallback(async () => {
     try {
+      dispatch({ type: "loading", loading: true });
+
+      await adminPerpusAdd().then((response) => {
+        dispatch({
+          type: "complete",
+          payload: response.data,
+        });
+      });
+
+      form.setFieldsValue({
+        mode: payload.mode,
+      });
+
       if (payload.data != null) {
         form.setFieldsValue({
           mode: payload.mode,
           id: payload.data.id,
-          jenis_perpustakaan_id:
-            payload.data.jenis_perpustakaan.nama_jenis_perpustakaan,
+          jenis_perpustakaan_id: parseInt(payload.data.jenis_perpustakaan_id),
           nama: payload.data.nama,
           alamat: payload.data.alamat,
           kecamatan: payload.data.kecamatan,
@@ -195,11 +238,21 @@ export default function AdminPerpusExportOne({ form, payload }) {
         }
       }
     } catch (e) {
+      dispatch({
+        type: "error",
+      });
+
       notification.error({ title: "Error", description: e.message });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function formSubmit() {
+    setLoading(true);
+
+    tableModalOnOk();
+  }
 
   //======================================================================//
 
@@ -211,49 +264,92 @@ export default function AdminPerpusExportOne({ form, payload }) {
 
   return (
     <div>
-      <Space style={{ marginLeft: "20px" }}>
-        <ReactToPrint
-          trigger={() => (
-            <Button icon={<PrinterOutlined />}>Print / PDF</Button>
-          )}
-          content={() => componentRef.current}
-        />
-      </Space>
-      <div ref={componentRef} style={{ margin: "20px" }}>
+      <Spin spinning={loading}>
         <Form
           layout="horizontal"
           preserve={false}
           form={form}
           labelCol={{ span: 7 }}
           wrapperCol={{ span: 17 }}
+          onFinish={formSubmit}
         >
+          <Form.Item hidden name="mode">
+            <Input />
+          </Form.Item>
+          <Form.Item hidden name="id">
+            <Input />
+          </Form.Item>
           <Row>
-            <Col span={24} style={{ marginBottom: "10px" }}>
+            <Col span={24}>
               <Title level={4} style={{ textAlign: "center" }}>
                 Data Perpustakaan
               </Title>
+              <Divider style={{ margin: "15px 0px" }} />
             </Col>
           </Row>
-          <Form.Item label="Jenis Perpustakaan" name="jenis_perpustakaan_id">
-            <Input bordered={false} />
+          <Form.Item
+            label="Jenis Perpustakaan"
+            name="jenis_perpustakaan_id"
+            rules={[{ required: true, message: "Pilih salah satu" }]}
+          >
+            <Select placeholder="Pilihan" loading={state.loading}>
+              {state.payload != null &&
+                state.payload.jenis_perpustakaan.map((item) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.nama_jenis_perpustakaan} (Level : {item.level})
+                  </Option>
+                ))}
+            </Select>
           </Form.Item>
-          <Form.Item label="Nama" name="nama">
+          <Form.Item
+            label="Nama"
+            name="nama"
+            rules={[{ required: true, message: "Field tidak boleh kosong" }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item label="Alamat" name="alamat">
             <Input.TextArea />
           </Form.Item>
           <Form.Item label="Kecamatan" name="kecamatan">
-            <Input />
+            <Select placeholder="Pilihan" loading={state.loading}>
+              {state.payload != null &&
+                state.payload.kecamatan.map((item) => (
+                  <Option key={item.id} value={item.nama_kecamatan}>
+                    {item.nama_kecamatan}
+                  </Option>
+                ))}
+            </Select>
           </Form.Item>
           <Form.Item label="Kelurahan" name="kelurahan">
-            <Input />
+            <Select placeholder="Pilihan" loading={state.loading}>
+              {state.payload != null &&
+                state.payload.kelurahan.map((item) => (
+                  <Option key={item.id} value={item.nama_kelurahan}>
+                    {item.nama_kelurahan}
+                  </Option>
+                ))}
+            </Select>
           </Form.Item>
           <Form.Item label="Provinsi" name="provinsi">
-            <Input />
+            <Select placeholder="Pilihan" loading={state.loading}>
+              {state.payload != null &&
+                state.payload.provinsi.map((item) => (
+                  <Option key={item.id} value={item.nama_provinsi}>
+                    {item.nama_provinsi}
+                  </Option>
+                ))}
+            </Select>
           </Form.Item>
           <Form.Item label="Kabupaten" name="kabupaten_kota">
-            <Input />
+            <Select placeholder="Pilihan" loading={state.loading}>
+              {state.payload != null &&
+                state.payload.kabupaten.map((item) => (
+                  <Option key={item.id} value={item.nama_kabupaten}>
+                    {item.nama_kabupaten}
+                  </Option>
+                ))}
+            </Select>
           </Form.Item>
           <Form.Item label="Kode Pos" name="kode_pos">
             <Input />
@@ -634,13 +730,18 @@ export default function AdminPerpusExportOne({ form, payload }) {
               </Col>
             </Row>
           </Form.Item>
-          <Form.Item hidden>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
+          <Row justify="center">
+            <Col>
+              <Space>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+                <Button>Batal</Button>
+              </Space>
+            </Col>
+          </Row>
         </Form>
-      </div>
+      </Spin>
     </div>
   );
 }

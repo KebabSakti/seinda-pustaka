@@ -55,7 +55,7 @@ function reducer(state, action) {
   }
 }
 
-export default function AdminPerpustakaan() {
+export default function AdminUser() {
   const componentRef = useRef();
 
   const { RangePicker } = DatePicker;

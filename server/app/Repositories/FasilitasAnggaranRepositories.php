@@ -26,8 +26,9 @@ class FasilitasAnggaranRepositories
 
     public static function update($params)
     {
-        $data = FasilitasAnggaran::where('perpustakaan_id', $params['perpustakaan_id'])
-                                 ->update([
+        $data = FasilitasAnggaran::updateOrCreate(
+                                    ['perpustakaan_id' => $params['perpustakaan_id']],
+                                    [
                                         'internet' => $params['internet'] ?? null,
                                         'fasilitas_tv' => $params['fasilitas_tv'] ?? null,
                                         'kantin' => $params['kantin'] ?? null,

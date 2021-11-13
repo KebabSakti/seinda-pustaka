@@ -15,46 +15,51 @@ class Perpustakaan extends Model
 
     public function jenis_perpustakaan()
     {
-        return $this->belongsTo(\App\Models\JenisPerpustakaan::class);
+        return $this->belongsTo(JenisPerpustakaan::class);
     }
 
     public function data_gedung()
     {
-        return $this->hasOne(\App\Models\DataGedung::class);
+        return $this->hasOne(DataGedung::class);
     }
 
     public function sumber_daya_manusia()
     {
-        return $this->hasOne(\App\Models\SumberDayaManusia::class);
+        return $this->hasOne(SumberDayaManusia::class);
     }
 
     public function koleksi_materi()
     {
-        return $this->hasOne(\App\Models\KoleksiMateri::class);
+        return $this->hasOne(KoleksiMateri::class);
     }
 
     public function mendapat_koleksi()
     {
-        return $this->hasMany(\App\Models\MendapatKoleksi::class);
+        return $this->hasMany(MendapatKoleksi::class);
     }
 
     public function jam_operasional()
     {
-        return $this->hasOne(\App\Models\JamOperasional::class);
+        return $this->hasOne(JamOperasional::class);
     }
 
     public function anggota_otomasi()
     {
-        return $this->hasOne(\App\Models\AnggotaOtomasi::class);
+        return $this->hasOne(AnggotaOtomasi::class);
     }
 
     public function sarana_prasarana()
     {
-        return $this->hasOne(\App\Models\SaranaPrasarana::class);
+        return $this->hasOne(SaranaPrasarana::class);
     }
 
     public function fasilitas_anggaraan()
     {
-        return $this->hasOne(\App\Models\FasilitasAnggaran::class);
+        return $this->hasOne(FasilitasAnggaran::class);
+    }
+
+    public function buku()
+    {
+        return $this->hasMany(Buku::class);
     }
 }

@@ -1,23 +1,23 @@
-import Network from "../module/NetworkModule";
+import Network from "../../module/NetworkModule";
 
-export async function perpusIndex(params) {
+export async function adminPerpusIndex(params) {
   return await Network().post("/admin/perpus/index", params, {
     params: { page: params.page },
   });
 }
 
-export async function perpusAdd(params) {
+export async function adminPerpusAdd(params) {
   return await Network().post("/admin/perpus/add", params);
 }
 
-export async function perpusStore(params) {
+export async function adminPerpusStore(params) {
   return await Network().post("/admin/perpus/store", params);
 }
 
-export async function perpusUpdate(params) {
+export async function adminPerpusUpdate(params) {
   return await Network().post("/admin/perpus/update", params);
 }
 
-export async function perpusDelete(params) {
+export async function adminPerpusDelete(params) {
   return await Network().post("/admin/perpus/delete", params);
 }

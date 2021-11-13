@@ -24,8 +24,9 @@ class KoleksiMateriRepositories
 
     public static function update($params)
     {
-        $data = KoleksiMateri::where('perpustakaan_id', $params['perpustakaan_id'])
-                             ->update([
+        $data = KoleksiMateri::updateOrCreate(
+                                 ['perpustakaan_id' => $params['perpustakaan_id']],
+                                 [
                                     'jumlah_buku_nonfiksi' => $params['jumlah_buku_nonfiksi'] ?? null,
                                     'jumlah_buku_referensi' => $params['jumlah_buku_referensi'] ?? null,
                                     'jumlah_buku_fiksi' => $params['jumlah_buku_fiksi'] ?? null,

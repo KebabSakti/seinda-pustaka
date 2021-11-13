@@ -32,8 +32,9 @@ class SaranaPrasaranaRepositories
 
     public static function update($params)
     {
-        $data = SaranaPrasarana::where('perpustakaan_id', $params['perpustakaan_id'])
-                               ->update([
+        $data = SaranaPrasarana::updateOrCreate(
+                                ['perpustakaan_id' => $params['perpustakaan_id']],
+                                [
                                     'operasional_roda_empat' => $params['operasional_roda_empat'] ?? 0,
                                     'operasional_roda_dua' => $params['operasional_roda_dua'] ?? 0,
                                     'rak_buku' => $params['rak_buku'] ?? 0,
