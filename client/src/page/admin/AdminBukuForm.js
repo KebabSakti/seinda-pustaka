@@ -217,7 +217,6 @@ export default function AdminBukuForm({
                 <Button type="primary" htmlType="submit">
                   Submit
                 </Button>
-                <Button>Batal</Button>
               </Space>
             </Col>
           </Row>

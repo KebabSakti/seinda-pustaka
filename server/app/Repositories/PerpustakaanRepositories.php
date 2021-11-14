@@ -10,7 +10,7 @@ class PerpustakaanRepositories
 {
     public static function fetchOne($id)
     {
-        $data = Perpustakaan::find($id);
+        $data = Perpustakaan::with(['jenis_perpustakaan', 'data_gedung', 'sumber_daya_manusia', 'koleksi_materi', 'mendapat_koleksi', 'jam_operasional', 'anggota_otomasi', 'sarana_prasarana', 'fasilitas_anggaraan'])->find($id);
 
         return $data;
     }
@@ -19,7 +19,7 @@ class PerpustakaanRepositories
     {
         $columns = Schema::getColumnListing('perpustakaans');
 
-        $query = Perpustakaan::query();
+        $query = Perpustakaan::with(['jenis_perpustakaan', 'data_gedung', 'sumber_daya_manusia', 'koleksi_materi', 'mendapat_koleksi', 'jam_operasional', 'anggota_otomasi', 'sarana_prasarana', 'fasilitas_anggaraan']);
 
         if (!empty($params['d_start']) && !empty($params['d_end'])) {
             $query->where('tahun_berdiri_perpustakaan', '>=', $params['d_start'])

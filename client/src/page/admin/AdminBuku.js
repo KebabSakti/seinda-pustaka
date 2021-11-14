@@ -110,6 +110,7 @@ export default function AdminBuku() {
     {
       title: "Perpustakaan",
       dataIndex: ["perpustakaan", "nama"],
+      responsive: ["sm"],
     },
     {
       title: "Judul",
@@ -119,6 +120,7 @@ export default function AdminBuku() {
     {
       title: "Sampul",
       dataIndex: "sampul",
+      responsive: ["sm"],
       render: (text, record) => {
         return text == "" ? "-" : <Image height={50} src={text} />;
       },
@@ -139,6 +141,11 @@ export default function AdminBuku() {
           </a>
         );
       },
+    },
+    {
+      title: "Stok",
+      dataIndex: "stok",
+      responsive: ["md"],
     },
     {
       title: "Status",
@@ -165,9 +172,9 @@ export default function AdminBuku() {
             overlay={
               <Menu onClick={(event) => tableMenuEvent(event, record)}>
                 <Menu.Item key="edit">Edit / Detail</Menu.Item>
-                <Menu.Item key="delete">
+                {/* <Menu.Item key="delete">
                   <Text type="danger">Hapus</Text>
-                </Menu.Item>
+                </Menu.Item> */}
                 {/* <Menu.Divider style={{ margin: "0px" }} />
                 <Menu.Item key="exportOne" icon={<ExportOutlined />}>
                   Export Data

@@ -736,7 +736,6 @@ export default function AdminPerpusForm({ form, payload, tableModalOnOk }) {
                 <Button type="primary" htmlType="submit">
                   Submit
                 </Button>
-                <Button>Batal</Button>
               </Space>
             </Col>
           </Row>

@@ -1,4 +1,5 @@
 import { Menu } from "antd";
+import { Link } from "react-router-dom";
 import {
   BookOutlined,
   LogoutOutlined,
@@ -7,10 +8,12 @@ import {
   UserOutlined,
   DatabaseOutlined,
   ExceptionOutlined,
+  ColumnWidthOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 
 export default function AdminMenu({ logout, path }) {
+  const { SubMenu } = Menu;
+
   return (
     <Menu
       theme="light"
@@ -41,18 +44,40 @@ export default function AdminMenu({ logout, path }) {
       </Menu.Item>
 
       <Menu.Item
+        key="/pinjam"
+        icon={<ColumnWidthOutlined style={{ fontSize: "18px" }} />}
+      >
+        <Link to="/admin/pinjam">Pinjam Buku</Link>
+      </Menu.Item>
+
+      <Menu.Item
         key="/user"
         icon={<UserOutlined style={{ fontSize: "18px" }} />}
       >
         <Link to="/admin/user">User</Link>
       </Menu.Item>
 
-      <Menu.Item
-        key="/data"
+      <SubMenu
+        key="sub1"
         icon={<DatabaseOutlined style={{ fontSize: "18px" }} />}
+        title="Data"
       >
-        <Link to="/admin/master">Data</Link>
-      </Menu.Item>
+        <Menu.Item key="/kabupaten">
+          <Link to="/admin/kabupaten">Kabupaten</Link>
+        </Menu.Item>
+        <Menu.Item key="/kecamatan">
+          <Link to="/admin/kecamatan">Kecamatan</Link>
+        </Menu.Item>
+        <Menu.Item key="/kelurahan">
+          <Link to="/admin/kelurahan">Kelurahan</Link>
+        </Menu.Item>
+        <Menu.Item key="/provinsi">
+          <Link to="/admin/provinsi">Provinsi</Link>
+        </Menu.Item>
+        <Menu.Item key="/jenis_perpus">
+          <Link to="/admin/jenis_perpus">Jenis Perpustakaan</Link>
+        </Menu.Item>
+      </SubMenu>
 
       <Menu.Item
         key="/config"

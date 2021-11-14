@@ -9,10 +9,12 @@ class PerpustakaanRole extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $with = ['perpustakaan'];
 
     /**
-     * Get the user that owns the PerpustakaanRole
+     * Get the user that owns the PerpustakaanRole.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -22,7 +24,7 @@ class PerpustakaanRole extends Model
     }
 
     /**
-     * Get the user that owns the PerpustakaanRole
+     * Get the user that owns the PerpustakaanRole.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

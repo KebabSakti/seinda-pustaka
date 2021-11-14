@@ -2,38 +2,31 @@
 
 namespace App\Repositories;
 
+use App\Models\JenisPerpustakaan;
 use App\Modules\UtilityModule;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class JenisPerpusRepositories
 {
-    public static function fetchOne($keyword)
+    public static function fetchOne($params)
     {
-        $columns = Schema::getColumnListing('jenis_perpustakaans');
-
-        $query = DB::table('jenis_perpustakaans');
-
-        if (!empty($keyword)) {
-            $query->where(function ($query) use ($columns, $keyword) {
-                foreach ($columns as $column) {
-                    $query->orWhere($column, $keyword);
-                }
-            });
-        }
-
-        $data = $query->first();
+        $data = JenisPerpustakaan::find($params['id']);
 
         return $data;
     }
 
-    public static function fetchMany($params)
+    public static function fetchMany($params = null)
     {
         $columns = Schema::getColumnListing('jenis_perpustakaans');
 
-        $query = DB::table('jenis_perpustakaans');
+        $query = JenisPerpustakaan::query();
 
-        if (!empty($keyword)) {
+        if (!empty($params['d_start']) && !empty($params['d_end'])) {
+            $query->where('created_at', '>=', $params['d_start'])
+                ->where('created_at', '<=', $params['d_end']);
+        }
+
+        if (!empty($params['keyword'])) {
             $query->where(function ($query) use ($columns, $params) {
                 foreach ($columns as $column) {
                     $query->orWhere($column, 'like', '%'.$params['keyword'].'%');
@@ -52,5 +45,33 @@ class JenisPerpusRepositories
         }
 
         return $datas;
+    }
+
+    public static function store($params)
+    {
+        $data = JenisPerpustakaan::create([
+            'nama_jenis_perpustakaan' => $params['nama_jenis_perpustakaan'],
+            'level' => $params['level'],
+            'aktif' => $params['aktif'],
+        ]);
+
+        return $data;
+    }
+
+    public static function update($params)
+    {
+        $data = JenisPerpustakaan::where('id', $params['id'])
+                                 ->update([
+                                    'nama_jenis_perpustakaan' => $params['nama_jenis_perpustakaan'],
+                                    'level' => $params['level'],
+                                    'aktif' => $params['aktif'],
+                                 ]);
+
+        return $data;
+    }
+
+    public static function delete($params)
+    {
+        JenisPerpustakaan::where('id', $params['id'])->delete();
     }
 }

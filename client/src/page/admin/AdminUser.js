@@ -1,10 +1,10 @@
 import { useEffect, useCallback, useReducer, useState, useRef } from "react";
 import {
-  adminPerpusDelete,
-  adminPerpusIndex,
-  adminPerpusStore,
-  adminPerpusUpdate,
-} from "../../api/admin/AdminPerpusApi";
+  adminUserDelete,
+  adminUserIndex,
+  adminUserStore,
+  adminUserUpdate,
+} from "../../api/admin/AdminUserApi";
 import { debounce } from "../../module/UtilityModule";
 import { getUser } from "../../module/AuthModule";
 import AdminPerpusForm from "../admin/AdminPerpusForm";
@@ -23,10 +23,12 @@ import {
   Modal,
   Form,
   message,
+  Tag,
 } from "antd";
 import { BarsOutlined, ExportOutlined } from "@ant-design/icons";
 import AdminPerpusExportAll from "./AdminPerpusExportAll";
 import AdminPerpusExportOne from "./AdminPerpusExportOne";
+import AdminUserForm from "./AdminUserForm";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -106,68 +108,69 @@ export default function AdminUser() {
 
   const columns = [
     {
+      title: "Perpustakaan",
+      dataIndex: ["perpustakaan_role", "perpustakaan", "nama"],
+    },
+    {
       title: "Nama",
-      dataIndex: "nama",
-      sorter: true,
+      dataIndex: ["user_profile", "nama"],
     },
     {
-      title: "Jenis Perpustakaan",
-      dataIndex: ["jenis_perpustakaan", "nama_jenis_perpustakaan"],
+      title: "Username",
+      dataIndex: "username",
+      sorter: true,
       responsive: ["sm"],
     },
     {
-      title: "Kecamatan",
-      dataIndex: "kecamatan",
-      responsive: ["sm"],
-      ellipsis: true,
+      title: "Role",
+      dataIndex: "role",
       sorter: true,
+      responsive: ["sm"],
+      render: (text, record) => {
+        if (text === "admin") {
+          return "Admin";
+        }
+
+        return text === "perpustakaan" ? "Operator" : "Member";
+      },
     },
     {
-      title: "Kelurahan",
-      dataIndex: "kelurahan",
-      responsive: ["sm"],
-      sorter: true,
-    },
-    {
-      title: "Provinsi",
-      dataIndex: "provinsi",
+      title: "Email",
+      dataIndex: ["user_profile", "email"],
       responsive: ["md"],
-      sorter: true,
     },
     {
-      title: "Status Perpustakaan",
-      dataIndex: "status_perpustakaan",
+      title: "No. Hp",
+      dataIndex: ["user_profile", "no_hp"],
       responsive: ["md"],
-      sorter: true,
+    },
+    {
+      title: "No. ID",
+      dataIndex: ["user_profile", "no_identitas"],
+      responsive: ["md"],
     },
     {
       title: "NPSN",
-      dataIndex: "npsn",
+      dataIndex: ["user_profile", "npsn"],
       responsive: ["lg"],
-    },
-    {
-      title: "Kepala Perpustakaan",
-      dataIndex: "nama_kepala_perpustakaan",
-      responsive: ["lg"],
-      sorter: true,
-    },
-    {
-      title: "Kepala Instansi Indek",
-      dataIndex: "nama_kepala_instansi_induk",
-      responsive: ["xl"],
-      sorter: true,
-    },
-    {
-      title: "Tahun Berdiri",
-      dataIndex: "tahun_berdiri_perpustakaan",
-      responsive: ["xl"],
-      sorter: true,
     },
     {
       title: "Alamat",
-      dataIndex: "alamat",
-      responsive: ["xl"],
+      dataIndex: ["user_profile", "alamat"],
       ellipsis: true,
+      responsive: ["lg"],
+    },
+    {
+      title: "Aktif",
+      dataIndex: "aktif",
+      responsive: ["sm"],
+      render: (text, record) => {
+        return text > 0 ? (
+          <Tag color="success">Aktif</Tag>
+        ) : (
+          <Tag color="error">Non Aktif</Tag>
+        );
+      },
     },
     {
       title: "",
@@ -178,16 +181,10 @@ export default function AdminUser() {
             arrow
             trigger={["click"]}
             placement="topCenter"
+            disabled={record.role === "admin"}
             overlay={
               <Menu onClick={(event) => tableMenuEvent(event, record)}>
                 <Menu.Item key="edit">Edit / Detail</Menu.Item>
-                <Menu.Item key="delete">
-                  <Text type="danger">Hapus</Text>
-                </Menu.Item>
-                <Menu.Divider style={{ margin: "0px" }} />
-                <Menu.Item key="exportOne" icon={<ExportOutlined />}>
-                  Export Data
-                </Menu.Item>
               </Menu>
             }
           >
@@ -204,7 +201,7 @@ export default function AdminUser() {
     try {
       dispatch({ type: "loading", loading: true });
 
-      await adminPerpusIndex(params).then((response) => {
+      await adminUserIndex(params).then((response) => {
         let results = response.data.data.map((item) => {
           return { ...item, key: item.id };
         });
@@ -304,14 +301,20 @@ export default function AdminUser() {
               "Data akan dihapus, proses ini tidak dapat dikembalikan, lanjutkan ?"
             )
           ) {
-            await adminPerpusDelete({ id: payload.id }).then((_) => {
+            dispatch({ type: "loading", loading: true });
+
+            await adminUserDelete({ id: payload.id }).then((_) => {
               setFilter({ ...filter });
 
               message.success("Data berhasil di hapus");
             });
           }
         } catch (e) {
-          console.log(e);
+          dispatch({
+            type: "error",
+          });
+
+          notification.error({ title: "Error", description: e.message });
         }
         break;
 
@@ -352,10 +355,11 @@ export default function AdminUser() {
     switch (page) {
       case "form":
         return (
-          <AdminPerpusForm
+          <AdminUserForm
             form={form}
             payload={modalPayload}
             tableModalOnOk={tableModalOnOk}
+            loading={state.loading}
           />
         );
 
@@ -373,21 +377,15 @@ export default function AdminUser() {
 
   async function tableModalOnOk() {
     try {
+      await form.validateFields();
+
+      dispatch({ type: "loading", loading: true });
+
       let params = form.getFieldValue();
 
       switch (params["mode"]) {
         case "add":
-          await form.validateFields();
-
-          await adminPerpusStore({
-            ...params,
-            tahun_berdiri_perpustakaan:
-              params.tahun_berdiri_perpustakaan?.format("YYYY"),
-            senin_kamis: params.senin_kamis?.format("HH:mm:ss"),
-            jummat: params.jummat?.format("HH:mm:ss"),
-            sabtu: params.sabtu?.format("HH:mm:ss"),
-            user_id: getUser().id,
-          }).then((_) => {
+          await adminUserStore(params).then((_) => {
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
@@ -398,17 +396,7 @@ export default function AdminUser() {
           break;
 
         case "edit":
-          await form.validateFields();
-
-          await adminPerpusUpdate({
-            ...params,
-            tahun_berdiri_perpustakaan:
-              params.tahun_berdiri_perpustakaan?.format("YYYY"),
-            senin_kamis: params.senin_kamis?.format("HH:mm:ss"),
-            jummat: params.jummat?.format("HH:mm:ss"),
-            sabtu: params.sabtu?.format("HH:mm:ss"),
-            user_id: getUser().id,
-          }).then((_) => {
+          await adminUserUpdate(params).then((_) => {
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
@@ -421,7 +409,11 @@ export default function AdminUser() {
         default:
       }
     } catch (e) {
-      console.log(e);
+      dispatch({
+        type: "error",
+      });
+
+      notification.error({ title: "Error", description: e.message });
     }
   }
 
@@ -438,7 +430,7 @@ export default function AdminUser() {
   return (
     <div>
       <Modal {...modal}>{tableModalPage(modalPayload.page)}</Modal>
-      <Title level={4}>Daftar Perpustakaan</Title>
+      <Title level={4}>Daftar User</Title>
       <Divider style={{ margin: "10px 0px" }} />
       <Row
         justify="space-between"
@@ -448,7 +440,7 @@ export default function AdminUser() {
       >
         <Col xs={24} sm={24} md={8} lg={8}>
           <RangePicker
-            picker="year"
+            picker="date"
             style={{ width: "100%" }}
             onChange={tableDateRange}
           />
@@ -471,10 +463,6 @@ export default function AdminUser() {
                 overlay={
                   <Menu onClick={tableMenuEvent}>
                     <Menu.Item key="add">Tambah Data</Menu.Item>
-                    <Menu.Divider style={{ margin: "0px" }} />
-                    <Menu.Item key="exportAll" icon={<ExportOutlined />}>
-                      Export Data
-                    </Menu.Item>
                   </Menu>
                 }
               >

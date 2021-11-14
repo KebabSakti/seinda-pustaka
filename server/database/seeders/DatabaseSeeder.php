@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 
 class DatabaseSeeder extends Seeder
 {
@@ -58,13 +60,40 @@ class DatabaseSeeder extends Seeder
         //     'role' => 'member',
         // ]);
 
-        for ($i = 0; $i <= 1000; ++$i) {
-            $id = \App\Models\Perpustakaan::inRandomOrder()->first()->id;
+        // for ($i = 0; $i <= 1000; ++$i) {
+        //     $id = \App\Models\Perpustakaan::inRandomOrder()->first()->id;
 
-            \App\Models\Buku::factory()->create([
-                'perpustakaan_id' => $id,
-                'sampul' => 'https://loremflickr.com/200/200/book_cover?random='.$i,
-            ]);
+        //     \App\Models\Buku::factory()->create([
+        //         'perpustakaan_id' => $id,
+        //         'sampul' => 'https://loremflickr.com/200/200/book_cover?random='.$i,
+        //     ]);
+        // }
+
+        for ($i = 0; $i <= 100; ++$i) {
+            $status = Arr::random(['Pengajuan', 'Dipinjam', 'Dikembalikan']);
+
+            $buku = \App\Models\Buku::inRandomOrder()->first();
+            $member = \App\Models\User::where('role', 'public')->inRandomOrder()->first();
+            $operator = \App\Models\User::where('role', 'perpustakaan')->inRandomOrder()->first();
+            $tempo = Carbon::now()->addDays(3);
+
+            if ($status == 'Pengajuan') {
+                \App\Models\StatusBuku::create([
+                    'perpustakaan_id' => $buku->perpustakaan_id,
+                    'buku_id' => $buku->id,
+                    'member_id' => $member->id,
+                    'status' => $status,
+                ]);
+            } else {
+                \App\Models\StatusBuku::create([
+                    'perpustakaan_id' => $buku->perpustakaan_id,
+                    'buku_id' => $buku->id,
+                    'member_id' => $member->id,
+                    'operator_id' => $operator->id,
+                    'status' => $status,
+                    'jatuh_tempo' => $tempo,
+                ]);
+            }
         }
     }
 }

@@ -2,20 +2,25 @@ import { useEffect, useCallback } from "react";
 import { message, notification } from "antd";
 import { useHistory } from "react-router-dom";
 import { checkUser, getUser } from "../module/AuthModule";
+import { initConfig } from "../module/ConfigModule";
 
 export default function PageMiddleware({ children, setFullLoading }) {
   const history = useHistory();
 
-  const check = useCallback(async () => {
+  const init = useCallback(async () => {
     try {
       setFullLoading(true);
 
       await checkUser();
 
+      await initConfig({});
+
       setFullLoading(false);
 
       message.success("Anda login sebagai " + getUser().user_profile.nama);
     } catch (e) {
+      console.log(e);
+
       setFullLoading(false);
 
       notification.error({
@@ -28,8 +33,8 @@ export default function PageMiddleware({ children, setFullLoading }) {
   }, [history, setFullLoading]);
 
   useEffect(() => {
-    check();
-  }, [check]);
+    init();
+  }, [init]);
 
   return children;
 }

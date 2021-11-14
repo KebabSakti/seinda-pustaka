@@ -9,6 +9,8 @@ class JenisPerpustakaan extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function perpustakaan()
     {
         return $this->hasOne(\App\Models\Perpustakaan::class);

@@ -21,6 +21,14 @@ import { getPath } from "./module/HelperModule";
 import { useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import AdminBuku from "./page/admin/AdminBuku";
+import AdminUser from "./page/admin/AdminUser";
+import AdminJenisPerpus from "./page/admin/AdminJenisPerpus";
+import AdminKabupaten from "./page/admin/AdminKabupaten";
+import AdminKecamatan from "./page/admin/AdminKecamatan";
+import AdminKelurahan from "./page/admin/AdminKelurahan";
+import AdminProvinsi from "./page/admin/AdminProvinsi";
+import AdminKonfigurasi from "./page/admin/AdminKonfigurasi";
+import AdminPinjamBuku from "./page/admin/AdminPinjamBuku";
 
 export default function App() {
   const history = useHistory();
@@ -91,7 +99,7 @@ export default function App() {
         <PageMiddleware setFullLoading={setFullLoading}>
           <Route path="/admin">
             <Template
-              notif={notif}
+              // notif={notif}
               menu={
                 <AdminMenu logout={logout} path={getPath(location.pathname)} />
               }
@@ -105,6 +113,30 @@ export default function App() {
                 </Route>
                 <Route path="/admin/buku">
                   <AdminBuku />
+                </Route>
+                <Route path="/admin/pinjam">
+                  <AdminPinjamBuku />
+                </Route>
+                <Route path="/admin/user">
+                  <AdminUser />
+                </Route>
+                <Route path="/admin/kabupaten">
+                  <AdminKabupaten />
+                </Route>
+                <Route path="/admin/kecamatan">
+                  <AdminKecamatan />
+                </Route>
+                <Route path="/admin/kelurahan">
+                  <AdminKelurahan />
+                </Route>
+                <Route path="/admin/provinsi">
+                  <AdminProvinsi />
+                </Route>
+                <Route path="/admin/jenis_perpus">
+                  <AdminJenisPerpus />
+                </Route>
+                <Route path="/admin/config">
+                  <AdminKonfigurasi />
                 </Route>
                 <Route path="*">
                   <Redirect to="/admin/home" />

@@ -11,7 +11,7 @@ class BukuRepositories
 {
     public static function fetchOne($id)
     {
-        $data = Buku::find($id);
+        $data = Buku::with(['perpustakaan', 'status_buku'])->find($id);
 
         return $data;
     }
@@ -20,7 +20,7 @@ class BukuRepositories
     {
         $columns = Schema::getColumnListing('bukus');
 
-        $query = Buku::query();
+        $query = Buku::with(['perpustakaan', 'status_buku']);
 
         if (!empty($params['d_start']) && !empty($params['d_end'])) {
             $query->whereDate('created_at', '>=', $params['d_start'])

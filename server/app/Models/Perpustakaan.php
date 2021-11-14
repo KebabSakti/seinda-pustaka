@@ -11,7 +11,7 @@ class Perpustakaan extends Model
 
     protected $guarded = [];
 
-    protected $with = ['jenis_perpustakaan', 'data_gedung', 'sumber_daya_manusia', 'koleksi_materi', 'mendapat_koleksi', 'jam_operasional', 'anggota_otomasi', 'sarana_prasarana', 'fasilitas_anggaraan'];
+    // protected $with = ['jenis_perpustakaan', 'data_gedung', 'sumber_daya_manusia', 'koleksi_materi', 'mendapat_koleksi', 'jam_operasional', 'anggota_otomasi', 'sarana_prasarana', 'fasilitas_anggaraan'];
 
     public function jenis_perpustakaan()
     {

@@ -10,10 +10,14 @@ class Buku extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $with = ['perpustakaan'];
 
     public function perpustakaan()
     {
         return $this->belongsTo(Perpustakaan::class);
+    }
+
+    public function status_buku()
+    {
+        return $this->hasMany(StatusBuku::class);
     }
 }

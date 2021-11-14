@@ -43,7 +43,7 @@ export default function AdminBukuExportAll({ payload }) {
           )}
           content={() => componentRef.current}
         />
-        <ExcelFile
+        {/* <ExcelFile
           filename="Data Buku"
           element={<Button icon={<FileExcelOutlined />}>Excel</Button>}
         >
@@ -58,7 +58,7 @@ export default function AdminBukuExportAll({ payload }) {
               );
             })}
           </ExcelSheet>
-        </ExcelFile>
+        </ExcelFile> */}
       </Space>
       <div ref={componentRef} style={{ margin: "20px", textAlign: "center" }}>
         <Title level={3}>Data Buku</Title>

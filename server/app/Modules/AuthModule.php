@@ -35,11 +35,11 @@ class AuthModule
             throw new Exception('Username atau password tidak boleh kosong');
         }
 
-        if (!Auth::attempt(['username' => $username, 'password' => $password])) {
-            throw new Exception('Username atau password anda salah');
+        if (!Auth::attempt(['username' => $username, 'password' => $password, 'aktif' => 1])) {
+            throw new Exception('Username dan password anda salah, atau akun anda sedang di blokir');
         }
 
-        $user = UserRepositories::fetchOne(null, $username);
+        $user = UserRepositories::fetchOne(['username' => $username]);
 
         $user->token = $user->createToken($username, ['role-'.$user->role])->plainTextToken;
 
@@ -48,7 +48,7 @@ class AuthModule
 
     public static function logout($id)
     {
-        $user = UserRepositories::fetchOne($id, null);
+        $user = UserRepositories::fetchOne(['id' => $id]);
 
         $user->tokens()->delete();
     }

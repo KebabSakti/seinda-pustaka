@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
 
-    protected $with = ['userProfile', 'perpustakaan_role'];
+    // protected $with = ['userProfile', 'perpustakaan_role'];
 
     /**
      * The attributes that are mass assignable.
@@ -21,8 +21,8 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
-        'email',
+        'username',
+        'role',
         'password',
     ];
 

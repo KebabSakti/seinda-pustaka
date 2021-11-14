@@ -181,9 +181,9 @@ export default function AdminPerpustakaan() {
             overlay={
               <Menu onClick={(event) => tableMenuEvent(event, record)}>
                 <Menu.Item key="edit">Edit / Detail</Menu.Item>
-                <Menu.Item key="delete">
+                {/* <Menu.Item key="delete">
                   <Text type="danger">Hapus</Text>
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Divider style={{ margin: "0px" }} />
                 <Menu.Item key="exportOne" icon={<ExportOutlined />}>
                   Export Data
