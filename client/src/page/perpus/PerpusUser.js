@@ -1,13 +1,12 @@
 import { useEffect, useCallback, useReducer, useState, useRef } from "react";
-import {
-  adminUserDelete,
-  adminUserIndex,
-  adminUserStore,
-  adminUserUpdate,
-} from "../../api/admin/AdminUserApi";
 import { debounce } from "../../module/UtilityModule";
-import { getUser } from "../../module/AuthModule";
-import AdminPerpusForm from "../admin/AdminPerpusForm";
+import PerpusUserForm from "./PerpusUserForm";
+import {
+  perpusUserDelete,
+  perpusUserIndex,
+  perpusUserStore,
+  perpusUserUpdate,
+} from "../../api/perpus/PerpusUserApi";
 import {
   Row,
   Col,
@@ -26,9 +25,7 @@ import {
   Tag,
 } from "antd";
 import { BarsOutlined, ExportOutlined } from "@ant-design/icons";
-import AdminPerpusExportAll from "./AdminPerpusExportAll";
-import AdminPerpusExportOne from "./AdminPerpusExportOne";
-import AdminUserForm from "./PerpusUserForm";
+import { getUser } from "../../module/AuthModule";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -88,6 +85,8 @@ export default function PerpusUser() {
     paging_size: 5,
     sort_key: "users.id",
     sort_mode: "desc",
+    perpustakaan_id: getUser()?.perpustakaan_role.perpustakaan_id,
+    role: "public",
   });
 
   const [state, dispatch] = useReducer(reducer, {
@@ -129,8 +128,8 @@ export default function PerpusUser() {
       sorter: true,
       responsive: ["sm"],
       render: (text, record) => {
-        if (text === "admin") {
-          return "Admin";
+        if (text === "perpus") {
+          return "perpus";
         }
 
         return text === "perpustakaan" ? "Operator" : "Member";
@@ -183,7 +182,7 @@ export default function PerpusUser() {
             arrow
             trigger={["click"]}
             placement="topCenter"
-            disabled={record.role === "admin"}
+            disabled={record.role === "perpus"}
             overlay={
               <Menu onClick={(event) => tableMenuEvent(event, record)}>
                 <Menu.Item key="edit">Edit / Detail</Menu.Item>
@@ -203,7 +202,7 @@ export default function PerpusUser() {
     try {
       dispatch({ type: "loading", loading: true });
 
-      await adminUserIndex(params).then((response) => {
+      await perpusUserIndex(params).then((response) => {
         console.log(response.data.data);
 
         let results = response.data.data.map((item, index) => {
@@ -307,7 +306,7 @@ export default function PerpusUser() {
           ) {
             dispatch({ type: "loading", loading: true });
 
-            await adminUserDelete({ id: payload.id }).then((_) => {
+            await perpusUserDelete({ id: payload.id }).then((_) => {
               setFilter({ ...filter });
 
               message.success("Data berhasil di hapus");
@@ -359,7 +358,7 @@ export default function PerpusUser() {
     switch (page) {
       case "form":
         return (
-          <AdminUserForm
+          <PerpusUserForm
             form={form}
             payload={modalPayload}
             tableModalOnOk={tableModalOnOk}
@@ -367,11 +366,11 @@ export default function PerpusUser() {
           />
         );
 
-      case "exportAll":
-        return <AdminPerpusExportAll payload={modalPayload} />;
+      // case "exportAll":
+      //   return <perpusPerpusExportAll payload={modalPayload} />;
 
-      case "exportOne":
-        return <AdminPerpusExportOne form={form} payload={modalPayload} />;
+      // case "exportOne":
+      //   return <perpusPerpusExportOne form={form} payload={modalPayload} />;
 
       default:
     }
@@ -389,7 +388,7 @@ export default function PerpusUser() {
 
       switch (params["mode"]) {
         case "add":
-          await adminUserStore(params).then((_) => {
+          await perpusUserStore(params).then((_) => {
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
@@ -400,7 +399,7 @@ export default function PerpusUser() {
           break;
 
         case "edit":
-          await adminUserUpdate(params).then((_) => {
+          await perpusUserUpdate(params).then((_) => {
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });

@@ -32,6 +32,7 @@ import AdminPinjamBuku from "./page/admin/AdminPinjamBuku";
 import PerpusPerpustakaan from "./page/perpus/PerpusPerpustakaan";
 import PerpusBuku from "./page/perpus/PerpusBuku";
 import PerpusPinjamBuku from "./page/perpus/PerpusPinjamBuku";
+import PerpusUser from "./page/perpus/PerpusUser";
 
 export default function App() {
   const history = useHistory();
@@ -166,6 +167,9 @@ export default function App() {
                 </Route>
                 <Route path="/perpus/pinjam">
                   <PerpusPinjamBuku />
+                </Route>
+                <Route path="/perpus/user">
+                  <PerpusUser />
                 </Route>
                 <Route path="*">
                   <Redirect to="/perpus/home" />

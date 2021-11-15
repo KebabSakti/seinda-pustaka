@@ -115,6 +115,14 @@ Route::group(['prefix' => 'perpustakaan', 'middleware' => ['auth:sanctum', 'abil
         Route::post('update', [App\Http\Controllers\Admin\StatusBukuController::class, 'update']);
         Route::post('delete', [App\Http\Controllers\Admin\StatusBukuController::class, 'delete']);
     });
+
+    Route::prefix('user')->group(function () {
+        Route::post('index', [App\Http\Controllers\Admin\UserController::class, 'index']);
+        Route::post('add', [App\Http\Controllers\Admin\UserController::class, 'add']);
+        Route::post('store', [App\Http\Controllers\Admin\UserController::class, 'store']);
+        Route::post('update', [App\Http\Controllers\Admin\UserController::class, 'update']);
+        Route::post('delete', [App\Http\Controllers\Admin\UserController::class, 'delete']);
+    });
 });
 
 Route::group(['prefix' => 'public', 'middleware' => ['auth:sanctum', 'abilities:role-public']], function () {

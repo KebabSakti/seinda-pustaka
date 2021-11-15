@@ -119,7 +119,7 @@ export default function PerpusPinjamBukuForm({
           <Row>
             <Col span={24}>
               <Title level={4} style={{ textAlign: "center" }}>
-                Data Kabupaten
+                Data Pinjam Buku
               </Title>
               <Divider style={{ margin: "15px 0px" }} />
             </Col>

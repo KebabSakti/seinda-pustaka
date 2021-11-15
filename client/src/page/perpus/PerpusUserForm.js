@@ -14,10 +14,10 @@ import {
   Spin,
   message,
 } from "antd";
-import { adminUserAdd } from "../../api/admin/AdminUserApi";
-import { LoadingOutlined } from "@ant-design/icons";
+import { perpusUserAdd } from "../../api/perpus/PerpusUserApi";
 import { debounce } from "../../module/UtilityModule";
 import { userExist } from "../../api/UtilityApi";
+import { getUser } from "../../module/AuthModule";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -63,7 +63,7 @@ export default function PerpusUserForm({
     try {
       dispatch({ type: "loading", loading: true });
 
-      await adminUserAdd().then((response) => {
+      await perpusUserAdd().then((response) => {
         dispatch({
           type: "complete",
           payload: response.data,
@@ -72,6 +72,8 @@ export default function PerpusUserForm({
 
       form.setFieldsValue({
         mode: payload.mode,
+        role: "public",
+        perpustakaan_id: getUser()?.perpustakaan_role.perpustakaan_id,
       });
 
       if (payload.data != null) {
@@ -200,7 +202,7 @@ export default function PerpusUserForm({
             rules={[{ required: true, message: "Pilih salah satu" }]}
           >
             <Radio.Group disabled={payload.data != null}>
-              <Radio value="perpustakaan">Operator</Radio>
+              {/* <Radio value="perpustakaan">Operator</Radio> */}
               <Radio value="public">Member</Radio>
             </Radio.Group>
           </Form.Item>
@@ -236,7 +238,7 @@ export default function PerpusUserForm({
             <Input.TextArea />
           </Form.Item>
           <Form.Item label="Perpustakaan" name="perpustakaan_id">
-            <Select placeholder="Pilihan" loading={state.loading}>
+            <Select placeholder="Pilihan" loading={state.loading} disabled>
               {state.payload != null &&
                 state.payload.map((item) => (
                   <Option key={item.id} value={item.id}>

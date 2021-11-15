@@ -41,7 +41,7 @@ class UserRepositories
         if (!empty($params['keyword'])) {
             $query->where(function ($query) use ($columns, $params) {
                 foreach ($columns as $column) {
-                    $query->orWhere($column, 'like', '%'.$params['keyword'].'%');
+                    $query->orWhere($column, 'like', '%' . $params['keyword'] . '%');
                 }
             });
         }
@@ -72,30 +72,38 @@ class UserRepositories
         $cols = array_merge($colOne, $colTwo, $colThree);
 
         $query = DB::table($tbMain)
-                   ->leftJoin($tbOne, $tbOne.'.user_id', $tbMain.'.id')
-                   ->leftJoin($tbTwo, $tbTwo.'.user_id', $tbMain.'.id')
-                   ->leftJoin($tbThree, $tbTwo.'.perpustakaan_id', $tbThree.'.id')
-                   ->select(
-                       $tbMain.'.id as '.$tbMain.'.id',
-                       $tbMain.'.username as '.$tbMain.'.username',
-                       $tbMain.'.role as '.$tbMain.'.role',
-                       $tbMain.'.aktif as '.$tbMain.'.aktif',
-                       $tbThree.'.nama as '.$tbThree.'.nama',
-                       $tbOne.'.*',
-                       $tbOne.'.nama as '.$tbOne.'.nama',
-                       $tbOne.'.email as '.$tbOne.'.email',
-                       $tbTwo.'.*',
-                    );
+            ->leftJoin($tbOne, $tbOne . '.user_id', $tbMain . '.id')
+            ->leftJoin($tbTwo, $tbTwo . '.user_id', $tbMain . '.id')
+            ->leftJoin($tbThree, $tbTwo . '.perpustakaan_id', $tbThree . '.id')
+            ->select(
+                $tbMain . '.id as ' . $tbMain . '.id',
+                $tbMain . '.username as ' . $tbMain . '.username',
+                $tbMain . '.role as ' . $tbMain . '.role',
+                $tbMain . '.aktif as ' . $tbMain . '.aktif',
+                $tbThree . '.nama as ' . $tbThree . '.nama',
+                $tbOne . '.*',
+                $tbOne . '.nama as ' . $tbOne . '.nama',
+                $tbOne . '.email as ' . $tbOne . '.email',
+                $tbTwo . '.*',
+            );
+
+        if (!empty($params['role'])) {
+            $query->where($tbMain . '.role', $params['role']);
+        }
+
+        if (!empty($params['perpustakaan_id'])) {
+            $query->where($tbTwo . '.perpustakaan_id', $params['perpustakaan_id']);
+        }
 
         if (!empty($params['d_start']) && !empty($params['d_end'])) {
-            $query->whereDate($tbMain.'.created_at', '>=', $params['d_start'])
-                  ->whereDate($tbMain.'.created_at', '<=', $params['d_end']);
+            $query->whereDate($tbMain . '.created_at', '>=', $params['d_start'])
+                ->whereDate($tbMain . '.created_at', '<=', $params['d_end']);
         }
 
         if (!empty($params['keyword'])) {
             $query->where(function ($query) use ($cols, $params) {
                 foreach ($cols as $column) {
-                    $query->orWhere($column, 'like', '%'.$params['keyword'].'%');
+                    $query->orWhere($column, 'like', '%' . $params['keyword'] . '%');
                 }
             });
         }
