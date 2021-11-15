@@ -92,7 +92,29 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'abilities:r
 });
 
 Route::group(['prefix' => 'perpustakaan', 'middleware' => ['auth:sanctum', 'abilities:role-perpustakaan']], function () {
-    //perpus route
+    Route::prefix('perpus')->group(function () {
+        Route::post('index', [App\Http\Controllers\Admin\PerpustakaanController::class, 'index']);
+        Route::post('add', [App\Http\Controllers\Admin\PerpustakaanController::class, 'add']);
+        Route::post('store', [App\Http\Controllers\Admin\PerpustakaanController::class, 'store']);
+        Route::post('update', [App\Http\Controllers\Admin\PerpustakaanController::class, 'update']);
+        Route::post('delete', [App\Http\Controllers\Admin\PerpustakaanController::class, 'delete']);
+    });
+
+    Route::prefix('buku')->group(function () {
+        Route::post('index', [App\Http\Controllers\Perpus\BukuController::class, 'index']);
+        Route::post('add', [App\Http\Controllers\Admin\BukuController::class, 'add']);
+        Route::post('store', [App\Http\Controllers\Admin\BukuController::class, 'store']);
+        Route::post('update', [App\Http\Controllers\Admin\BukuController::class, 'update']);
+        Route::post('delete', [App\Http\Controllers\Admin\BukuController::class, 'delete']);
+    });
+
+    Route::prefix('pinjam')->group(function () {
+        Route::post('index', [App\Http\Controllers\Admin\StatusBukuController::class, 'index']);
+        Route::post('add', [App\Http\Controllers\Admin\StatusBukuController::class, 'add']);
+        Route::post('store', [App\Http\Controllers\Admin\StatusBukuController::class, 'store']);
+        Route::post('update', [App\Http\Controllers\Admin\StatusBukuController::class, 'update']);
+        Route::post('delete', [App\Http\Controllers\Admin\StatusBukuController::class, 'delete']);
+    });
 });
 
 Route::group(['prefix' => 'public', 'middleware' => ['auth:sanctum', 'abilities:role-public']], function () {
@@ -103,4 +125,10 @@ Route::group(['prefix' => 'public', 'middleware' => ['auth:sanctum', 'abilities:
 Route::group(['prefix' => 'global', 'middleware' => ['auth:sanctum']], function () {
     Route::post('index', [App\Http\Controllers\ExtraDataContoller::class, 'index']);
     Route::post('user_exist', [App\Http\Controllers\UtilityController::class, 'userExist']);
+
+    Route::prefix('konfigurasi')->group(function () {
+        Route::post('index', [App\Http\Controllers\Admin\KonfigurasiController::class, 'index']);
+        Route::post('show', [App\Http\Controllers\Admin\KonfigurasiController::class, 'show']);
+        Route::post('update', [App\Http\Controllers\Admin\KonfigurasiController::class, 'update']);
+    });
 });

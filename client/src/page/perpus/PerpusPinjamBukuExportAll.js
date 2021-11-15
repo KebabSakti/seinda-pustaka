@@ -4,7 +4,7 @@ import ReactToPrint from "react-to-print";
 import { PrinterOutlined } from "@ant-design/icons";
 import moment from "moment";
 
-export default function AdminPinjamBukuExportAll({ payload }) {
+export default function PerpusPinjamBukuExportAll({ payload }) {
   const componentRef = useRef();
   const { Title } = Typography;
 
@@ -26,12 +26,20 @@ export default function AdminPinjamBukuExportAll({ payload }) {
     },
     // {
     //   title: "Operator",
-    //   dataIndex: "user_profils.nama",
+    //   dataIndex: ["operator", "nama"],
     //   responsive: ["sm"],
     // },
     {
       title: "Peminjam",
       dataIndex: "user_profils.nama",
+      render: (text, record) => {
+        return (
+          <div>
+            <div>{text}</div>
+            <div>{record.member?.no_hp}</div>
+          </div>
+        );
+      },
     },
     {
       title: "Status",

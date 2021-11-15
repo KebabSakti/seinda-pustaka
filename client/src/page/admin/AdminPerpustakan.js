@@ -470,8 +470,8 @@ export default function AdminPerpustakaan() {
                 placement="bottomCenter"
                 overlay={
                   <Menu onClick={tableMenuEvent}>
-                    <Menu.Item key="add">Tambah Data</Menu.Item>
-                    <Menu.Divider style={{ margin: "0px" }} />
+                    {/* <Menu.Item key="add">Tambah Data</Menu.Item> */}
+                    {/* <Menu.Divider style={{ margin: "0px" }} /> */}
                     <Menu.Item key="exportAll" icon={<ExportOutlined />}>
                       Export Data
                     </Menu.Item>

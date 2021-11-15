@@ -46,7 +46,7 @@ function reducer(state, action) {
   }
 }
 
-export default function AdminUserForm({
+export default function PerpusUserForm({
   form,
   payload,
   tableModalOnOk,

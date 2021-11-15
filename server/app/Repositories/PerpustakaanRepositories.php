@@ -21,6 +21,14 @@ class PerpustakaanRepositories
 
         $query = Perpustakaan::with(['jenis_perpustakaan', 'data_gedung', 'sumber_daya_manusia', 'koleksi_materi', 'mendapat_koleksi', 'jam_operasional', 'anggota_otomasi', 'sarana_prasarana', 'fasilitas_anggaraan']);
 
+        if (!empty($params['user_id'])) {
+            $query->where('user_id', $params['user_id']);
+        }
+
+        if (!empty($params['jenis_perpustakaan_id'])) {
+            $query->where('jenis_perpustakaan_id', $params['jenis_perpustakaan_id']);
+        }
+
         if (!empty($params['d_start']) && !empty($params['d_end'])) {
             $query->where('tahun_berdiri_perpustakaan', '>=', $params['d_start'])
                 ->where('tahun_berdiri_perpustakaan', '<=', $params['d_end']);

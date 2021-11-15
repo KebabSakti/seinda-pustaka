@@ -14,6 +14,7 @@ use App\Repositories\KelurahanRepositories;
 use App\Repositories\KoleksiMateriRepositories;
 use App\Repositories\MendapatKoleksiRepositories;
 use App\Repositories\PerpustakaanRepositories;
+use App\Repositories\PerpustakaanRoleRepositories;
 use App\Repositories\ProvinsiRepositories;
 use App\Repositories\SaranaPrasaranaRepositories;
 use App\Repositories\SumberDayaManusiaRepositories;
@@ -48,6 +49,7 @@ class PerpustakaanController extends Controller
         $perpustakaan = PerpustakaanRepositories::store($params);
 
         $params['perpustakaan_id'] = $perpustakaan->id;
+        $params['user_id'] = $perpustakaan->user_id;
 
         DataGedungRepositories::store($params);
         SumberDayaManusiaRepositories::store($params);
@@ -56,6 +58,7 @@ class PerpustakaanController extends Controller
         AnggotaOtomasiRepositories::store($params);
         SaranaPrasaranaRepositories::store($params);
         FasilitasAnggaranRepositories::store($params);
+        PerpustakaanRoleRepositories::store($params);
 
         if (!empty($params['sumber_koleksi'])) {
             foreach ($params['sumber_koleksi'] as $param) {

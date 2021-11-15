@@ -29,6 +29,9 @@ import AdminKelurahan from "./page/admin/AdminKelurahan";
 import AdminProvinsi from "./page/admin/AdminProvinsi";
 import AdminKonfigurasi from "./page/admin/AdminKonfigurasi";
 import AdminPinjamBuku from "./page/admin/AdminPinjamBuku";
+import PerpusPerpustakaan from "./page/perpus/PerpusPerpustakaan";
+import PerpusBuku from "./page/perpus/PerpusBuku";
+import PerpusPinjamBuku from "./page/perpus/PerpusPinjamBuku";
 
 export default function App() {
   const history = useHistory();
@@ -145,10 +148,24 @@ export default function App() {
             </Template>
           </Route>
           <Route path="/perpus">
-            <Template notif={notif} menu={<PerpusMenu logout={logout} />}>
+            <Template
+              notif={notif}
+              menu={
+                <PerpusMenu logout={logout} path={getPath(location.pathname)} />
+              }
+            >
               <Switch>
                 <Route path="/perpus/home">
                   <PerpusHome />
+                </Route>
+                <Route path="/perpus/perpus">
+                  <PerpusPerpustakaan />
+                </Route>
+                <Route path="/perpus/buku">
+                  <PerpusBuku />
+                </Route>
+                <Route path="/perpus/pinjam">
+                  <PerpusPinjamBuku />
                 </Route>
                 <Route path="*">
                   <Redirect to="/perpus/home" />

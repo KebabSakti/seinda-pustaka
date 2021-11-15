@@ -23,4 +23,15 @@ class UtilityModule
 
         return $param;
     }
+
+    public static function arrayPrefix($prefix, $array)
+    {
+        $datas = [];
+
+        foreach ($array as $item) {
+            array_push($datas, $prefix.'.'.$item);
+        }
+
+        return $datas;
+    }
 }

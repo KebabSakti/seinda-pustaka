@@ -86,7 +86,7 @@ export default function AdminUser() {
   const [filter, setFilter] = useState({
     page: 1,
     paging_size: 5,
-    sort_key: "id",
+    sort_key: "users.id",
     sort_mode: "desc",
   });
 
@@ -108,22 +108,24 @@ export default function AdminUser() {
 
   const columns = [
     {
-      title: "Perpustakaan",
-      dataIndex: ["perpustakaan_role", "perpustakaan", "nama"],
+      title: "Perpus",
+      dataIndex: "perpustakaans.nama",
+      sorter: true,
     },
     {
       title: "Nama",
-      dataIndex: ["user_profile", "nama"],
+      dataIndex: "user_profils.nama",
+      sorter: true,
     },
     {
       title: "Username",
-      dataIndex: "username",
+      dataIndex: "users.username",
       sorter: true,
       responsive: ["sm"],
     },
     {
       title: "Role",
-      dataIndex: "role",
+      dataIndex: "users.role",
       sorter: true,
       responsive: ["sm"],
       render: (text, record) => {
@@ -136,33 +138,33 @@ export default function AdminUser() {
     },
     {
       title: "Email",
-      dataIndex: ["user_profile", "email"],
+      dataIndex: "email",
       responsive: ["md"],
     },
     {
       title: "No. Hp",
-      dataIndex: ["user_profile", "no_hp"],
+      dataIndex: "no_hp",
       responsive: ["md"],
     },
     {
       title: "No. ID",
-      dataIndex: ["user_profile", "no_identitas"],
+      dataIndex: "no_identitas",
       responsive: ["md"],
     },
     {
       title: "NPSN",
-      dataIndex: ["user_profile", "npsn"],
+      dataIndex: "npsn",
       responsive: ["lg"],
     },
     {
       title: "Alamat",
-      dataIndex: ["user_profile", "alamat"],
+      dataIndex: "alamat",
       ellipsis: true,
       responsive: ["lg"],
     },
     {
       title: "Aktif",
-      dataIndex: "aktif",
+      dataIndex: "users.aktif",
       responsive: ["sm"],
       render: (text, record) => {
         return text > 0 ? (
@@ -202,8 +204,10 @@ export default function AdminUser() {
       dispatch({ type: "loading", loading: true });
 
       await adminUserIndex(params).then((response) => {
-        let results = response.data.data.map((item) => {
-          return { ...item, key: item.id };
+        console.log(response.data.data);
+
+        let results = response.data.data.map((item, index) => {
+          return { ...item, key: index };
         });
 
         dispatch({

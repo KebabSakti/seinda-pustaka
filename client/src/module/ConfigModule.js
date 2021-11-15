@@ -1,10 +1,7 @@
-import {
-  adminConfigIndex,
-  adminConfigUpdate,
-} from "../api/admin/AdminConfigApi";
+import { configIndex, configUpdate } from "../api/ConfigApi";
 
 export async function initConfig(params) {
-  let response = await adminConfigIndex(params);
+  let response = await configIndex(params);
 
   saveConfig(response.data);
 
@@ -12,7 +9,7 @@ export async function initConfig(params) {
 }
 
 export async function updateConfig(params) {
-  let response = await adminConfigUpdate(params);
+  let response = await configUpdate(params);
 
   saveConfig(response.data);
 

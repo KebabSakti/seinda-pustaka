@@ -1,10 +1,10 @@
 import { useEffect, useCallback, useReducer, useState, useRef } from "react";
 import {
-  adminPinjamBukuDelete,
-  adminPinjamBukuIndex,
-  adminPinjamBukuStore,
-  adminPinjamBukuUpdate,
-} from "../../api/admin/AdminPinjamBukuApi";
+  perpusPinjamBukuDelete,
+  perpusPinjamBukuIndex,
+  perpusPinjamBukuStore,
+  perpusPinjamBukuUpdate,
+} from "../../api/perpus/PerpusPinjamBukuApi";
 import { debounce } from "../../module/UtilityModule";
 import {
   Row,
@@ -25,9 +25,10 @@ import {
   Image,
 } from "antd";
 import { BarsOutlined, ExportOutlined } from "@ant-design/icons";
-import AdminPinjamBukuForm from "./AdminPinjamBukuForm";
+import PerpusPinjamBukuForm from "./PerpusPinjamBukuForm";
 import moment from "moment";
-import AdminPinjamBukuExportAll from "./AdminPinjamBukuExportAll";
+import PerpusPinjamBukuExportAll from "./PerpusPinjamBukuExportAll";
+import { getUser } from "../../module/AuthModule";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -56,7 +57,7 @@ function reducer(state, action) {
   }
 }
 
-export default function AdminPinjamBuku() {
+export default function PerpusPinjamBuku() {
   const componentRef = useRef();
 
   const { RangePicker } = DatePicker;
@@ -87,6 +88,7 @@ export default function AdminPinjamBuku() {
     paging_size: 10,
     sort_key: "status_bukus.id",
     sort_mode: "desc",
+    perpustakaan_id: getUser()?.perpustakaan_role.perpustakaan_id,
   });
 
   const [state, dispatch] = useReducer(reducer, {
@@ -121,14 +123,13 @@ export default function AdminPinjamBuku() {
       title: "Sampul",
       dataIndex: "bukus.sampul",
       responsive: ["sm"],
-      sorter: true,
       render: (text, record) => {
         return text === "" ? "-" : <Image height={50} src={text} />;
       },
     },
     // {
     //   title: "Operator",
-    //   dataIndex: "user_profils.nama",
+    //   dataIndex: ["operator", "nama"],
     //   responsive: ["sm"],
     // },
     {
@@ -136,6 +137,14 @@ export default function AdminPinjamBuku() {
       dataIndex: "user_profils.nama",
       responsive: ["sm"],
       sorter: true,
+      render: (text, record) => {
+        return (
+          <div>
+            <div>{text}</div>
+            <div>{record.member?.no_hp}</div>
+          </div>
+        );
+      },
     },
     {
       title: "Status",
@@ -186,44 +195,46 @@ export default function AdminPinjamBuku() {
         return moment(text).format("DD MMM YYYY");
       },
     },
-    // {
-    //   title: "",
-    //   dataIndex: "id",
-    //   render: (text, record) => {
-    //     return (
-    //       <Dropdown
-    //         arrow
-    //         trigger={["click"]}
-    //         placement="topCenter"
-    //         overlay={
-    //           <Menu onClick={(event) => tableMenuEvent(event, record)}>
-    //             <Menu.Item key="edit">Edit / Detail</Menu.Item>
-    //             <Menu.Item key="delete">
-    //               <Text type="danger">Hapus</Text>
-    //             </Menu.Item>
-    //             {/* <Menu.Divider style={{ margin: "0px" }} />
-    //             <Menu.Item key="exportOne" icon={<ExportOutlined />}>
-    //               Export Data
-    //             </Menu.Item> */}
-    //           </Menu>
-    //         }
-    //       >
-    //         <Button size="small" shape="circle" type="dashed">
-    //           <BarsOutlined />
-    //         </Button>
-    //       </Dropdown>
-    //     );
-    //   },
-    // },
+    {
+      title: "",
+      dataIndex: "status_bukus.id",
+      render: (text, record) => {
+        return (
+          <Dropdown
+            arrow
+            trigger={["click"]}
+            placement="topCenter"
+            overlay={
+              <Menu onClick={(event) => tableMenuEvent(event, record)}>
+                <Menu.Item key="edit">Detail</Menu.Item>
+                {/* <Menu.Item key="delete">
+                  <Text type="danger">Hapus</Text>
+                </Menu.Item> */}
+                {/* <Menu.Divider style={{ margin: "0px" }} />
+                <Menu.Item key="exportOne" icon={<ExportOutlined />}>
+                  Export Data
+                </Menu.Item> */}
+              </Menu>
+            }
+          >
+            <Button size="small" shape="circle" type="dashed">
+              <BarsOutlined />
+            </Button>
+          </Dropdown>
+        );
+      },
+    },
   ];
 
   const fetchDatas = useCallback(async (params) => {
     try {
       dispatch({ type: "loading", loading: true });
 
-      await adminPinjamBukuIndex(params).then((response) => {
-        let results = response.data.data.map((item) => {
-          return { ...item, key: item.id };
+      await perpusPinjamBukuIndex(params).then((response) => {
+        console.log(response.data.data);
+
+        let results = response.data.data.map((item, index) => {
+          return { ...item, key: index };
         });
 
         dispatch({
@@ -323,7 +334,7 @@ export default function AdminPinjamBuku() {
           ) {
             dispatch({ type: "loading", loading: true });
 
-            await adminPinjamBukuDelete({ id: payload.id }).then((_) => {
+            await perpusPinjamBukuDelete({ id: payload.id }).then((_) => {
               setFilter({ ...filter });
 
               message.success("Data berhasil di hapus");
@@ -376,7 +387,7 @@ export default function AdminPinjamBuku() {
     switch (page) {
       case "form":
         return (
-          <AdminPinjamBukuForm
+          <PerpusPinjamBukuForm
             loading={state.loading}
             form={form}
             payload={modalPayload}
@@ -385,10 +396,10 @@ export default function AdminPinjamBuku() {
         );
 
       case "exportAll":
-        return <AdminPinjamBukuExportAll payload={modalPayload} />;
+        return <PerpusPinjamBukuExportAll payload={modalPayload} />;
 
       // case "exportOne":
-      //   return <AdminPerpusExportOne form={form} payload={modalPayload} />;
+      //   return <perpusPerpusExportOne form={form} payload={modalPayload} />;
 
       default:
     }
@@ -400,29 +411,13 @@ export default function AdminPinjamBuku() {
     try {
       await form.validateFields();
 
+      dispatch({ type: "loading", loading: true });
+
       let params = form.getFieldValue();
-
-      let formData = new FormData();
-
-      Object.keys(params).forEach(function (key) {
-        if (params[key] != null) {
-          formData.set(key, params[key]);
-        }
-      });
-
-      if (params?.sampul != null) {
-        formData.set("sampul", params.sampul.target.files[0]);
-      }
-
-      if (params?.download != null) {
-        formData.set("download", params.download.target.files[0]);
-      }
 
       switch (params["mode"]) {
         case "add":
-          dispatch({ type: "loading", loading: true });
-
-          await adminPinjamBukuStore(formData).then((_) => {
+          await perpusPinjamBukuStore(params).then((_) => {
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
@@ -433,9 +428,12 @@ export default function AdminPinjamBuku() {
           break;
 
         case "edit":
-          dispatch({ type: "loading", loading: true });
-
-          await adminPinjamBukuUpdate(formData).then((_) => {
+          await perpusPinjamBukuUpdate({
+            ...params,
+            jatuh_tempo: moment(params.jatuh_tempo).format(
+              "YYYY-MM-DD HH:mm:ss"
+            ),
+          }).then((_) => {
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });

@@ -1,11 +1,13 @@
 import { useEffect, useCallback, useReducer, useState, useRef } from "react";
 import {
-  adminPinjamBukuDelete,
-  adminPinjamBukuIndex,
-  adminPinjamBukuStore,
-  adminPinjamBukuUpdate,
-} from "../../api/admin/AdminPinjamBukuApi";
+  perpusPerpusDelete,
+  perpusPerpusIndex,
+  perpusPerpusStore,
+  perpusPerpusUpdate,
+} from "../../api/perpus/PerpusPerpusApi";
 import { debounce } from "../../module/UtilityModule";
+import { getUser, saveUser } from "../../module/AuthModule";
+import PerpusPerpusForm from "../perpus/PerpusPerpusForm";
 import {
   Row,
   Col,
@@ -21,13 +23,10 @@ import {
   Modal,
   Form,
   message,
-  Tag,
-  Image,
 } from "antd";
 import { BarsOutlined, ExportOutlined } from "@ant-design/icons";
-import AdminPinjamBukuForm from "./AdminPinjamBukuForm";
-import moment from "moment";
-import AdminPinjamBukuExportAll from "./AdminPinjamBukuExportAll";
+import PerpusPerpusExportAll from "./PerpusPerpusExportAll";
+import PerpusPerpusExportOne from "./PerpusPerpusExportOne";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -48,7 +47,7 @@ function reducer(state, action) {
       return {
         ...state,
         loading: false,
-        error: action.error,
+        payload: null,
       };
 
     default:
@@ -56,7 +55,7 @@ function reducer(state, action) {
   }
 }
 
-export default function AdminPinjamBuku() {
+export default function PerpusPerpustakaan() {
   const componentRef = useRef();
 
   const { RangePicker } = DatePicker;
@@ -84,9 +83,10 @@ export default function AdminPinjamBuku() {
 
   const [filter, setFilter] = useState({
     page: 1,
-    paging_size: 10,
-    sort_key: "status_bukus.id",
+    paging_size: 5,
+    sort_key: "id",
     sort_mode: "desc",
+    // user_id: getUser()?.id,
   });
 
   const [state, dispatch] = useReducer(reducer, {
@@ -95,8 +95,8 @@ export default function AdminPinjamBuku() {
       datas: [],
       pagination: {
         current: 1,
-        pageSize: 10,
-        total: 10,
+        pageSize: 5,
+        total: 5,
         showLessItems: true,
         responsive: true,
         showSizeChanger: false,
@@ -107,121 +107,106 @@ export default function AdminPinjamBuku() {
 
   const columns = [
     {
-      title: "Perpustakaan",
-      dataIndex: "perpustakaans.nama",
+      title: "Nama",
+      dataIndex: "nama",
+      sorter: true,
+    },
+    {
+      title: "Jenis Perpustakaan",
+      dataIndex: ["jenis_perpustakaan", "nama_jenis_perpustakaan"],
+      responsive: ["sm"],
+    },
+    {
+      title: "Kecamatan",
+      dataIndex: "kecamatan",
+      responsive: ["sm"],
+      ellipsis: true,
+      sorter: true,
+    },
+    {
+      title: "Kelurahan",
+      dataIndex: "kelurahan",
       responsive: ["sm"],
       sorter: true,
     },
     {
-      title: "Buku",
-      dataIndex: "bukus.judul",
-      sorter: true,
-    },
-    {
-      title: "Sampul",
-      dataIndex: "bukus.sampul",
-      responsive: ["sm"],
-      sorter: true,
-      render: (text, record) => {
-        return text === "" ? "-" : <Image height={50} src={text} />;
-      },
-    },
-    // {
-    //   title: "Operator",
-    //   dataIndex: "user_profils.nama",
-    //   responsive: ["sm"],
-    // },
-    {
-      title: "Peminjam",
-      dataIndex: "user_profils.nama",
-      responsive: ["sm"],
-      sorter: true,
-    },
-    {
-      title: "Status",
-      dataIndex: "status_bukus.status",
+      title: "Provinsi",
+      dataIndex: "provinsi",
       responsive: ["md"],
       sorter: true,
-      render: (text, record) => {
-        let tag;
-
-        if (text === "Pengajuan") {
-          tag = "blue";
-        }
-
-        if (text === "Dipinjam") {
-          tag = "green";
-        }
-
-        if (text === "Dikembalikan") {
-          tag = "magenta";
-        }
-
-        return <Tag color={tag}>{text}</Tag>;
-      },
     },
     {
-      title: "Tgl Post",
-      dataIndex: "status_bukus.created_at",
-      responsive: ["sm"],
+      title: "Status Perpustakaan",
+      dataIndex: "status_perpustakaan",
+      responsive: ["md"],
       sorter: true,
-      render: (text, record) => {
-        if (text === null) {
-          return "-";
-        }
-
-        return moment(text).format("DD MMM YYYY");
-      },
     },
     {
-      title: "Jatuh Tempo",
-      dataIndex: "status_bukus.jatuh_tempo",
-      responsive: ["sm"],
+      title: "NPSN",
+      dataIndex: "npsn",
+      responsive: ["lg"],
+    },
+    {
+      title: "Kepala Perpustakaan",
+      dataIndex: "nama_kepala_perpustakaan",
+      responsive: ["lg"],
       sorter: true,
+    },
+    {
+      title: "Kepala Instansi Indek",
+      dataIndex: "nama_kepala_instansi_induk",
+      responsive: ["xl"],
+      sorter: true,
+    },
+    {
+      title: "Tahun Berdiri",
+      dataIndex: "tahun_berdiri_perpustakaan",
+      responsive: ["xl"],
+      sorter: true,
+    },
+    {
+      title: "Alamat",
+      dataIndex: "alamat",
+      responsive: ["xl"],
+      ellipsis: true,
+    },
+    {
+      title: "",
+      dataIndex: "id",
       render: (text, record) => {
-        if (text === null) {
-          return "-";
-        }
-
-        return moment(text).format("DD MMM YYYY");
+        return (
+          <Dropdown
+            arrow
+            trigger={["click"]}
+            placement="topCenter"
+            disabled={getUser()?.id != record.user_id}
+            overlay={
+              <Menu onClick={(event) => tableMenuEvent(event, record)}>
+                <Menu.Item key="edit">Edit / Detail</Menu.Item>
+                <Menu.Item key="delete">
+                  <Text type="danger">Hapus</Text>
+                </Menu.Item>
+                <Menu.Divider style={{ margin: "0px" }} />
+                <Menu.Item key="exportOne" icon={<ExportOutlined />}>
+                  Export Data
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            <Button size="small" shape="circle" type="dashed">
+              <BarsOutlined />
+            </Button>
+          </Dropdown>
+        );
       },
     },
-    // {
-    //   title: "",
-    //   dataIndex: "id",
-    //   render: (text, record) => {
-    //     return (
-    //       <Dropdown
-    //         arrow
-    //         trigger={["click"]}
-    //         placement="topCenter"
-    //         overlay={
-    //           <Menu onClick={(event) => tableMenuEvent(event, record)}>
-    //             <Menu.Item key="edit">Edit / Detail</Menu.Item>
-    //             <Menu.Item key="delete">
-    //               <Text type="danger">Hapus</Text>
-    //             </Menu.Item>
-    //             {/* <Menu.Divider style={{ margin: "0px" }} />
-    //             <Menu.Item key="exportOne" icon={<ExportOutlined />}>
-    //               Export Data
-    //             </Menu.Item> */}
-    //           </Menu>
-    //         }
-    //       >
-    //         <Button size="small" shape="circle" type="dashed">
-    //           <BarsOutlined />
-    //         </Button>
-    //       </Dropdown>
-    //     );
-    //   },
-    // },
   ];
 
   const fetchDatas = useCallback(async (params) => {
     try {
       dispatch({ type: "loading", loading: true });
 
-      await adminPinjamBukuIndex(params).then((response) => {
+      await perpusPerpusIndex(params).then((response) => {
         let results = response.data.data.map((item) => {
           return { ...item, key: item.id };
         });
@@ -235,8 +220,8 @@ export default function AdminPinjamBuku() {
               current: response.data.current_page,
               total: response.data.total,
               pageSize: response.data.per_page,
-              showSizeChanger: response.data.total > 10 ? true : false,
-              pageSizeOptions: ["10", response.data.total],
+              showSizeChanger: response.data.total > 5 ? true : false,
+              pageSizeOptions: ["5", response.data.total],
             },
           },
         });
@@ -321,21 +306,14 @@ export default function AdminPinjamBuku() {
               "Data akan dihapus, proses ini tidak dapat dikembalikan, lanjutkan ?"
             )
           ) {
-            dispatch({ type: "loading", loading: true });
-
-            await adminPinjamBukuDelete({ id: payload.id }).then((_) => {
+            await perpusPerpusDelete({ id: payload.id }).then((_) => {
               setFilter({ ...filter });
 
               message.success("Data berhasil di hapus");
             });
           }
         } catch (e) {
-          dispatch({ type: "error", error: e });
-
-          notification.error({
-            message: "Error",
-            description: e.message,
-          });
+          console.log(e);
         }
         break;
 
@@ -376,8 +354,7 @@ export default function AdminPinjamBuku() {
     switch (page) {
       case "form":
         return (
-          <AdminPinjamBukuForm
-            loading={state.loading}
+          <PerpusPerpusForm
             form={form}
             payload={modalPayload}
             tableModalOnOk={tableModalOnOk}
@@ -385,44 +362,39 @@ export default function AdminPinjamBuku() {
         );
 
       case "exportAll":
-        return <AdminPinjamBukuExportAll payload={modalPayload} />;
+        return <PerpusPerpusExportAll payload={modalPayload} />;
 
-      // case "exportOne":
-      //   return <AdminPerpusExportOne form={form} payload={modalPayload} />;
+      case "exportOne":
+        return <PerpusPerpusExportOne form={form} payload={modalPayload} />;
 
       default:
     }
   }
 
-  //CRUD===================================================================================================//
+  //CRUD==================================================================//
 
   async function tableModalOnOk() {
     try {
-      await form.validateFields();
-
       let params = form.getFieldValue();
-
-      let formData = new FormData();
-
-      Object.keys(params).forEach(function (key) {
-        if (params[key] != null) {
-          formData.set(key, params[key]);
-        }
-      });
-
-      if (params?.sampul != null) {
-        formData.set("sampul", params.sampul.target.files[0]);
-      }
-
-      if (params?.download != null) {
-        formData.set("download", params.download.target.files[0]);
-      }
 
       switch (params["mode"]) {
         case "add":
-          dispatch({ type: "loading", loading: true });
+          await form.validateFields();
 
-          await adminPinjamBukuStore(formData).then((_) => {
+          await perpusPerpusStore({
+            ...params,
+            tahun_berdiri_perpustakaan:
+              params.tahun_berdiri_perpustakaan?.format("YYYY"),
+            senin_kamis: params.senin_kamis?.format("HH:mm:ss"),
+            jummat: params.jummat?.format("HH:mm:ss"),
+            sabtu: params.sabtu?.format("HH:mm:ss"),
+            user_id: getUser().id,
+          }).then((response) => {
+            saveUser({
+              ...getUser(),
+              perpustakaan_role: { perpustakaan_id: response.data.id },
+            });
+
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
@@ -433,14 +405,22 @@ export default function AdminPinjamBuku() {
           break;
 
         case "edit":
-          dispatch({ type: "loading", loading: true });
+          await form.validateFields();
 
-          await adminPinjamBukuUpdate(formData).then((_) => {
+          await perpusPerpusUpdate({
+            ...params,
+            tahun_berdiri_perpustakaan:
+              params.tahun_berdiri_perpustakaan?.format("YYYY"),
+            senin_kamis: params.senin_kamis?.format("HH:mm:ss"),
+            jummat: params.jummat?.format("HH:mm:ss"),
+            sabtu: params.sabtu?.format("HH:mm:ss"),
+            user_id: getUser().id,
+          }).then((_) => {
             setModal({ ...modal, visible: false });
 
             setFilter({ ...filter });
 
-            message.success("Data berhasil di update");
+            message.success("Data berhasil di edit");
           });
 
           break;
@@ -448,29 +428,24 @@ export default function AdminPinjamBuku() {
         default:
       }
     } catch (e) {
-      dispatch({ type: "error", error: e });
-
-      notification.error({
-        message: "Error",
-        description: e.message,
-      });
+      console.log(e);
     }
   }
 
-  //CRUD===================================================================================================//
+  //CRUD==================================================================//
 
-  //=========================================================================================================//
+  //======================================================================//
 
   useEffect(() => {
     fetchDatas(filter);
   }, [filter, fetchDatas]);
 
-  //=========================================================================================================//
+  //======================================================================//
 
   return (
     <div>
       <Modal {...modal}>{tableModalPage(modalPayload.page)}</Modal>
-      <Title level={4}>Daftar Pinjaman Buku</Title>
+      <Title level={4}>Daftar Perpustakaan</Title>
       <Divider style={{ margin: "10px 0px" }} />
       <Row
         justify="space-between"
@@ -480,7 +455,7 @@ export default function AdminPinjamBuku() {
       >
         <Col xs={24} sm={24} md={8} lg={8}>
           <RangePicker
-            picker="date"
+            picker="year"
             style={{ width: "100%" }}
             onChange={tableDateRange}
           />
@@ -502,8 +477,17 @@ export default function AdminPinjamBuku() {
                 placement="bottomCenter"
                 overlay={
                   <Menu onClick={tableMenuEvent}>
-                    {/* <Menu.Item key="add">Tambah Data</Menu.Item>
-                    <Menu.Divider style={{ margin: "0px" }} /> */}
+                    <Menu.Item
+                      key="add"
+                      disabled={
+                        state.payload?.datas.filter(
+                          (item) => getUser()?.id == item.user_id
+                        ).length > 0
+                      }
+                    >
+                      Tambah Data
+                    </Menu.Item>
+                    <Menu.Divider style={{ margin: "0px" }} />
                     <Menu.Item key="exportAll" icon={<ExportOutlined />}>
                       Export Data
                     </Menu.Item>

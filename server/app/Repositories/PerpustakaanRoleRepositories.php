@@ -11,7 +11,6 @@ class PerpustakaanRoleRepositories
         $data = PerpustakaanRole::create([
             'perpustakaan_id' => $params['perpustakaan_id'],
             'user_id' => $params['user_id'],
-            'role' => $params['role'],
         ]);
 
         return $data;

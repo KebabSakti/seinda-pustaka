@@ -11,8 +11,6 @@ class PerpustakaanRole extends Model
 
     protected $guarded = [];
 
-    protected $with = ['perpustakaan'];
-
     /**
      * Get the user that owns the PerpustakaanRole.
      *
